@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="FYBX" name="出差费用报销" activiti:bpmType="1">
+    <endEvent id="node5" name="结束"/>
+    <startEvent id="node6" name="开始"/>
+    <userTask id="node7" name="会签" activiti:user="" activiti:roleIds="2" activiti:formUrl="www.baidu.com" activiti:taskType="bpm_countersign" activiti:param="" activiti:assignee="${assignee}">
+      <extensionElements>
+        <activiti:taskListener event="create" expression="${taskAssignHandler.createTaskListener(task)}"/>
+        <activiti:taskListener event="assignment" expression="${taskAssignHandler.assignTaskListener(task)}"/>
+        <activiti:taskListener event="complete" expression="${taskAssignHandler.completeTaskListener(task)}"/>
+        <activiti:executionListener expression="${taskAssignHandler.executionStart(execution)}" event="start"/>
+      </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="assigneeList" activiti:elementVariable="assignee">
+        <completionCondition>${nrOfCompletedInstances/nrOfInstances &gt;= 1}</completionCondition> 
+      </multiInstanceLoopCharacteristics>
+    </userTask>
+    <userTask id="node8" name="审核" activiti:user="hedong" activiti:roleIds="" activiti:formUrl="www.baidu.com" activiti:taskType="bpm_approve" activiti:param="">
+      <extensionElements>
+        <activiti:taskListener event="create" expression="${taskAssignHandler.createTaskListener(task)}"/>
+        <activiti:taskListener event="assignment" expression="${taskAssignHandler.assignTaskListener(task)}"/>
+        <activiti:taskListener event="complete" expression="${taskAssignHandler.completeTaskListener(task)}"/>
+        <activiti:executionListener expression="${taskAssignHandler.executionStart(execution)}" event="start"/>
+      </extensionElements>
+    </userTask>
+    <userTask id="node9" name="审批" activiti:user="gaohui" activiti:roleIds="" activiti:formUrl="www.baidu.com" activiti:taskType="bpm_exa_approve" activiti:param="">
+      <extensionElements>
+        <activiti:taskListener event="create" expression="${taskAssignHandler.createTaskListener(task)}"/>
+        <activiti:taskListener event="assignment" expression="${taskAssignHandler.assignTaskListener(task)}"/>
+        <activiti:taskListener event="complete" expression="${taskAssignHandler.completeTaskListener(task)}"/>
+        <activiti:executionListener expression="${taskAssignHandler.executionStart(execution)}" event="start"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" name="" sourceRef="node9" targetRef="node5"/>
+    <sequenceFlow id="flow2" name="" sourceRef="node8" targetRef="node9"/>
+    <sequenceFlow id="flow3" name="" sourceRef="node7" targetRef="node8"/>
+    <sequenceFlow id="flow4" name="" sourceRef="node6" targetRef="node7"/>
+  </process>  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_FYBX">
+    <bpmndi:BPMNPlane bpmnElement="FYBX" id="BPMNPlane_FYBX">
+      <bpmndi:BPMNShape bpmnElement="node5" id="BPMNShape_node5">
+        <omgdc:Bounds height="60" width="100" x="556" y="16"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node6" id="BPMNShape_node6">
+        <omgdc:Bounds height="60" width="100" x="23" y="16"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node7" id="BPMNShape_node7">
+        <omgdc:Bounds height="60" width="100" x="155" y="15"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node8" id="BPMNShape_node8">
+        <omgdc:Bounds height="60" width="100" x="285" y="16"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node9" id="BPMNShape_node9">
+        <omgdc:Bounds height="60" width="100" x="424" y="16"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="474" y="46"/>
+        <omgdi:waypoint x="606" y="46"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="335" y="46"/>
+        <omgdi:waypoint x="474" y="46"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="205" y="45"/>
+        <omgdi:waypoint x="335" y="46"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="73" y="46"/>
+        <omgdi:waypoint x="205" y="45"/>
+      </bpmndi:BPMNEdge> 
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

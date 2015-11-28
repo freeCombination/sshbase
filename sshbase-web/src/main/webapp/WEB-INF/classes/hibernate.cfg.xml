@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+		<!-- <property name="dialect">org.hibernate.dialect.OracleDialect</property> -->
+		
+		<!-- 
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property> 
+		<property name="dialect">com.hed.sshbase.common.util.SQLServerDialectUtil</property>
+		<property name="hbm2ddl.import_files">import_sqlserver.sql</property>
+		-->
+		
+		<!-- <property name="dialect">org.hibernate.dialect.MySQLDialect</property> -->
+		<!-- MysqlDialectUtil 配置自定义方言支持text类型数据 -->
+		<!-- <property name="dialect">com.hed.sshbase.common.util.MysqlDialectUtil</property> -->
+		
+		<property name="dialect">com.hed.sshbase.common.util.SQLServerDialectUtil</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">false</property>
+		<property name="hbm2ddl.auto">none</property>
+	</session-factory>
+</hibernate-configuration>

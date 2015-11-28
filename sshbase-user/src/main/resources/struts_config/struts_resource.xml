@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="resource" extends="st" namespace="/resource">
+		<!-- 跳转到资源管理页面action -->
+		<action name="toResourceIndex" class="com.hed.sshbase.resource.action.ResourceAction" method="toResourcesManager">
+			<result>/WEB-INF/pages/resource/resourceIndex.jsp</result>
+		</action>
+		<action name="getResourceList" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceList">
+		</action>
+		<action name="getResourceListByMap" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceListByMap">
+		</action>
+		<action name="getResById" class="com.hed.sshbase.resource.action.ResourceAction" method="getResById">
+		</action>
+		<action name="getRById" class="com.hed.sshbase.resource.action.ResourceAction" method="getRById">
+		</action>
+		<action name="getAllResourceType" class="com.hed.sshbase.resource.action.ResourceAction" method="getAllResourceType">
+		</action>
+		<action name="addResource" class="com.hed.sshbase.resource.action.ResourceAction" method="addResource">
+		</action>
+		<action name="synchronizeResourceInfo" class="com.hed.sshbase.resource.action.ResourceAction" method="synchronizeResourceInfo">
+		</action>
+		<action name="editResource" class="com.hed.sshbase.resource.action.ResourceAction" method="editResource">
+		</action>
+		<action name="deleteResource" class="com.hed.sshbase.resource.action.ResourceAction" method="deleteResource">
+		</action>
+		<action name="getResourceByParentId" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceByParentId">
+		</action>
+		<action name="getResourceById" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceById">
+		</action>
+		<action name="validateResourceProperties" class="com.hed.sshbase.resource.action.ResourceAction" method="validateResourceProperties">
+		</action>
+		<action name="getSynchResTree" class="com.hed.sshbase.resource.action.ResourceAction" method="getSynchResTree">
+		</action>
+		<action name="checkResIsExist" class="com.hed.sshbase.resource.action.ResourceAction" method="checkResIsExist">
+		</action>
+		<action name="getResourceListByRoleIds" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceListByRoleIds">
+		</action>
+		<action name="getResourceTreeList" class="com.hed.sshbase.resource.action.ResourceAction" method="getResourceTreeList">
+			<result type="json">
+				<param name="root">treeNodeList</param>
+			</result>
+		</action>
+	</package>
+</struts>

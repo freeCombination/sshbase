@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="CCSQLC" name="出差申请流程" activiti:bpmType="2">
+    <endEvent id="node4" name="结束"/>
+    <userTask id="node5" name="审批" activiti:user="wujialing" activiti:roleIds="" activiti:formUrl="www.google.com" activiti:taskType="bpm_exa_approve" activiti:param="">
+      <extensionElements>
+        <activiti:taskListener event="create" expression="${taskAssignHandler.createTaskListener(task)}"/>
+        <activiti:taskListener event="assignment" expression="${taskAssignHandler.assignTaskListener(task)}"/>
+        <activiti:taskListener event="complete" expression="${taskAssignHandler.completeTaskListener(task)}"/>
+        <activiti:executionListener expression="${taskAssignHandler.executionStart(execution)}" event="start"/>
+      </extensionElements>
+    </userTask>
+    <userTask id="node6" name="审核" activiti:user="hedong" activiti:roleIds="" activiti:formUrl="www.google.com" activiti:taskType="bpm_approve" activiti:param="">
+      <extensionElements>
+        <activiti:taskListener event="create" expression="${taskAssignHandler.createTaskListener(task)}"/>
+        <activiti:taskListener event="assignment" expression="${taskAssignHandler.assignTaskListener(task)}"/>
+        <activiti:taskListener event="complete" expression="${taskAssignHandler.completeTaskListener(task)}"/>
+        <activiti:executionListener expression="${taskAssignHandler.executionStart(execution)}" event="start"/>
+      </extensionElements>
+    </userTask>
+    <startEvent id="node7" name="开始"/>
+    <sequenceFlow id="flow1" name="" sourceRef="node5" targetRef="node4"/>
+    <sequenceFlow id="flow2" name="" sourceRef="node6" targetRef="node5"/>
+    <sequenceFlow id="flow3" name="" sourceRef="node7" targetRef="node6"/>
+  </process>  
+  <bpmndi:BPMNDiagram id="BPMNDiagram_CCSQLC">
+    <bpmndi:BPMNPlane bpmnElement="CCSQLC" id="BPMNPlane_CCSQLC">
+      <bpmndi:BPMNShape bpmnElement="node4" id="BPMNShape_node4">
+        <omgdc:Bounds height="60" width="100" x="653" y="25"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node5" id="BPMNShape_node5">
+        <omgdc:Bounds height="60" width="100" x="430" y="25"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node6" id="BPMNShape_node6">
+        <omgdc:Bounds height="60" width="100" x="206" y="25"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="node7" id="BPMNShape_node7">
+        <omgdc:Bounds height="60" width="100" x="34" y="25"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="480" y="55"/>
+        <omgdi:waypoint x="703" y="55"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="256" y="55"/>
+        <omgdi:waypoint x="480" y="55"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="84" y="55"/>
+        <omgdi:waypoint x="256" y="55"/>
+      </bpmndi:BPMNEdge> 
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
