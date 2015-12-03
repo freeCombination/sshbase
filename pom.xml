@@ -405,6 +405,7 @@
     
     <modules>
         <module>sshbase-user</module>
+        <module>sshbase-hg</module>
         <module>sshbase-web</module>
-  </modules>
+    </modules>
 </project>

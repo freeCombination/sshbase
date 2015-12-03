@@ -87,7 +87,7 @@
         <property name="dataSource" ref="dataSource2" />
         <property name="packagesToScan">
             <list>
-                <value>com.hed.sshbase.ds2.entity</value>
+                <value>com.hed.sshbase.hg.entity</value>
             </list>
         </property>
         <property name="configLocation" value="classpath:hibernate.cfg2.xml" />

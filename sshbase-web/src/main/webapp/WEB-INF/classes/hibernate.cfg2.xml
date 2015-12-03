@@ -16,7 +16,7 @@
 		<!-- MysqlDialectUtil 配置自定义方言支持text类型数据 -->
 		<!-- <property name="dialect">com.hed.sshbase.common.util.MysqlDialectUtil</property> -->
 		
-		<property name="dialect">com.hed.sshbase.common.util.MysqlDialectUtil</property>
+		<property name="dialect">com.hed.sshbase.common.util.SQLServerDialectUtil</property>
 		<property name="show_sql">true</property>
 		<property name="format_sql">false</property>
 		<property name="hbm2ddl.auto">none</property>

@@ -53,7 +53,7 @@
 	<include file="struts_config/struts_org.xml"></include>
 	<include file="struts_config/struts_log.xml"></include> 
 	<include file="struts_config/struts_attach.xml"></include> 
-	<include file="struts_config/struts_attach_demo.xml"></include>
+	<include file="struts_config/struts_hg.xml"></include>
 	<!-- 
 	<include file="struts_config/struts_workturns.xml"></include> 
 	<include file="struts_config/struts_bpm.xml"></include>

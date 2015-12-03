@@ -10,7 +10,7 @@
 <!-- <meta http-equiv="x-ua-compatible" content="ie=7" /> -->
 <html class="overflow_hidden">
 <head>
-<title>开发架构系统</title>
+<title>海关实时数据监控系统</title>
 
 <script>
 
@@ -199,7 +199,7 @@ function getIE() {
 </head>
 <body class="overflow_hidden" onload="getIE();">
 	<div class="frame2_top">
-		<div class="top_logo">管理系统</div>
+		<div class="top_logo">海关实时数据监控系统</div>
 		<div class="top_img">
 			<span class="top_right">
 			<!--  <input name="" type="button" value="" class="top_help" onclick="toHelp();" />  -->
