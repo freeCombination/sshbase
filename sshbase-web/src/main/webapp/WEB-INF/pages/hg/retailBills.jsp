@@ -232,9 +232,14 @@
                 handler:function(){
                 	query();
                 }
-			}]
+			}],
+			listeners:{
+				itemdblclick:function(grid, record, item, index, e, eOpts ){
+					openwin(0);
+				}
+			}
 		});
-		//dictStore.load({params:{start:0,limit:SystemConstant.commonSize}});
+		dictStore.load({params:{start:0,limit:SystemConstant.commonSize}});
 		
 		query();
 		
@@ -428,6 +433,30 @@
 	                }
 	            }
 	        }).show();
+		}
+		
+		function openwin(billsId) {
+		    var height = 600;
+		    var width = 1366;
+		    var h = window.screen.availHeight;
+		    var w = window.screen.availWidth;
+		    
+		    var dh = document.body.clientHeight;
+            var dw = document.body.clientWidth;
+		    
+		    if (w <= 1366) {
+		    	width = dw - 20;
+		    	height = dh;
+		    }
+		    
+		    var y = (h - height) / 2;
+            var x = (w - width) / 2;
+            if (w <= 1366) {
+            	x = 0;
+            }
+		    
+		    window.open("${ctx}/hg/toRetailBillsDetail.action?billsId=" + billsId, "", 
+		        "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
 		}
 		
 		function getFirstDay(){

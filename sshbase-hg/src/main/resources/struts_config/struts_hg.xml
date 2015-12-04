@@ -7,6 +7,9 @@
 		<action name="toRetailBills" >
 			<result>/WEB-INF/pages/hg/retailBills.jsp</result>
 		</action>
+		<action name="toRetailBillsDetail" >
+            <result>/WEB-INF/pages/hg/retailBillsDetail.jsp</result>
+        </action>
 		
 		<action name="*" class="com.hed.sshbase.hg.action.DataMonitorAction" method="{1}"></action>
 		
