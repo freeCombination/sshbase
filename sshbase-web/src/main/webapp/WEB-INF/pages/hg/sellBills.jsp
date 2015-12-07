@@ -7,7 +7,7 @@
 <%@include file="../common/taglibs.jsp"%>
 <%@include file="../common/css.jsp"%>
 <%@include file="../common/ext.jsp"%>
-<title>零售单</title>
+<title>销售出库单</title>
 <link href="" rel="SHORTCUT ICON" />
 <style type="text/css">
   .x-form-layout-table{
@@ -27,152 +27,163 @@
 		             "Ext.form.*",
 					 "Ext.data.*" ]);
 		//建立Model模型对象
-		Ext.define("Dict",{
+		Ext.define("SellBills",{
 			extend:"Ext.data.Model",
 			fields:[
-				{name: "pkDictionaryId",mapping:"pkDictionaryId"}, 
-				{name: "dictionaryName",mapping:"dictionaryName"}, 
-				{name: "typeName",mapping:"dictionaryTypeName"}, 
-				{name: "typeId",mapping:"dictionaryTypeId"},
-				{name: "levelOrder",mapping:"levelOrder"},
-				{name: "dictionaryValue",mapping:"dictionaryValue"},
-				{name: "dictionaryCode",mapping:"dictionaryCode"}
+				{name: "finterId"}, 
+				{name: "fdate"}, 
+				{name: "fsupplyId"}, 
+				{name: "fdCStockId"},
+				{name: "fitemName"},
+				{name: "fitemModel"},
+				{name: "funitId"}, 
+                {name: "fbatchNo"}, 
+                {name: "fauxqty"}, 
+                {name: "fauxprice"},
+                {name: "famount"},
+                {name: "fdeptId"},
+                {name: "fempId"}, 
+                {name: "fconsignPrice"}, 
+                {name: "fconsignAmount"},
+                {name: "fname"},
+                {name: "fnumber"},
+                {name: "deptName"}, 
+                {name: "userName"}, 
+                {name: "unit"},
+                {name: "ghcustom"},
+                {name: "stockName"},
+                {name: "fbillNo"}
 			]
 		});
 		
 		//建立数据Store
-		var dictStore=Ext.create("Ext.data.Store", {
+		var sellBillsStore=Ext.create("Ext.data.Store", {
 	        pageSize: SystemConstant.commonSize,
-	        model:"Dict",
-	        remoteSort:true,
+	        model:"SellBills",
 			proxy: {
 	            type:"ajax",
 	            actionMethods: {
                 	read: 'POST'
            		},
-			    url: "${ctx}/dict/getDicts.action",
+			    url: "${ctx}/hg/getSellDeliveryBills.action",
 			    reader: {
 				     totalProperty: "totalSize",
 				     root: "list"
 			    },
-	        simpleSortMode :true
-	        },
-	        sorters:[{
-	            property:"id",
-	            direction:"ASC"
-	        }]
+	            simpleSortMode :true
+	        }
 		});
 		
 		var cm=[
 				{header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
-	            {header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-	            {header: "日期",width: 100,dataIndex: "dictionaryName",menuDisabled: true,sortable :false,
+	            //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
+	            {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false,
 					renderer : function(value, cellmeta, record, rowIndex,
 							columnIndex, store) {
 						cellmeta.tdAttr = 'data-qtip="' + value + '"';
 						return value;
 					}},
-	            {header: "审核标志",width: 60,dataIndex: "typeName",menuDisabled: true,sortable :false,
+	            {header: "审核标志",width: 100,dataIndex: "",menuDisabled: true,sortable :false,
 					renderer : function(value, cellmeta, record, rowIndex,
 							columnIndex, store) {
 						cellmeta.tdAttr = 'data-qtip="' + value + '"';
 						return value;
 					}},
-	            {header: "单据编号",width:100,dataIndex: "dictionaryValue",menuDisabled: true,sortable :false,
+	            {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false,
 					renderer : function(value, cellmeta, record, rowIndex,
 							columnIndex, store) {
 						cellmeta.tdAttr = 'data-qtip="' + value + '"';
 						return value;
 					}},
-	            {header: "购货单位",width: 80,dataIndex: "dictionaryCode",menuDisabled: true,sortable :false,
+	            {header: "购货单位",width: 80,dataIndex: "ghcustom",menuDisabled: true,sortable :false,
 					renderer : function(value, cellmeta, record, rowIndex,
 							columnIndex, store) {
 						cellmeta.tdAttr = 'data-qtip="' + value + '"';
 						return value;
 					}},
-	            {header: "发货仓库",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+	            {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false,
 					renderer : function(value, cellmeta, record, rowIndex,
 							columnIndex, store) {
 						cellmeta.tdAttr = 'data-qtip="' + value + '"';
 						return value;
 					}},
-                {header: "产品长代码",width: 120,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }},
-                {header: "产品名称",width: 120,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "规格型号",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "规格型号",width: 100,dataIndex: "fitemModel",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "单位",width: 80,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "单位",width: 80,dataIndex: "unit",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "批号",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "实发数量",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "实发数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "单位成本",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "成本",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "部门",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "部门",width: 100,dataIndex: "deptName",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "业务员",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "业务员",width: 100,dataIndex: "userName",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "销售单价",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "销售单价",width: 100,dataIndex: "fconsignPrice",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
                         return value;
                     }
                 },
-                {header: "销售金额",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
+                {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false,
                     renderer : function(value, cellmeta, record, rowIndex,
                             columnIndex, store) {
                         cellmeta.tdAttr = 'data-qtip="' + value + '"';
@@ -181,7 +192,7 @@
                 }
 	         ];
 		
-		var typeNameStore = Ext.create('Ext.data.Store', {
+		/* var typeNameStore = Ext.create('Ext.data.Store', {
 		     model: 'Dict',
 		     proxy: {
 		         type: 'ajax',
@@ -203,10 +214,10 @@
 		     		}
 		     	}
 
-		});
+		}); */
 		
 		//grid组件
-		var dictGrid =  Ext.create("Ext.grid.Panel",{
+		var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
 			title:'零售单查询',
 			border:false,
 			columnLines: true,
@@ -214,16 +225,16 @@
 			region: "center",
 			width: "100%",
 			height: document.body.clientHeight,
-			id: "dictGrid",
+			id: "sellBillsGrid",
 			bbar:  Ext.create("Ext.PagingToolbar", {
-				store: dictStore,
+				store: sellBillsStore,
 				displayInfo: true,
 				displayMsg: SystemConstant.displayMsg,
 				emptyMsg: SystemConstant.emptyMsg
 			}),
 			columns:cm,
 	     	forceFit : true,
-			store: dictStore,
+			store: sellBillsStore,
 			autoScroll: true,
 			stripeRows: true,
 			tbar: ['日期',
@@ -262,7 +273,7 @@
 				text:'查询',
 				iconCls:'search-button',
 				handler:function(){
-					var proxy = dictStore.getProxy();
+					var proxy = sellBillsStore.getProxy();
 					proxy.setExtraParam("dictName",Ext.getCmp("dictName").getValue());
 					var dictType = Ext.getCmp("typeCombox").getValue();
 					if(dictType=='全部') {
@@ -270,7 +281,7 @@
 					}
 					
 					proxy.setExtraParam("dictType",dictType);
-					dictStore.loadPage(1);
+					sellBillsStore.loadPage(1);
 				}
 			},'->',
 			{
@@ -289,13 +300,13 @@
 				}
 			}
 		});
-		dictStore.load({params:{start:0,limit:SystemConstant.commonSize}});
+		sellBillsStore.load({params:{start:0,limit:SystemConstant.commonSize}});
 		
 		query();
 		
 		Ext.create("Ext.container.Viewport", {
 		    layout: "border",
-			items: [dictGrid]
+			items: [sellBillsGrid]
 		});
 		
 		function query(){
