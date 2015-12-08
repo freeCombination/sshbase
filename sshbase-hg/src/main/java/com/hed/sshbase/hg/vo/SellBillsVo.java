@@ -17,7 +17,7 @@ public class SellBillsVo implements Serializable{
 	private Date fdate;
 	
 	// 审核标志
-	
+	private String fcheckFlag;
 	// 购货单位 h
 	private Integer fsupplyId;
 	// 发货仓库 h
@@ -25,8 +25,8 @@ public class SellBillsVo implements Serializable{
 	
 	private String fitemName;
 	
-	// 规格型号 e TODO 表体数据表不存在这个字段
-	private String fitemModel;
+	// 规格型号 
+	private String fmodel;
 	// 单位 e
 	private Integer funitId;
 	// 批号 e
@@ -57,6 +57,7 @@ public class SellBillsVo implements Serializable{
 	private String stockName;
 	// 单据编号
 	private String fbillNo;
+	private String fbarCode;
 	
 	public Integer getFinterId() {
 		return finterId;
@@ -87,12 +88,6 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFitemName(String fitemName) {
 		this.fitemName = fitemName;
-	}
-	public String getFitemModel() {
-		return fitemModel;
-	}
-	public void setFitemModel(String fitemModel) {
-		this.fitemModel = fitemModel;
 	}
 	public Integer getFunitId() {
 		return funitId;
@@ -195,6 +190,24 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFbillNo(String fbillNo) {
 		this.fbillNo = fbillNo;
+	}
+	public String getFmodel() {
+		return fmodel;
+	}
+	public void setFmodel(String fmodel) {
+		this.fmodel = fmodel;
+	}
+	public String getFcheckFlag() {
+		return fcheckFlag;
+	}
+	public void setFcheckFlag(String fcheckFlag) {
+		this.fcheckFlag = fcheckFlag;
+	}
+	public String getFbarCode() {
+		return fbarCode;
+	}
+	public void setFbarCode(String fbarCode) {
+		this.fbarCode = fbarCode;
 	}
 	
 }

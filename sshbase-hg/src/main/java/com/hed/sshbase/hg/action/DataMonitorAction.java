@@ -21,6 +21,22 @@ public class DataMonitorAction extends BaseAction {
 	@Resource
     private IDataMonitorService monitorService;
 	
+	private String billsName;
+	private String billsId;
+	
+	public String getBillsName() {
+		return billsName;
+	}
+	public void setBillsName(String billsName) {
+		this.billsName = billsName;
+	}
+	public String getBillsId() {
+		return billsId;
+	}
+	public void setBillsId(String billsId) {
+		this.billsId = billsId;
+	}
+	
 	/**
 	 * 获取销售出库单
 	 * @return
@@ -39,4 +55,8 @@ public class DataMonitorAction extends BaseAction {
         }
         return null;
     }
+	
+	public String toSellBillsDetail() {
+		return SUCCESS;
+	}
 }

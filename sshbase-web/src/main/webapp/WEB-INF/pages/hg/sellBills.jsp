@@ -26,6 +26,12 @@
 		             "Ext.toolbar.Paging", 
 		             "Ext.form.*",
 					 "Ext.data.*" ]);
+		
+		var sdate = '';
+		var edate = '';
+		var btype = '';
+		var cflag = '';
+		
 		//建立Model模型对象
 		Ext.define("SellBills",{
 			extend:"Ext.data.Model",
@@ -35,7 +41,7 @@
 				{name: "fsupplyId"}, 
 				{name: "fdCStockId"},
 				{name: "fitemName"},
-				{name: "fitemModel"},
+				{name: "fmodel"},
 				{name: "funitId"}, 
                 {name: "fbatchNo"}, 
                 {name: "fauxqty"}, 
@@ -52,7 +58,9 @@
                 {name: "unit"},
                 {name: "ghcustom"},
                 {name: "stockName"},
-                {name: "fbillNo"}
+                {name: "fbillNo"},
+                {name: "fcheckFlag"},
+                {name: "fbarCode"}
 			]
 		});
 		
@@ -75,150 +83,31 @@
 		});
 		
 		var cm=[
-				{header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
-	            //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-	            {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "审核标志",width: 100,dataIndex: "",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "购货单位",width: 80,dataIndex: "ghcustom",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }},
-                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "规格型号",width: 100,dataIndex: "fitemModel",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "单位",width: 80,dataIndex: "unit",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "实发数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "部门",width: 100,dataIndex: "deptName",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "业务员",width: 100,dataIndex: "userName",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "销售单价",width: 100,dataIndex: "fconsignPrice",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                }
-	         ];
-		
-		/* var typeNameStore = Ext.create('Ext.data.Store', {
-		     model: 'Dict',
-		     proxy: {
-		         type: 'ajax',
-		         url: '${ctx}/dict/getDictTypes.action',
-		         reader: {
-		             type: 'json'
-		         }
-		     },
-		     autoLoad: true,
-		     listeners:{
-		     		load:function(store,records,eOpts){
-		     			var data = [{dictionaryId:"",dictionaryName:"全部"}];
-		     			for(var i = 0; i < records.length; i++){
-		     				var id = records[i].get("pkDictionaryId");
-		     				var name = records[i].get("dictionaryName");
-		     				data.push({pkDictionaryId:id,dictionaryName:name});
-		     			}
-		     			store.loadData(data);
-		     		}
-		     	}
-
-		}); */
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
+                {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
+                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
+                {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
+                {header: "购货单位",width: 100,dataIndex: "ghcustom",menuDisabled: true,sortable :false},
+                {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
+                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
+                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                {header: "实发数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                {header: "部门",width: 100,dataIndex: "deptName",menuDisabled: true,sortable :false},
+                {header: "业务员",width: 90,dataIndex: "userName",menuDisabled: true,sortable :false},
+                {header: "销售单价",width: 100,dataIndex: "fconsignPrice",menuDisabled: true,sortable :false},
+                {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 100,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
+             ];
 		
 		//grid组件
 		var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
-			title:'零售单查询',
+			//title:'零售单查询',
 			border:false,
 			columnLines: true,
 			layout:"fit",
@@ -242,7 +131,7 @@
 				width: 90,
 				xtype: 'textfield',
 				readOnly:true,
-		        value:getFirstDay(),
+		        //value:getFirstDay(),
 		        id:'queryDate',
 		        listeners:{
 		            "afterrender":function(com,eOpts){
@@ -274,13 +163,7 @@
 				iconCls:'search-button',
 				handler:function(){
 					var proxy = sellBillsStore.getProxy();
-					proxy.setExtraParam("dictName",Ext.getCmp("dictName").getValue());
-					var dictType = Ext.getCmp("typeCombox").getValue();
-					if(dictType=='全部') {
-						dictType = '';
-					}
-					
-					proxy.setExtraParam("dictType",dictType);
+					proxy.setExtraParam("queryDate",Ext.getCmp("queryDate").getValue());
 					sellBillsStore.loadPage(1);
 				}
 			},'->',
@@ -296,11 +179,11 @@
 			}],
 			listeners:{
 				itemdblclick:function(grid, record, item, index, e, eOpts ){
-					openwin(0);
+					openwin(record.get('fbillNo'));
 				}
 			}
 		});
-		sellBillsStore.load({params:{start:0,limit:SystemConstant.commonSize}});
+		//sellBillsStore.load({params:{start:0,limit:SystemConstant.commonSize}});
 		
 		query();
 		
@@ -334,7 +217,6 @@
 	                            fieldLabel: '起始日期',
 	                            id:'startDate',
 	                            readOnly:true,
-	                            value:getFirstDay(),
 	                            listeners:{
 	                                "afterrender":function(com,eOpts){
 	                                    var startTime=Ext.getDom("startDate-inputEl");
@@ -355,7 +237,6 @@
 	                            fieldLabel: '截止日期 ',
 	                            id:'endDate',
 	                            readOnly:true,
-	                            value:Ext.Date.format(new Date(),"Y-m-d"),
 	                            listeners:{
 	                                "afterrender":function(com,eOpts){
 	                                    var endTime=Ext.getDom("endDate-inputEl");
@@ -378,89 +259,47 @@
 	                width: '100%',
 	                items :[
 	                    {
-	                        columnWidth: .6,
+	                        columnWidth: .5,
 	                        border: false,
 	                        items: [{
-	                            xtype: 'textfield',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            fieldLabel: '物料代码',
-	                            id:'startMaterialCode'
-	                        },{
-	                            xtype: 'textfield',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            fieldLabel: '客户代码',
-	                            id:'startClientCode'
-	                        },{
-	                            fieldLabel: '销售方式',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            xtype: 'combo',
-	                            id: 'sellWay'
+	                        	fieldLabel: '单据类型',
+                                xtype: 'combo',
+                                id:'billsType',
+                                displayField: 'display',
+                                valueField: 'value',
+                                store:Ext.create('Ext.data.Store', {
+                                	fields:['display', 'value'],
+                                    data:[
+                                        {'display':'全部', 'value':-1},
+                                        {'display':'外购入库', 'value':1},
+                                        {'display':'其他入库', 'value':10},
+                                        {'display':'销售出库', 'value':21},
+                                        {'display':'其他出库', 'value':29}
+                                    ]
+                                })
 	                        }]
 	                    },
 	                    {
-	                        columnWidth: .4,
+	                        columnWidth: .5,
 	                        border: false,
 	                        items: [{
-	                            xtype: 'textfield',
-	                            labelWidth: 40,
-	                            width: 145,
-	                            fieldLabel: '至 ',
-	                            id:'endMaterialCode'
-	                        },{
-	                            xtype: 'textfield',
-	                            labelWidth: 40,
-	                            width: 145,
-	                            fieldLabel: '至 ',
-	                            id:'endClientCode'
+	                        	fieldLabel: '审核标志',
+                                xtype: 'combo',
+                                id:'checkFlag',
+                                displayField: 'display',
+                                valueField: 'value',
+                                store:Ext.create('Ext.data.Store', {
+                                    fields:['display', 'value'],
+                                    data:[
+                                        {'display':'全部', 'value':'A'},
+                                        {'display':'Y', 'value':'Y'},
+                                        {'display':'N', 'value':'N'},
+                                    ]
+                                })
 	                        }]
 	                    }
 	                ]
-	            },
-	            {
-                    xtype:'fieldset',
-                    padding: '5 0 0 0',
-                    collapsible: false,
-                    layout: 'column',
-                    width: '100%',
-                    items :[
-                        {
-                            columnWidth: .3,
-                            border: false,
-                            items: [{
-                                xtype: 'checkbox',
-                                margin:'0 0 0 30',
-                                boxLabel: '分级汇总'
-                            },{
-                                xtype: 'checkbox',
-                                margin:'0 0 0 30',
-                                boxLabel: '仅显示汇总行'
-                            }]
-                        },
-                        {
-                            columnWidth: .7,
-                            border: false,
-                            items: [{
-                                fieldLabel: '单据状态',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
-                            },{
-                                fieldLabel: '单据类型 ',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
-                            },{
-                                fieldLabel: '订单来源',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
-                            }]
-                        }
-                    ]
-                }]
+	            }]
 	        });
 	        
 	        var queryWin = Ext.create('Ext.window.Window', {
@@ -479,18 +318,43 @@
 	                text: '确定',
 	                id: 'sureBtn',
 	                handler: function() {
-	                    
+	                	Ext.getCmp("queryDate").setValue('');
+	                	sdate = Ext.getCmp('startDate').getValue();
+                        edate = Ext.getCmp('endDate').getValue();
+                        btype = Ext.getCmp('billsType').getValue();
+                        cflag = Ext.getCmp('checkFlag').getValue();
+	                	
+	                    var proxy = sellBillsStore.getProxy();
+	                    proxy.setExtraParam('startDate',sdate);
+	                    proxy.setExtraParam('endDate',edate);
+	                    proxy.setExtraParam('billsType',btype);
+	                    proxy.setExtraParam('checkFlag',cflag);
+	                    proxy.setExtraParam("queryDate",'');
+	                    sellBillsStore.loadPage(1);
+	                    queryWin.close();
 	                }
 	            }, {
 	                text: '取消',
 	                id: 'cancelBtn',
 	                handler: function() {
+	                	sellBillsStore.loadPage(1);
 	                    queryWin.close();
 	                }
 	            }],
 	            listeners: {
-	                render: function(){
-	                    
+	                afterrender: function(){
+	                	if (sdate && sdate != '') {
+	                		Ext.getCmp('startDate').setValue(sdate);
+	                        Ext.getCmp('endDate').setValue(edate);
+	                        Ext.getCmp('billsType').setValue(btype);
+	                        Ext.getCmp('checkFlag').setValue(cflag);
+	                	}
+	                	else {
+	                		Ext.getCmp('startDate').setValue(getFirstDay());
+                            Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
+                            Ext.getCmp('billsType').setValue(-1);
+                            Ext.getCmp('checkFlag').setValue('A');
+	                	}
 	                }
 	            }
 	        }).show();
@@ -516,7 +380,11 @@
             	x = 0;
             }
 		    
-		    window.open("${ctx}/hg/toRetailBillsDetail.action?billsId=" + billsId, "", 
+            var url = "${ctx}/hg/toSellBillsDetail.action?billsId=" + billsId + "&billsName=销售出库单";
+            url = encodeURI(url);
+            url = encodeURI(url);
+            
+		    window.open(url, "", 
 		        "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
 		}
 		

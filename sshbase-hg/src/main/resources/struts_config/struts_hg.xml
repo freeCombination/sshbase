@@ -13,7 +13,7 @@
         <action name="toSellBills" >
             <result>/WEB-INF/pages/hg/sellBills.jsp</result>
         </action>
-        <action name="toSellBillsDetail" >
+        <action name="toSellBillsDetail" class="com.hed.sshbase.hg.action.DataMonitorAction">
             <result>/WEB-INF/pages/hg/sellBillsDetail.jsp</result>
         </action>
 		
