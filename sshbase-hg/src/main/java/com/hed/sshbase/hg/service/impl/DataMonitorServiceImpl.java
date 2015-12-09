@@ -41,9 +41,18 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t2.FInterID finterId, t1.Fdate fdate, t1.FSupplyID fsupplyId, t1.FDCStockID fdCStockId, "
 				+ " t2.FItemName fitemName, t2.FUnitID funitId, t2.FBatchNo fbatchNo,"
 				+ " t2.Fauxqty fauxqty, t2.Fauxprice fauxprice, t2.Famount famount, t1.FDeptID fdeptId, "
-				+ " t1.FEmpID fempId, t2.FConsignPrice fconsignPrice, t2.FConsignAmount fconsignAmount,"
-				+ " t3.FName fname, t3.FNumber fnumber, t4.FName deptName, t5.FName userName, t6.FName unit,"
-				+ " t7.FName ghcustom, t8.FName stockName, t1.FBillNo fbillNo, t9.FModel fmodel, t2.FBarCode fbarCode";
+				+ " t1.FEmpID fempId, t2.FConsignPrice fconsignPrice, t2.FConsignAmount fconsignAmount, "
+				+ " t3.FName fname, t3.FNumber fnumber, t4.FName deptName, t5.FName userName, t6.FName unit, "
+				+ " t7.FName ghcustom, t8.FName stockName, t1.FBillNo fbillNo, t9.FModel fmodel, t2.FBarCode fbarCode, "
+				+ " t9.FShortNumber fshortNumber, t2.FAuxQtyMust fauxQtyMust, t10.FName fsecUnitName, "
+				+ " t2.FSecCoefficient fsecCoefficient, t2.FSecQty fsecQty, t2.FAuxPlanPrice fauxPlanPrice, "
+				+ " t2.FPlanAmount fplanAmount, t2.Fnote fnote, t2.FKFDate fkfDate, t2.FKFPeriod fkfPeriod, "
+				+ " t2.FPeriodDate fperiodDate, t2.FDiscountRate fdiscountRate, t2.FSourceBillNo fsourceBillNo, "
+				+ " t2.FContractBillNo fcontractBillNo, t2.FOrderBillNo forderBillNo, t2.FOrderEntryID forderEntryId, "
+				+ " t2.FSecInvoiceQty fsecInvoiceQty, t2.FAuxQtyInvoice fauxQtyInvoice, t2.FClientOrderNo fclientOrderNo, "
+				+ " t2.FConfirmMemEntry fconfirmMemEntry, t2.FClientEntryID fclientEntryId, t2.FChkPassItem fchkPassItem, "
+				+ " t1.FSettleDate fsettleDate, t1.FFetchAdd ffetchAdd, t1.FHolisticDiscountRate fholisticDiscountRate, "
+				+ " t1.FSaleStyle fsaleStyle, t1.FExplanation fexplanation, t1.FSelTranType fselTranType ";
 		
 		String countSql = " SELECT count(*)";
 		String commonSql = " FROM ICStockBill t1 LEFT JOIN ICStockBillEntry t2 "
@@ -55,6 +64,8 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN t_Organization t7 ON t7.FItemID = t1.FSupplyID"
 				+ " LEFT JOIN t_Stock t8 ON t8.FItemID = t1.FDCStockID"
 				+ " LEFT JOIN t_ICItem t9 ON t9.FItemID = t2.FItemID"
+				+ " LEFT JOIN t_MeasureUnit t10 ON t10.FItemID = t9.FSecUnitID" // 对不对
+				+ " "
 				+ " WHERE 1 = 1 ";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {

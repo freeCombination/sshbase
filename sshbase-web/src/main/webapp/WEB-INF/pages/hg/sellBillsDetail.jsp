@@ -7,7 +7,7 @@
 <%@include file="../common/taglibs.jsp"%>
 <%@include file="../common/css.jsp"%>
 <%@include file="../common/ext.jsp"%>
-<title>零售单明细</title>
+<title>出入库明细单</title>
 <link href="" rel="SHORTCUT ICON" />
 <style type="text/css">
   .x-form-layout-table{
@@ -60,7 +60,36 @@
                 {name: "stockName"},
                 {name: "fbillNo"},
                 {name: "fcheckFlag"},
-                {name: "fbarCode"}
+                {name: "fbarCode"},
+                
+                {name: "fshortNumber"}, 
+                {name: "fauxQtyMust"}, 
+                {name: "fsecUnitName"}, 
+                {name: "fsecCoefficient"},
+                {name: "fsecQty"},
+                {name: "fauxPlanPrice"},
+                {name: "fplanAmount"}, 
+                {name: "fnote"}, 
+                {name: "fkfDate"}, 
+                {name: "fkfPeriod"},
+                {name: "fperiodDate"},
+                {name: "fdiscountRate"},
+                {name: "fsourceBillNo"}, 
+                {name: "fcontractBillNo"}, 
+                {name: "forderBillNo"},
+                {name: "forderEntryId"},
+                {name: "fsecInvoiceQty"},
+                {name: "fauxQtyInvoice"}, 
+                {name: "fclientOrderNo"}, 
+                {name: "fconfirmMemEntry"},
+                {name: "fclientEntryId"},
+                {name: "fchkPassItem"},
+                {name: "fsettleDate"},
+                {name: "ffetchAdd"},
+                {name: "fholisticDiscountRate"},
+                {name: "fsaleStyle"}, 
+                {name: "fexplanation"}, 
+                {name: "fselTranType"}
             ]
         });
         
@@ -85,24 +114,40 @@
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-                {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
-                {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
-                {header: "购货单位",width: 100,dataIndex: "ghcustom",menuDisabled: true,sortable :false},
-                {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
-                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
-                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "产品代码",width: 90,dataIndex: "fshortNumber",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
+                {header: "产品名称",width:160,dataIndex: "fname",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
-                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "辅助属性",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
                 {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "应发数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
                 {header: "实发数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "辅助单位",width: 90,dataIndex: "fsecUnitName",menuDisabled: true,sortable :false},
+                {header: "换算率",width: 100,dataIndex: "fsecCoefficient",menuDisabled: true,sortable :false},
+                {header: "辅助数量",width: 100,dataIndex: "fsecQty",menuDisabled: true,sortable :false},
+                {header: "计划单价",width: 100,dataIndex: "fauxPlanPrice",menuDisabled: true,sortable :false},
+                {header: "计划价金额",width: 100,dataIndex: "fplanAmount",menuDisabled: true,sortable :false},
                 {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
                 {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
-                {header: "部门",width: 100,dataIndex: "deptName",menuDisabled: true,sortable :false},
-                {header: "业务员",width: 90,dataIndex: "userName",menuDisabled: true,sortable :false},
+                {header: "备注",width: 100,dataIndex: "fnote",menuDisabled: true,sortable :false},
+                {header: "生产/采购日期",width: 120,dataIndex: "fkfDate",menuDisabled: true,sortable :false},
+                {header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
+                {header: "有效期至",width: 100,dataIndex: "fperiodDate",menuDisabled: true,sortable :false},
+                {header: "仓位",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
                 {header: "销售单价",width: 100,dataIndex: "fconsignPrice",menuDisabled: true,sortable :false},
+                {header: "折扣率(%)",width: 100,dataIndex: "fdiscountRate",menuDisabled: true,sortable :false},
                 {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false},
-                {header: "条形码",width: 100,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
+                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
+                {header: "合同单号",width: 100,dataIndex: "fcontractBillNo",menuDisabled: true,sortable :false},
+                {header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
+                {header: "订单分录",width: 100,dataIndex: "forderEntryId",menuDisabled: true,sortable :false},
+                {header: "辅助单位开票数量",width: 120,dataIndex: "fsecInvoiceQty",menuDisabled: true,sortable :false},
+                {header: "开票数量",width: 90,dataIndex: "fauxQtyInvoice",menuDisabled: true,sortable :false},
+                {header: "客户订单号",width: 90,dataIndex: "fclientOrderNo",menuDisabled: true,sortable :false},
+                {header: "对账确认意见(表体)",width: 120,dataIndex: "fconfirmMemEntry",menuDisabled: true,sortable :false},
+                {header: "订单行号",width: 90,dataIndex: "fclientEntryId",menuDisabled: true,sortable :false},
+                {header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
              ];
         
         //grid组件
@@ -152,6 +197,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    id:'fsettleDate',
                     fieldLabel: '收款日期'
                 }]
             },
@@ -160,7 +206,8 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
-                    fieldLabel: '交货地点 '
+                    id:'ffetchAdd',
+                    fieldLabel: '交货地点'
                 }]
             },
             {
@@ -177,6 +224,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    id:'fholisticDiscountRate',
                     fieldLabel: '整单折扣率'
                 }]
             },
@@ -185,6 +233,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    id:'fsaleStyle',
                     fieldLabel: '销售方式'
                 }]
             },
@@ -193,6 +242,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    id:'fexplanation',
                     fieldLabel: '摘要 '
                 }]
             },
@@ -210,7 +260,8 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
-                    fieldLabel: '原单类型'
+                    id:'fselTranType',
+                    fieldLabel: '源单类型'
                 }]
             },
             {
@@ -244,6 +295,12 @@
         		Ext.getCmp('fbillNo').setValue(r.get('fbillNo'));
         		Ext.getCmp('fdate').setValue(r.get('fdate'));
         		Ext.getCmp('stockName').setValue(r.get('stockName'));
+        		Ext.getCmp('fsettleDate').setValue(r.get('fsettleDate'));
+        		Ext.getCmp('ffetchAdd').setValue(r.get('ffetchAdd'));
+        		Ext.getCmp('fholisticDiscountRate').setValue(r.get('fholisticDiscountRate'));
+        		Ext.getCmp('fsaleStyle').setValue(r.get('fsaleStyle'));
+        		Ext.getCmp('fexplanation').setValue(r.get('fexplanation'));
+        		Ext.getCmp('fselTranType').setValue(r.get('fselTranType'));
         		
         		hasSet = true;
         	}
