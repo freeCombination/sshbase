@@ -36,20 +36,20 @@
 		Ext.define("SellBills",{
             extend:"Ext.data.Model",
             fields:[
-                {name: "finterId"}, 
+                {name: "finterId"},
                 {name: "fdate"}, 
-                {name: "fsupplyId"}, 
+                {name: "fsupplyId"},
                 {name: "fdCStockId"},
                 {name: "fitemName"},
                 {name: "fmodel"},
-                {name: "funitId"}, 
-                {name: "fbatchNo"}, 
-                {name: "fauxqty"}, 
+                {name: "funitId"},
+                {name: "fbatchNo"},
+                {name: "fauxqty"},
                 {name: "fauxprice"},
                 {name: "famount"},
                 {name: "fdeptId"},
-                {name: "fempId"}, 
-                {name: "fconsignPrice"}, 
+                {name: "fempId"},
+                {name: "fconsignPrice"},
                 {name: "fconsignAmount"},
                 {name: "fname"},
                 {name: "fnumber"},
@@ -62,7 +62,9 @@
                 {name: "fcheckFlag"},
                 {name: "fbarCode"},
                 
-                {name: "fshortNumber"}, 
+                {name: "ffmanagerId"},
+                
+                {name: "fshortNumber"},
                 {name: "fauxQtyMust"}, 
                 {name: "fsecUnitName"}, 
                 {name: "fsecCoefficient"},
@@ -74,22 +76,25 @@
                 {name: "fkfPeriod"},
                 {name: "fperiodDate"},
                 {name: "fdiscountRate"},
-                {name: "fsourceBillNo"}, 
+                {name: "fsourceBillNo"},
                 {name: "fcontractBillNo"}, 
                 {name: "forderBillNo"},
                 {name: "forderEntryId"},
                 {name: "fsecInvoiceQty"},
-                {name: "fauxQtyInvoice"}, 
-                {name: "fclientOrderNo"}, 
+                {name: "fauxQtyInvoice"},
+                {name: "fclientOrderNo"},
                 {name: "fconfirmMemEntry"},
                 {name: "fclientEntryId"},
                 {name: "fchkPassItem"},
                 {name: "fsettleDate"},
                 {name: "ffetchAdd"},
                 {name: "fholisticDiscountRate"},
-                {name: "fsaleStyle"}, 
-                {name: "fexplanation"}, 
-                {name: "fselTranType"}
+                {name: "fsaleStyle"},
+                {name: "fexplanation"},
+                {name: "fselTranType"},
+                
+                {name: "fitemId"},
+                {name: "fcomBrandName"}
             ]
         });
         
@@ -111,6 +116,7 @@
             }
         });
         
+        // 销售出库
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
@@ -150,6 +156,33 @@
                 {header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
              ];
         
+        // 其他出库
+        var cm2=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
+                {header: "商品编码",width: 90,dataIndex: "fshortNumber",menuDisabled: true,sortable :false},//fitemId
+                {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
+                {header: "商品名称",width:160,dataIndex: "fname",menuDisabled: true,sortable :false},//fitemName
+                {header: "商品类别",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
+                {header: "商品品牌",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "应出库数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
+                {header: "实出库数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                {header: "金额",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                {header: "备注",width: 100,dataIndex: "fnote",menuDisabled: true,sortable :false},
+                {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
+                {header: "仓位",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false}
+             ];
+        
+        var finalCm = cm;
+        if ('其他出库单' == billsName) {
+        	finalCm = cm2;
+        }
+        
+        
         //grid组件
         var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
             //title:'零售单查询',
@@ -164,7 +197,7 @@
                 displayMsg: SystemConstant.displayMsg,
                 emptyMsg: SystemConstant.emptyMsg
             }),
-            columns:cm,
+            columns:finalCm,
             forceFit : false,
             store: sellBillsStore,
             autoScroll: true,
@@ -190,6 +223,17 @@
                 items: [{
                     xtype: 'label',
                     text: billsName
+                }]
+            },
+            // 其他出库单：部门
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    id:'deptName',
+                    hidden:true,
+                    fieldLabel: '部门'
                 }]
             },
             {
@@ -284,6 +328,15 @@
             }]
         });
 		
+		if ('其他出库单' == billsName) {
+			Ext.getCmp('fsettleDate').setVisible(false);
+			Ext.getCmp('deptName').setVisible(true);
+			Ext.getCmp('fexplanation').setVisible(false);
+			Ext.getCmp('fsaleStyle').setVisible(false);
+			Ext.getCmp('fholisticDiscountRate').setVisible(false);
+			Ext.getCmp('ghcustom').setVisible(false);
+			Ext.getCmp('ffetchAdd').setVisible(false);
+        }
 		
 		var proxy = sellBillsStore.getProxy();
         proxy.setExtraParam("forDetail","forDetail");
@@ -301,6 +354,7 @@
         		Ext.getCmp('fsaleStyle').setValue(r.get('fsaleStyle'));
         		Ext.getCmp('fexplanation').setValue(r.get('fexplanation'));
         		Ext.getCmp('fselTranType').setValue(r.get('fselTranType'));
+        		Ext.getCmp('deptName').setValue(r.get('deptName'));
         		
         		hasSet = true;
         	}

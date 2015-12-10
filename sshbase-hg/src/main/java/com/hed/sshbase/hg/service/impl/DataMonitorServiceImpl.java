@@ -52,7 +52,8 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t2.FSecInvoiceQty fsecInvoiceQty, t2.FAuxQtyInvoice fauxQtyInvoice, t2.FClientOrderNo fclientOrderNo, "
 				+ " t2.FConfirmMemEntry fconfirmMemEntry, t2.FClientEntryID fclientEntryId, t2.FChkPassItem fchkPassItem, "
 				+ " t1.FSettleDate fsettleDate, t1.FFetchAdd ffetchAdd, t1.FHolisticDiscountRate fholisticDiscountRate, "
-				+ " t1.FSaleStyle fsaleStyle, t1.FExplanation fexplanation, t1.FSelTranType fselTranType ";
+				+ " t1.FSaleStyle fsaleStyle, t1.FExplanation fexplanation, t1.FSelTranType fselTranType, "
+				+ " t1.FFManagerID ffmanagerId, t2.FItemID fitemId, t11.FName fcomBrandName";
 		
 		String countSql = " SELECT count(*)";
 		String commonSql = " FROM ICStockBill t1 LEFT JOIN ICStockBillEntry t2 "
@@ -65,7 +66,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN t_Stock t8 ON t8.FItemID = t1.FDCStockID"
 				+ " LEFT JOIN t_ICItem t9 ON t9.FItemID = t2.FItemID"
 				+ " LEFT JOIN t_MeasureUnit t10 ON t10.FItemID = t9.FSecUnitID" // 对不对
-				+ " "
+				+ " LEFT JOIN t_Supplier t11 ON t11.FItemID = t2.FItemID"
 				+ " WHERE 1 = 1 ";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {

@@ -120,6 +120,23 @@ public class SellBillsVo implements Serializable{
 	// 源单类型
 	private Integer fselTranType;
 	
+	/* 其他出库 *****************************/
+	// 领料部门(deptName)
+	// 数量(实发数量 fauxqty)
+	// 单价(单位成本 fauxprice)
+	// 金额(成本 famount)
+	// 领料
+	private Integer ffmanagerId;
+	// 商品编码
+	private Integer fitemId;
+	// 商品名称(fitemName)
+	// 商品类别
+	private String fcomBrandName;
+	// 商品品牌
+	
+	// 应出库数量(应发数量 fauxQtyMust)
+	// 实出库数量(实发数量 fauxqty)
+	
 	
 	public Integer getFinterId() {
 		return finterId;
@@ -438,6 +455,24 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFselTranType(Integer fselTranType) {
 		this.fselTranType = fselTranType;
+	}
+	public Integer getFfmanagerId() {
+		return ffmanagerId;
+	}
+	public void setFfmanagerId(Integer ffmanagerId) {
+		this.ffmanagerId = ffmanagerId;
+	}
+	public Integer getFitemId() {
+		return fitemId;
+	}
+	public void setFitemId(Integer fitemId) {
+		this.fitemId = fitemId;
+	}
+	public String getFcomBrandName() {
+		return fcomBrandName;
+	}
+	public void setFcomBrandName(String fcomBrandName) {
+		this.fcomBrandName = fcomBrandName;
 	}
 	
 }
