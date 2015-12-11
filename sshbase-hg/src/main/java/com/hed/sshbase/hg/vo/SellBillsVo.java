@@ -11,6 +11,7 @@ public class SellBillsVo implements Serializable{
 
 	private static final long serialVersionUID = -8358458975728084150L;
     
+	private Short ftranType;
 	private Integer finterId;
 	// 日期 h
 	private Date fdate;
@@ -120,7 +121,7 @@ public class SellBillsVo implements Serializable{
 	// 源单类型
 	private Integer fselTranType;
 	
-	/* 其他出库 *****************************/
+	/*其他出库 *****************************/
 	// 领料部门(deptName)
 	// 数量(实发数量 fauxqty)
 	// 单价(单位成本 fauxprice)
@@ -131,12 +132,36 @@ public class SellBillsVo implements Serializable{
 	private Integer fitemId;
 	// 商品名称(fitemName)
 	// 商品类别
-	private String fcomBrandName;
+	private String fitemTypeName;
 	// 商品品牌
+	private String fcomBrandName;
 	
 	// 应出库数量(应发数量 fauxQtyMust)
 	// 实出库数量(实发数量 fauxqty)
 	
+	/*外购入库*****************************/
+	// 供应商
+	private String fsupplyName;
+	// 收料仓库(stockName)
+	// 单价(fauxprice)
+	// 应收数量
+	// 实收数量(fauxqty)
+	// 金额(famount)
+	// 销售价格
+	private BigDecimal fentrySelfA0164;
+	// 销售价金额
+	private BigDecimal fentrySelfA0162;
+	// 进销价差额
+	private BigDecimal fentrySelfA0163;
+	// 关联数量
+	private BigDecimal fentrySelfA0165;
+	// 是否关联完毕
+	private Integer fentrySelfA0166;
+	// 门店销售价
+	
+	/*其他入库*****************************/
+	// 保管
+	private String fsManagerName;
 	
 	public Integer getFinterId() {
 		return finterId;
@@ -473,6 +498,60 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFcomBrandName(String fcomBrandName) {
 		this.fcomBrandName = fcomBrandName;
+	}
+	public Short getFtranType() {
+		return ftranType;
+	}
+	public void setFtranType(Short ftranType) {
+		this.ftranType = ftranType;
+	}
+	public String getFitemTypeName() {
+		return fitemTypeName;
+	}
+	public void setFitemTypeName(String fitemTypeName) {
+		this.fitemTypeName = fitemTypeName;
+	}
+	public String getFsupplyName() {
+		return fsupplyName;
+	}
+	public void setFsupplyName(String fsupplyName) {
+		this.fsupplyName = fsupplyName;
+	}
+	public BigDecimal getFentrySelfA0164() {
+		return fentrySelfA0164;
+	}
+	public void setFentrySelfA0164(BigDecimal fentrySelfA0164) {
+		this.fentrySelfA0164 = fentrySelfA0164;
+	}
+	public BigDecimal getFentrySelfA0162() {
+		return fentrySelfA0162;
+	}
+	public void setFentrySelfA0162(BigDecimal fentrySelfA0162) {
+		this.fentrySelfA0162 = fentrySelfA0162;
+	}
+	public BigDecimal getFentrySelfA0163() {
+		return fentrySelfA0163;
+	}
+	public void setFentrySelfA0163(BigDecimal fentrySelfA0163) {
+		this.fentrySelfA0163 = fentrySelfA0163;
+	}
+	public BigDecimal getFentrySelfA0165() {
+		return fentrySelfA0165;
+	}
+	public void setFentrySelfA0165(BigDecimal fentrySelfA0165) {
+		this.fentrySelfA0165 = fentrySelfA0165;
+	}
+	public Integer getFentrySelfA0166() {
+		return fentrySelfA0166;
+	}
+	public void setFentrySelfA0166(Integer fentrySelfA0166) {
+		this.fentrySelfA0166 = fentrySelfA0166;
+	}
+	public String getFsManagerName() {
+		return fsManagerName;
+	}
+	public void setFsManagerName(String fsManagerName) {
+		this.fsManagerName = fsManagerName;
 	}
 	
 }

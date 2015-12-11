@@ -38,6 +38,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
         String forDetail = paramMap.get("forDetail");
 		
 		String sql = " SELECT "
+				+ " t1.FTranType ftranType,"
 				+ " t2.FInterID finterId, t1.Fdate fdate, t1.FSupplyID fsupplyId, t1.FDCStockID fdCStockId, "
 				+ " t2.FItemName fitemName, t2.FUnitID funitId, t2.FBatchNo fbatchNo,"
 				+ " t2.Fauxqty fauxqty, t2.Fauxprice fauxprice, t2.Famount famount, t1.FDeptID fdeptId, "
@@ -53,7 +54,10 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t2.FConfirmMemEntry fconfirmMemEntry, t2.FClientEntryID fclientEntryId, t2.FChkPassItem fchkPassItem, "
 				+ " t1.FSettleDate fsettleDate, t1.FFetchAdd ffetchAdd, t1.FHolisticDiscountRate fholisticDiscountRate, "
 				+ " t1.FSaleStyle fsaleStyle, t1.FExplanation fexplanation, t1.FSelTranType fselTranType, "
-				+ " t1.FFManagerID ffmanagerId, t2.FItemID fitemId, t11.FName fcomBrandName";
+				+ " t1.FFManagerID ffmanagerId, t2.FItemID fitemId, t11.FName fsupplyName, t12.FName fitemTypeName, "
+				+ " t13.FName fcomBrandName, t2.FEntrySelfA0164 fentrySelfA0164, t2.FEntrySelfA0162 fentrySelfA0162, "
+				+ " t2.FEntrySelfA0163 fentrySelfA0163, t2.FEntrySelfA0165 fentrySelfA0165, t2.FEntrySelfA0166 fentrySelfA0166, "
+				+ " t14.FName fsManagerName";
 		
 		String countSql = " SELECT count(*)";
 		String commonSql = " FROM ICStockBill t1 LEFT JOIN ICStockBillEntry t2 "
@@ -66,7 +70,10 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN t_Stock t8 ON t8.FItemID = t1.FDCStockID"
 				+ " LEFT JOIN t_ICItem t9 ON t9.FItemID = t2.FItemID"
 				+ " LEFT JOIN t_MeasureUnit t10 ON t10.FItemID = t9.FSecUnitID" // 对不对
-				+ " LEFT JOIN t_Supplier t11 ON t11.FItemID = t2.FItemID"
+				+ " LEFT JOIN t_Supplier t11 ON t11.FItemID = t1.FSupplyID"
+				+ " LEFT JOIN t_ComCategory t12 ON t12.FItemID = t2.FComCategoryID"
+				+ " LEFT JOIN t_ComBrand t13 ON t13.FItemID =  t2.FComBrandID"
+				+ " LEFT JOIN t_Emp t14 ON t14.FItemID = t1.FSManagerID"
 				+ " WHERE 1 = 1 ";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {

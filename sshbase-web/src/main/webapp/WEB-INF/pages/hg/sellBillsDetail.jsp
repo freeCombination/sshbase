@@ -27,15 +27,17 @@
 		             "Ext.form.*",
 					 "Ext.data.*" ]);
 		
-		var billsName = '<s:property value="billsName" />';
-		billsName = decodeURI(billsName);
+		//var billsName = '<s:property value="billsName" />';
+		//billsName = decodeURI(billsName);
 		var billsId = '<s:property value="billsId" />';
+		var btype = '<s:property value="ftranType" />';
 		var hasSet = false;
 		
 		//建立Model模型对象
 		Ext.define("SellBills",{
             extend:"Ext.data.Model",
             fields:[
+                {name: "ftranType"},
                 {name: "finterId"},
                 {name: "fdate"}, 
                 {name: "fsupplyId"},
@@ -94,7 +96,16 @@
                 {name: "fselTranType"},
                 
                 {name: "fitemId"},
-                {name: "fcomBrandName"}
+                {name: "fitemTypeName"},
+                {name: "fcomBrandName"},
+                
+                {name: "fsupplyName"},
+                {name: "fentrySelfA0164"},
+                {name: "fentrySelfA0162"},
+                {name: "fentrySelfA0163"},
+                {name: "fentrySelfA0165"},
+                {name: "fentrySelfA0166"},
+                {name: "fsManagerName"}
             ]
         });
         
@@ -163,8 +174,8 @@
                 {header: "商品编码",width: 90,dataIndex: "fshortNumber",menuDisabled: true,sortable :false},//fitemId
                 {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
                 {header: "商品名称",width:160,dataIndex: "fname",menuDisabled: true,sortable :false},//fitemName
-                {header: "商品类别",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
-                {header: "商品品牌",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                {header: "商品类别",width: 100,dataIndex: "fitemTypeName",menuDisabled: true,sortable :false},
+                {header: "商品品牌",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
                 {header: "应出库数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
@@ -177,11 +188,58 @@
                 {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false}
              ];
         
-        var finalCm = cm;
-        if ('其他出库单' == billsName) {
-        	finalCm = cm2;
-        }
+        // 外购入库
+        var cm3=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
+                {header: "商品编码",width: 140,dataIndex: "fnumber",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 100,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
+                {header: "商品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "商品类别",width: 100,dataIndex: "fitemTypeName",menuDisabled: true,sortable :false},
+                {header: "商品品牌",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                {header: "应收数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
+                {header: "实收数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
+                {header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                {header: "金额",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                {header: "收货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
+                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
+                {header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
+                {header: "销售价格",width:100,dataIndex: "fentrySelfA0164",menuDisabled: true,sortable :false},
+                {header: "销售价金额",width: 100,dataIndex: "fentrySelfA0162",menuDisabled: true,sortable :false},
+                {header: "进销价差额",width: 100,dataIndex: "fentrySelfA0163",menuDisabled: true,sortable :false},
+                {header: "关联数量",width: 120,dataIndex: "fentrySelfA0165",menuDisabled: true,sortable :false},
+                {header: "是否关联完毕",width: 120,dataIndex: "fentrySelfA0166",menuDisabled: true,sortable :false},
+                {header: "门店销售价",width: 100,dataIndex: "",menuDisabled: true,sortable :false}
+             ];
         
+        // 其他入库
+        var cm4=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
+                {header: "商品编码",width: 140,dataIndex: "fnumber",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 100,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
+                {header: "商品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "商品类别",width: 100,dataIndex: "fitemTypeName",menuDisabled: true,sortable :false},
+                {header: "商品品牌",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "辅助属性",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                {header: "辅助单位",width: 90,dataIndex: "fsecUnitName",menuDisabled: true,sortable :false},
+                {header: "换算率",width: 100,dataIndex: "fsecCoefficient",menuDisabled: true,sortable :false},
+                {header: "辅助数量",width: 100,dataIndex: "fsecQty",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "应收数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
+                {header: "实收数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                {header: "收货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
+                {header: "仓位",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
+                {header: "备注",width: 100,dataIndex: "fnote",menuDisabled: true,sortable :false},
+                {header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
+             ];
         
         //grid组件
         var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
@@ -197,7 +255,7 @@
                 displayMsg: SystemConstant.displayMsg,
                 emptyMsg: SystemConstant.emptyMsg
             }),
-            columns:finalCm,
+            columns:cm,
             forceFit : false,
             store: sellBillsStore,
             autoScroll: true,
@@ -222,7 +280,8 @@
                 border: false,
                 items: [{
                     xtype: 'label',
-                    text: billsName
+                    id:'ftranType',
+                    text: ''
                 }]
             },
             // 其他出库单：部门
@@ -234,6 +293,16 @@
                     id:'deptName',
                     hidden:true,
                     fieldLabel: '部门'
+                }]
+            },
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    hidden:true,
+                    id:'fsManagerName',
+                    fieldLabel: '发货人 '
                 }]
             },
             {
@@ -325,18 +394,79 @@
                     id:'stockName',
                     fieldLabel: '发货仓库'
                 }]
+            },
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    hidden:true,
+                    id:'gysName',
+                    fieldLabel: '供应商'
+                }]
+            },
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    hidden:true,
+                    id:'stockNameGet',
+                    fieldLabel: '收货仓库'
+                }]
             }]
         });
 		
-		if ('其他出库单' == billsName) {
-			Ext.getCmp('fsettleDate').setVisible(false);
-			Ext.getCmp('deptName').setVisible(true);
-			Ext.getCmp('fexplanation').setVisible(false);
-			Ext.getCmp('fsaleStyle').setVisible(false);
-			Ext.getCmp('fholisticDiscountRate').setVisible(false);
-			Ext.getCmp('ghcustom').setVisible(false);
-			Ext.getCmp('ffetchAdd').setVisible(false);
+		var billsName = '销售出库单';
+        if (21 == btype) {
+            sellBillsGrid.reconfigure(sellBillsStore, cm);
+            billsName = '销售出库单';
         }
+        else if (29 == btype) {
+            Ext.getCmp('fsettleDate').setVisible(false);
+            Ext.getCmp('deptName').setVisible(true);
+            Ext.getCmp('fexplanation').setVisible(false);
+            Ext.getCmp('fsaleStyle').setVisible(false);
+            Ext.getCmp('fholisticDiscountRate').setVisible(false);
+            Ext.getCmp('ghcustom').setVisible(false);
+            Ext.getCmp('ffetchAdd').setVisible(false);
+            Ext.getCmp('stockNameGet').setVisible(false);
+            Ext.getCmp('gysName').setVisible(false);
+            sellBillsGrid.reconfigure(sellBillsStore, cm2);
+            billsName = '其他出库单';
+        }
+        else if (1 == btype) {
+            Ext.getCmp('fsettleDate').setVisible(false);
+            Ext.getCmp('deptName').setVisible(false);
+            Ext.getCmp('fsaleStyle').setVisible(false);
+            Ext.getCmp('fholisticDiscountRate').setVisible(false);
+            Ext.getCmp('ghcustom').setVisible(false);
+            Ext.getCmp('ffetchAdd').setVisible(false);
+            Ext.getCmp('stockName').setVisible(false);
+            
+            Ext.getCmp('stockNameGet').setVisible(true);
+            Ext.getCmp('gysName').setVisible(true);
+            sellBillsGrid.reconfigure(sellBillsStore, cm3);
+            billsName = '外购入库单';
+        }
+        else if (10 == btype) {
+            Ext.getCmp('deptName').setVisible(true);
+            Ext.getCmp('fsManagerName').setVisible(true);
+            Ext.getCmp('stockNameGet').setVisible(true);
+            
+            Ext.getCmp('gysName').setVisible(false);
+            Ext.getCmp('fsettleDate').setVisible(false);
+            Ext.getCmp('fsaleStyle').setVisible(false);
+            Ext.getCmp('fholisticDiscountRate').setVisible(false);
+            Ext.getCmp('ghcustom').setVisible(false);
+            Ext.getCmp('ffetchAdd').setVisible(false);
+            Ext.getCmp('stockName').setVisible(false);
+            
+            sellBillsGrid.reconfigure(sellBillsStore, cm4);
+            billsName = '其他入库单';
+        }
+        
+        Ext.getCmp('ftranType').setText(billsName);
 		
 		var proxy = sellBillsStore.getProxy();
         proxy.setExtraParam("forDetail","forDetail");
@@ -355,6 +485,9 @@
         		Ext.getCmp('fexplanation').setValue(r.get('fexplanation'));
         		Ext.getCmp('fselTranType').setValue(r.get('fselTranType'));
         		Ext.getCmp('deptName').setValue(r.get('deptName'));
+        		Ext.getCmp('stockNameGet').setValue(r.get('stockName'));
+        		Ext.getCmp('gysName').setValue(r.get('fsupplyName'));
+        		Ext.getCmp('fsManagerName').setValue(r.get('fsManagerName'));
         		
         		hasSet = true;
         	}

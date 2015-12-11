@@ -23,6 +23,7 @@ public class DataMonitorAction extends BaseAction {
 	
 	private String billsName;
 	private String billsId;
+	private String ftranType;
 	
 	public String getBillsName() {
 		return billsName;
@@ -36,7 +37,12 @@ public class DataMonitorAction extends BaseAction {
 	public void setBillsId(String billsId) {
 		this.billsId = billsId;
 	}
-	
+	public String getFtranType() {
+		return ftranType;
+	}
+	public void setFtranType(String ftranType) {
+		this.ftranType = ftranType;
+	}
 	/**
 	 * 获取销售出库单
 	 * @return
