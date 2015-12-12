@@ -163,6 +163,15 @@ public class SellBillsVo implements Serializable{
 	// 保管
 	private String fsManagerName;
 	
+	/*实时库存*****************************/
+	// 仓库代码
+	private String stockNumber;
+	// 基本单位数量
+	private BigDecimal fqty;
+	private BigDecimal fcostPrice;
+	// 生产/采购日期
+	private String fkfDateStr;
+	
 	public Integer getFinterId() {
 		return finterId;
 	}
@@ -552,6 +561,30 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFsManagerName(String fsManagerName) {
 		this.fsManagerName = fsManagerName;
+	}
+	public String getStockNumber() {
+		return stockNumber;
+	}
+	public void setStockNumber(String stockNumber) {
+		this.stockNumber = stockNumber;
+	}
+	public BigDecimal getFqty() {
+		return fqty;
+	}
+	public void setFqty(BigDecimal fqty) {
+		this.fqty = fqty;
+	}
+	public BigDecimal getFcostPrice() {
+		return fcostPrice;
+	}
+	public void setFcostPrice(BigDecimal fcostPrice) {
+		this.fcostPrice = fcostPrice;
+	}
+	public String getFkfDateStr() {
+		return fkfDateStr;
+	}
+	public void setFkfDateStr(String fkfDateStr) {
+		this.fkfDateStr = fkfDateStr;
 	}
 	
 }

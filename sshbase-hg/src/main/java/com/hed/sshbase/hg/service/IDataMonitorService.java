@@ -11,8 +11,12 @@ import com.hed.sshbase.hg.vo.SellBillsVo;
 public interface IDataMonitorService {
     
 	/**
-	 * 获取销售出库单
-	 * @return
+	 * 查询实时库存
 	 */
-	public ListVo<SellBillsVo> getSellDeliveryBills(Map<String, String> paramMap);
+	public ListVo<SellBillsVo> getSellDeliveryBills(Map<String, String> paramMap) throws Exception;
+	
+	/**
+	 * 查询实时库存
+	 */
+	public ListVo<SellBillsVo> getInventory(Map<String, String> paramMap)  throws Exception;
 }

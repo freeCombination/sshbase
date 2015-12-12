@@ -43,9 +43,9 @@ public class DataMonitorAction extends BaseAction {
 	public void setFtranType(String ftranType) {
 		this.ftranType = ftranType;
 	}
+	
 	/**
-	 * 获取销售出库单
-	 * @return
+	 * 获取出入库单
 	 */
 	public String getSellDeliveryBills() {
         try {
@@ -55,8 +55,8 @@ public class DataMonitorAction extends BaseAction {
             JsonUtil.outJson(volst);
             
         } catch (Exception e) {
-            JsonUtil.outJson("{success:false,msg:'获取销售出库单失败！'}");
-            this.excepAndLogHandle(DataMonitorAction.class, "获取销售出库单", e, false);
+            JsonUtil.outJson("{success:false,msg:'获取出入库单失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "获取出入库单", e, false);
             return LOGIN;
         }
         return null;
@@ -65,4 +65,22 @@ public class DataMonitorAction extends BaseAction {
 	public String toSellBillsDetail() {
 		return SUCCESS;
 	}
+	
+	/**
+	 * 查询实时库存
+	 */
+	public String getInventory() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getInventory(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            JsonUtil.outJson("{success:false,msg:'查询实时库存失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "查询实时库存", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
 }

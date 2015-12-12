@@ -25,7 +25,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
     private IBaseDao2 baseDao2;
 	
 	@Override
-	public ListVo<SellBillsVo> getSellDeliveryBills(Map<String, String> paramMap) {
+	public ListVo<SellBillsVo> getSellDeliveryBills(Map<String, String> paramMap) throws Exception {
 		int start = NumberUtils.toInt(paramMap.get("start"));
         int limit = NumberUtils.toInt(paramMap.get("limit"));
         String startDate = paramMap.get("startDate");
@@ -112,4 +112,41 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		return volst;
 	}
 
+	@Override
+	public ListVo<SellBillsVo> getInventory(Map<String, String> paramMap)  throws Exception {
+		int start = NumberUtils.toInt(paramMap.get("start"));
+        int limit = NumberUtils.toInt(paramMap.get("limit"));
+        
+        String stockNumber = paramMap.get("stockNumber");
+		
+		String sql = " SELECT "
+				+ " t2.FNumber fnumber, t2.FName fname, t3.FModel fmodel, t4.FName stockName, "
+				+ " t4.FNumber stockNumber, t1.FKFDate fkfDateStr, t1.FKFPeriod fkfPeriod, t5.FName unit,"
+				+ " t1.FQty fqty, t1.FCostPrice fcostPrice";
+		
+		String countSql = " SELECT count(*)";
+		String commonSql = " FROM ICInventory t1 "
+				+ " LEFT JOIN t_Item t2 ON t2.FItemID = t1.FItemID "
+				+ " LEFT JOIN t_ICItem t3 ON t3.FItemID = t1.FItemID"
+				+ " LEFT JOIN t_Stock t4 ON t4.FItemID = t1.FStockID"
+				+ " LEFT JOIN t_MeasureUnit t5 ON t5.FItemID = t3.FUnitID"
+				+ " WHERE 1 = 1 ";
+		
+		if (StringUtil.isNotBlank(stockNumber)) {
+			commonSql += " and t4.FNumber='" + stockNumber + "'";
+		}
+		else {
+			commonSql += " and t4.FNumber in ('001', '110', '111')";
+		}
+		
+		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
+		
+		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
+		volst.setTotalSize(count);
+		volst.setList(lst);
+		return volst;
+	}
+	
 }
