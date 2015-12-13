@@ -83,4 +83,22 @@ public class DataMonitorAction extends BaseAction {
         }
         return null;
     }
+	
+	/**
+	 * 查询零售单
+	 */
+	public String getRetail() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getRetail(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            JsonUtil.outJson("{success:false,msg:'查询零售单失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "查询零售单", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
 }

@@ -302,7 +302,7 @@
                     xtype: 'textfield',
                     hidden:true,
                     id:'fsManagerName',
-                    fieldLabel: '发货人 '
+                    fieldLabel: '发货人'
                 }]
             },
             {

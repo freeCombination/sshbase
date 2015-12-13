@@ -109,7 +109,7 @@
 		        children: [
 		            {nodeId: "001", text: "001(免税仓库)", leaf: true },
 		            {nodeId: "110", text: "100(机场免税店)", leaf: true},
-		            {nodeId: "111", text: "111(免税品 待检仓)", leaf: true }
+		            {nodeId: "111", text: "111(免税品待检仓)", leaf: true }
 		        ]
 		    }
 		});

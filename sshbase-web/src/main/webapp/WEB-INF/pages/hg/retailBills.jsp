@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@include file="../common/doc_type.jsp"%>
 <html>
 <head>
@@ -11,404 +11,210 @@
 <link href="" rel="SHORTCUT ICON" />
 <style type="text/css">
   .x-form-layout-table{
-	table-layout: fixed;
+    table-layout: fixed;
   }
 </style>
 </head>
 <body>
-	<script type="text/javascript">
-	
-	Ext.onReady(function() {
-		Ext.QuickTips.init();
-		//自动引入其他需要的js
-		Ext.require(["Ext.container.*",
-		             "Ext.grid.*", 
-		             "Ext.toolbar.Paging", 
-		             "Ext.form.*",
-					 "Ext.data.*" ]);
-		//建立Model模型对象
-		Ext.define("Dict",{
-			extend:"Ext.data.Model",
-			fields:[
-				{name: "pkDictionaryId",mapping:"pkDictionaryId"}, 
-				{name: "dictionaryName",mapping:"dictionaryName"}, 
-				{name: "typeName",mapping:"dictionaryTypeName"}, 
-				{name: "typeId",mapping:"dictionaryTypeId"},
-				{name: "levelOrder",mapping:"levelOrder"},
-				{name: "dictionaryValue",mapping:"dictionaryValue"},
-				{name: "dictionaryCode",mapping:"dictionaryCode"}
-			]
-		});
-		
-		//建立数据Store
-		var dictStore=Ext.create("Ext.data.Store", {
-	        pageSize: SystemConstant.commonSize,
-	        model:"Dict",
-	        remoteSort:true,
-			proxy: {
-	            type:"ajax",
-	            actionMethods: {
-                	read: 'POST'
-           		},
-			    url: "${ctx}/dict/getDicts.action",
-			    reader: {
-				     totalProperty: "totalSize",
-				     root: "list"
-			    },
-	        simpleSortMode :true
-	        },
-	        sorters:[{
-	            property:"id",
-	            direction:"ASC"
-	        }]
-		});
-		
-		var cm=[
-				{header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
-	            {header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-	            {header: "日期",width: 100,dataIndex: "dictionaryName",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "审核标志",width: 60,dataIndex: "typeName",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "单据编号",width:100,dataIndex: "dictionaryValue",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "购货单位",width: 80,dataIndex: "dictionaryCode",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-	            {header: "发货仓库",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-					renderer : function(value, cellmeta, record, rowIndex,
-							columnIndex, store) {
-						cellmeta.tdAttr = 'data-qtip="' + value + '"';
-						return value;
-					}},
-                {header: "产品长代码",width: 120,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }},
-                {header: "产品名称",width: 120,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
+    <script type="text/javascript">
+    
+    Ext.onReady(function() {
+        Ext.QuickTips.init();
+        //自动引入其他需要的js
+        Ext.require(["Ext.container.*",
+                     "Ext.grid.*", 
+                     "Ext.toolbar.Paging", 
+                     "Ext.form.*",
+                     "Ext.data.*" ]);
+        
+        var sdate = '';
+        var edate = '';
+        
+        //建立Model模型对象
+        Ext.define("SellBills",{
+            extend:"Ext.data.Model",
+            fields:[
+                {name: "finterId"},
+                {name: "fdate"},
+                {name: "fsupplyId"},
+                {name: "fdCStockId"},
+                {name: "fitemName"},
+                {name: "fmodel"},
+                {name: "funitId"},
+                {name: "fbatchNo"},
+                {name: "fauxqty"}, 
+                {name: "fauxprice"},
+                {name: "famount"},
+                {name: "fdeptId"},
+                {name: "fempId"},
+                {name: "fconsignPrice"},
+                {name: "fconsignAmount"},
+                {name: "fname"},
+                {name: "fnumber"},
+                {name: "deptName"}, 
+                {name: "userName"}, 
+                {name: "unit"},
+                {name: "ghcustom"},
+                {name: "stockName"},
+                {name: "fbillNo"},
+                {name: "fcheckFlag"},
+                {name: "fbarCode"},
+                
+                {name: "ffmanagerId"},
+                {name: "fsupplyName"},
+                {name: "fsManagerName"},
+                {name: "ftranType"},
+                
+                {name: "fbillType"},
+                {name: "fbranchShop"},
+                {name: "fcashier"},
+                {name: "fpos"},
+                {name: "fshift"},
+                {name: "ftotalAmount"},
+                {name: "fdiscountAmount"},
+                {name: "freceAmount"},
+                {name: "fbeginTime"},
+                {name: "fendTime"},
+                {name: "fcollectMode"},
+                {name: "customName"}
+            ]
+        });
+        
+        //建立数据Store
+        var sellBillsStore=Ext.create("Ext.data.Store", {
+            pageSize: SystemConstant.commonSize,
+            model:"SellBills",
+            proxy: {
+                type:"ajax",
+                actionMethods: {
+                    read: 'POST'
                 },
-                {header: "规格型号",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
+                url: "${ctx}/hg/getRetail.action",
+                reader: {
+                     totalProperty: "totalSize",
+                     root: "list"
                 },
-                {header: "单位",width: 80,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "批号",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "实发数量",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "单位成本",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "成本",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "部门",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "业务员",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "销售单价",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                },
-                {header: "销售金额",width: 100,dataIndex: "levelOrder",menuDisabled: true,sortable :false,
-                    renderer : function(value, cellmeta, record, rowIndex,
-                            columnIndex, store) {
-                        cellmeta.tdAttr = 'data-qtip="' + value + '"';
-                        return value;
-                    }
-                }
-	         ];
-		
-		var typeNameStore = Ext.create('Ext.data.Store', {
-		     model: 'Dict',
-		     proxy: {
-		         type: 'ajax',
-		         url: '${ctx}/dict/getDictTypes.action',
-		         reader: {
-		             type: 'json'
-		         }
-		     },
-		     autoLoad: true,
-		     listeners:{
-		     		load:function(store,records,eOpts){
-		     			var data = [{dictionaryId:"",dictionaryName:"全部"}];
-		     			for(var i = 0; i < records.length; i++){
-		     				var id = records[i].get("pkDictionaryId");
-		     				var name = records[i].get("dictionaryName");
-		     				data.push({pkDictionaryId:id,dictionaryName:name});
-		     			}
-		     			store.loadData(data);
-		     		}
-		     	}
-
-		});
-		
-		//grid组件
-		var dictGrid =  Ext.create("Ext.grid.Panel",{
-			title:'零售单查询',
-			border:false,
-			columnLines: true,
-			layout:"fit",
-			region: "center",
-			width: "100%",
-			height: document.body.clientHeight,
-			id: "dictGrid",
-			bbar:  Ext.create("Ext.PagingToolbar", {
-				store: dictStore,
-				displayInfo: true,
-				displayMsg: SystemConstant.displayMsg,
-				emptyMsg: SystemConstant.emptyMsg
-			}),
-			columns:cm,
-	     	forceFit : true,
-			store: dictStore,
-			autoScroll: true,
-			stripeRows: true,
-			tbar: ['日期',
-			{
-				width: 90,
-				xtype: 'textfield',
-				readOnly:true,
-		        value:getFirstDay(),
-		        id:'queryDate',
-		        listeners:{
-		            "afterrender":function(com,eOpts){
-	                    var startTime=Ext.getDom("queryDate-inputEl");
-	                    startTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
-	                    startTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
-	                    startTime.onclick=function(){
-	                        WdatePicker({dateFmt:'yyyy-MM-dd'});
-	                        //,maxDate:'#F{$dp.$D(\'endDate-inputEl\')}'
-	                    };
-		            }
-		        }
-			},'&nbsp;单据编号',
-			{
-				id:'billsNo',
-				width: 120,
-                xtype: 'textfield'
-			},'&nbsp;购货单位',
+                simpleSortMode :true
+            }
+        });
+        
+        var cm=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                {header: "单据编号",width:160,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
+                {header: "单据日期",width: 100,dataIndex: "fdate",menuDisabled: true,sortable :false},
+                //{header: "单据类型",width: 90,dataIndex: "fbillType",menuDisabled: true,sortable :false},
+                //{header: "分店",width:100,dataIndex: "fbranchShop",menuDisabled: true,sortable :false},
+                {header: "收银员",width: 100,dataIndex: "fcashier",menuDisabled: true,sortable :false},
+                {header: "POS机",width: 100,dataIndex: "fpos",menuDisabled: true,sortable :false},
+                {header: "班次",width: 120,dataIndex: "fshift",menuDisabled: true,sortable :false},
+                {header: "总金额",width: 120,dataIndex: "ftotalAmount",menuDisabled: true,sortable :false},
+                {header: "折扣金额",width: 100,dataIndex: "fdiscountAmount",menuDisabled: true,sortable :false},
+                {header: "实收金额",width: 100,dataIndex: "freceAmount",menuDisabled: true,sortable :false},
+                {header: "销售开始时间",width: 100,dataIndex: "fbeginTime",menuDisabled: true,sortable :false},
+                {header: "销售结束时间",width: 100,dataIndex: "fendTime",menuDisabled: true,sortable :false},
+                {header: "收款性质",width: 100,dataIndex: "fcollectMode",menuDisabled: true,sortable :false},
+                {header: "客户名称",width: 100,dataIndex: "customName",menuDisabled: true,sortable :false}
+             ];
+        
+        //grid组件
+        var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
+            title:'零售单',
+            border:false,
+            columnLines: true,
+            layout:"fit",
+            region: "center",
+            width: "100%",
+            height: document.body.clientHeight,
+            id: "sellBillsGrid",
+            bbar:  Ext.create("Ext.PagingToolbar", {
+                store: sellBillsStore,
+                displayInfo: true,
+                displayMsg: SystemConstant.displayMsg,
+                emptyMsg: SystemConstant.emptyMsg
+            }),
+            columns:cm,
+            forceFit : false,
+            store: sellBillsStore,
+            autoScroll: true,
+            stripeRows: true,
+            tbar: [
             {
-                id:'purchaseUnit',
+                xtype:'label',
+                id:'createDate',
+                html:'POS机'
+            },
+            {
+                width: 90,
+                xtype: 'textfield',
+                readOnly:true,
+                id:'posMachine'
+            },
+            {
+                xtype:'label',
+                html:'&nbsp;&nbsp;班次'
+            },
+            {
+                id:'bcNo',
+                width: 120,
+                xtype: 'textfield'
+            },
+            {
+                xtype:'label',
+                html:'&nbsp;&nbsp;保质期(天)'
+            },
+            {
+                id:'fkfPeriod',
                 width: 120,
                 xtype: 'textfield'
             },'&nbsp;',
-			{
-				id:'searchDicBtn',
-				xtype:'button',
-				disabled:false,
-				text:'查询',
-				iconCls:'search-button',
-				handler:function(){
-					var proxy = dictStore.getProxy();
-					proxy.setExtraParam("dictName",Ext.getCmp("dictName").getValue());
-					var dictType = Ext.getCmp("typeCombox").getValue();
-					if(dictType=='全部') {
-						dictType = '';
-					}
-					
-					proxy.setExtraParam("dictType",dictType);
-					dictStore.loadPage(1);
-				}
-			},'->',
-			{
-				id:'addDicBtn',
+            {
+                id:'searchDicBtn',
+                xtype:'button',
+                disabled:false,
+                text:'查询',
+                iconCls:'search-button',
+                handler:function(){
+                    var proxy = sellBillsStore.getProxy();
+                    proxy.setExtraParam("queryDate",Ext.getCmp("queryDate").getValue());
+                    sellBillsStore.loadPage(1);
+                }
+            },'->',
+            {
+                id:'addDicBtn',
                 xtype:'button',
                 disabled:false,
                 text:'过滤',
                 iconCls:'add-button',
                 handler:function(){
-                	query();
+                    query();
                 }
-			}],
-			listeners:{
-				itemdblclick:function(grid, record, item, index, e, eOpts ){
-					openwin(0);
-				}
-			}
-		});
-		dictStore.load({params:{start:0,limit:SystemConstant.commonSize}});
-		
-		query();
-		
-		Ext.create("Ext.container.Viewport", {
-		    layout: "border",
-			items: [dictGrid]
-		});
-		
-		function query(){
-			var queryPanel = Ext.create('Ext.form.Panel', {
-	            border: false,
-	            layout: 'column',
-	            fieldDefaults: {
-	                labelWidth: 75,
-	                width: 170,
-	                labelAlign: 'right',
-	                anchor: '100%'
-	            },
-	            items: [{
-	                xtype:'fieldset',
-	                padding: '5 0 0 0',
-	                collapsible: false,
-	                layout: 'column',
-	                width: '100%',
-	                items :[
-	                    {
-	                        columnWidth: .5,
-	                        border: false,
-	                        items: [{
-	                            xtype: 'textfield',
-	                            fieldLabel: '起始日期',
-	                            id:'startDate',
-	                            readOnly:true,
-	                            value:getFirstDay(),
-	                            listeners:{
-	                                "afterrender":function(com,eOpts){
-	                                    var startTime=Ext.getDom("startDate-inputEl");
-	                                    startTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
-	                                    startTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
-	                                    startTime.onclick=function(){
-	                                        WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate-inputEl\')}'});
-	                                    };
-	                                }
-	                            }
-	                        }]
-	                    },
-	                    {
-	                        columnWidth: .5,
-	                        border: false,
-	                        items: [{
-	                            xtype: 'textfield',
-	                            fieldLabel: '截止日期 ',
-	                            id:'endDate',
-	                            readOnly:true,
-	                            value:Ext.Date.format(new Date(),"Y-m-d"),
-	                            listeners:{
-	                                "afterrender":function(com,eOpts){
-	                                    var endTime=Ext.getDom("endDate-inputEl");
-	                                    endTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
-	                                    endTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
-	                                    endTime.onclick=function(){
-	                                        WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate-inputEl\')}'});
-	                                    };
-	                                }
-	                            }
-	                        }]
-	                    }
-	                ]
-	            },
-	            {
-	                xtype:'fieldset',
-	                padding: '5 0 0 0',
-	                collapsible: false,
-	                layout: 'column',
-	                width: '100%',
-	                items :[
-	                    {
-	                        columnWidth: .6,
-	                        border: false,
-	                        items: [{
-	                            xtype: 'textfield',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            fieldLabel: '物料代码',
-	                            id:'startMaterialCode'
-	                        },{
-	                            xtype: 'textfield',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            fieldLabel: '客户代码',
-	                            id:'startClientCode'
-	                        },{
-	                            fieldLabel: '销售方式',
-	                            labelWidth: 95,
-	                            width: 195,
-	                            xtype: 'combo',
-	                            id: 'sellWay'
-	                        }]
-	                    },
-	                    {
-	                        columnWidth: .4,
-	                        border: false,
-	                        items: [{
-	                            xtype: 'textfield',
-	                            labelWidth: 40,
-	                            width: 145,
-	                            fieldLabel: '至 ',
-	                            id:'endMaterialCode'
-	                        },{
-	                            xtype: 'textfield',
-	                            labelWidth: 40,
-	                            width: 145,
-	                            fieldLabel: '至 ',
-	                            id:'endClientCode'
-	                        }]
-	                    }
-	                ]
-	            },
-	            {
+            }],
+            listeners:{
+                itemdblclick:function(grid, record, item, index, e, eOpts ){
+                    openwin(record.get('fbillNo'));
+                }
+            }
+        });
+        //sellBillsStore.load({params:{start:0,limit:SystemConstant.commonSize}});
+        
+        query();
+        
+        Ext.create("Ext.container.Viewport", {
+            layout: "border",
+            items: [sellBillsGrid]
+        });
+        
+        function query(){
+            var queryPanel = Ext.create('Ext.form.Panel', {
+                border: false,
+                layout: 'column',
+                fieldDefaults: {
+                    labelWidth: 75,
+                    width: 170,
+                    labelAlign: 'right',
+                    anchor: '100%'
+                },
+                items: [{
                     xtype:'fieldset',
                     padding: '5 0 0 0',
                     collapsible: false,
@@ -416,109 +222,149 @@
                     width: '100%',
                     items :[
                         {
-                            columnWidth: .3,
+                            columnWidth: .5,
                             border: false,
                             items: [{
-                                xtype: 'checkbox',
-                                margin:'0 0 0 30',
-                                boxLabel: '分级汇总'
-                            },{
-                                xtype: 'checkbox',
-                                margin:'0 0 0 30',
-                                boxLabel: '仅显示汇总行'
+                                xtype: 'textfield',
+                                fieldLabel: '起始日期',
+                                id:'startDate',
+                                readOnly:true,
+                                listeners:{
+                                    "afterrender":function(com,eOpts){
+                                        var startTime=Ext.getDom("startDate-inputEl");
+                                        startTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
+                                        startTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
+                                        startTime.onclick=function(){
+                                            WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate-inputEl\')}'});
+                                        };
+                                    }
+                                }
                             }]
                         },
                         {
-                            columnWidth: .7,
+                            columnWidth: .5,
                             border: false,
                             items: [{
-                                fieldLabel: '单据状态',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
-                            },{
-                                fieldLabel: '单据类型 ',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
-                            },{
-                                fieldLabel: '订单来源',
-                                labelWidth: 60,
-                                width: 140,
-                                xtype: 'combo'
+                                xtype: 'textfield',
+                                fieldLabel: '截止日期 ',
+                                id:'endDate',
+                                readOnly:true,
+                                listeners:{
+                                    "afterrender":function(com,eOpts){
+                                        var endTime=Ext.getDom("endDate-inputEl");
+                                        endTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
+                                        endTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
+                                        endTime.onclick=function(){
+                                            WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate-inputEl\')}'});
+                                        };
+                                    }
+                                }
                             }]
                         }
                     ]
                 }]
-	        });
-	        
-	        var queryWin = Ext.create('Ext.window.Window', {
-	            bodyStyle: 'padding:5px 5px 5px 5px; background-color:white;',
-	            title: '条件',
-	            closable: true,
-	            resizable: false,
-	            buttonAlign: "right",
-	            width: 380,
-	            modal: true,
-	            layout: 'fit',
-	            constrain: true, //设置只能在窗口范围内拖动
-	            closeAction: 'destroy',
-	            items: [queryPanel],
-	            buttons: [{
-	                text: '确定',
-	                id: 'sureBtn',
-	                handler: function() {
-	                    
-	                }
-	            }, {
-	                text: '取消',
-	                id: 'cancelBtn',
-	                handler: function() {
-	                    queryWin.close();
-	                }
-	            }],
-	            listeners: {
-	                render: function(){
-	                    
-	                }
-	            }
-	        }).show();
-		}
-		
-		function openwin(billsId) {
-		    var height = 600;
-		    var width = 1366;
-		    var h = window.screen.availHeight;
-		    var w = window.screen.availWidth;
-		    
-		    var dh = document.body.clientHeight;
+            });
+            
+            var queryWin = Ext.create('Ext.window.Window', {
+                bodyStyle: 'padding:5px 5px 5px 5px; background-color:white;',
+                title: '条件',
+                closable: true,
+                resizable: false,
+                buttonAlign: "right",
+                width: 380,
+                modal: true,
+                layout: 'fit',
+                constrain: true, //设置只能在窗口范围内拖动
+                closeAction: 'destroy',
+                items: [queryPanel],
+                buttons: [{
+                    text: '确定',
+                    id: 'sureBtn',
+                    handler: function() {
+                        sdate = Ext.getCmp('startDate').getValue();
+                        edate = Ext.getCmp('endDate').getValue();
+                        
+                        var proxy = sellBillsStore.getProxy();
+                        proxy.setExtraParam('startDate',sdate);
+                        proxy.setExtraParam('endDate',edate);
+                        sellBillsStore.loadPage(1);
+                        queryWin.close();
+                    }
+                }, {
+                    text: '取消',
+                    id: 'cancelBtn',
+                    handler: function() {
+                        sellBillsStore.loadPage(1);
+                        queryWin.close();
+                    }
+                }],
+                listeners: {
+                    afterrender: function(){
+                        if (sdate && sdate != '') {
+                            Ext.getCmp('startDate').setValue(sdate);
+                            Ext.getCmp('endDate').setValue(edate);
+                        }
+                        else {
+                            Ext.getCmp('startDate').setValue(getFirstDay());
+                            Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
+                        }
+                    }
+                }
+            }).show();
+        }
+        
+        function openwin(billsId) {
+            var height = 600;
+            var width = 1366;
+            var h = window.screen.availHeight;
+            var w = window.screen.availWidth;
+            
+            var dh = document.body.clientHeight;
             var dw = document.body.clientWidth;
-		    
-		    if (w <= 1366) {
-		    	width = dw - 20;
-		    	height = dh;
-		    }
-		    
-		    var y = (h - height) / 2;
+            
+            if (w <= 1366) {
+                width = dw - 20;
+                height = dh;
+            }
+            
+            var y = (h - height) / 2;
             var x = (w - width) / 2;
             if (w <= 1366) {
-            	x = 0;
+                x = 0;
             }
-		    
-		    window.open("${ctx}/hg/toRetailBillsDetail.action?billsId=" + billsId, "", 
-		        "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
-		}
-		
-		function getFirstDay(){
-		    var year = new Date().getFullYear();
-		    var month = new Date().getMonth();
-		    month += 1;
-		    if(month < 10){
-		        month = "0" + month;
-		    }
-		    return year + "-" + month + "-01";
-		}
-	});
-	</script>
+            
+            /* var billsName = '销售出库单';
+            if (-1 == btype || 21 == btype) {
+                billsName = '销售出库单';
+            }
+            else if (29 == btype) {
+                billsName = '其他出库单';
+            }
+            else if (1 == btype) {
+                billsName = '外购入库单';
+            }
+            else if (10 == btype) {
+                billsName = '其他入库单';
+            } */
+            
+            //var url = "${ctx}/hg/toSellBillsDetail.action?billsId=" + billsId + "&billsName=" + billsName;
+            //url = encodeURI(url);
+            //url = encodeURI(url);
+            
+            window.open("${ctx}/hg/toRetailBillsDetail.action?billsId=" + billsId, "", 
+                "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
+        }
+        
+        function getFirstDay(){
+            var year = new Date().getFullYear();
+            var month = new Date().getMonth();
+            month += 1;
+            if(month < 10){
+                month = "0" + month;
+            }
+            return year + "-" + month + "-01";
+        }
+    });
+    </script>
 </body>
 </html>

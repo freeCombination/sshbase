@@ -172,6 +172,84 @@ public class SellBillsVo implements Serializable{
 	// 生产/采购日期
 	private String fkfDateStr;
 	
+	/*零售单*****************************/
+	// 单据类型
+	private Character fbillType;
+	// 分店
+	private Integer fbranchShop;
+	// 收银员
+	private String fcashier;
+	// POS机
+	private Integer fpos;
+	// 班次
+	private String fshift;
+	// 总金额
+	private BigDecimal ftotalAmount;
+	// 折扣金额
+	private BigDecimal fdiscountAmount;
+	// 实收金额
+	private BigDecimal freceAmount;
+	// 销售开始时间
+	private Date fbeginTime;
+	// 销售结束时间
+	private Date fendTime;
+	// 收款性质
+	private Integer fcollectMode;
+	// 客户名称
+	private String customName;
+	// 原价
+	private BigDecimal fprice;
+	// 实价
+	private BigDecimal fdiscountPrice;
+	// 实付金额
+	private BigDecimal fbalAmount;
+	// 商品打折率(折扣率(%))
+	// 打折原因
+	private Integer fdiscountReason;
+	// 营业员(userName)
+	// 结算方式
+	private String fsettleName;
+	// 结算金额
+	private BigDecimal fsettleAmount;
+	// 币别
+	private String fcurrency;
+	// 汇率
+	private BigDecimal frate;
+	// 卡类别
+	private String fcardType;
+	// 卡号码
+	private String fcardNo;
+	// 银行卡交易参考号
+	private String freferenceNo;
+	// 卡号
+	private String fcardNumber;
+	private BigDecimal famountxf;
+	
+	// 卡类型
+	private String fcardTypeName;
+	// 卡种类
+	
+	// 账户名称
+	private Short faccount;
+	// 子账户号
+	private Integer faccountSubId;
+	// 顾客姓名
+	private String fcustomName;
+	// 地址
+	private String faddress;
+	// 联系人
+	private String flinkman;
+	// 电话
+	private String flinkTel;
+	// 移动电话
+	private String flinkPhone;
+	// 顾客备注1
+	private String freserve1;
+	// 退货原因
+	private String freserve2;
+	// 纸质单号
+	private String freserve3;
+	
 	public Integer getFinterId() {
 		return finterId;
 	}
@@ -585,6 +663,222 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFkfDateStr(String fkfDateStr) {
 		this.fkfDateStr = fkfDateStr;
+	}
+	public Character getFbillType() {
+		return fbillType;
+	}
+	public void setFbillType(Character fbillType) {
+		this.fbillType = fbillType;
+	}
+	public Integer getFbranchShop() {
+		return fbranchShop;
+	}
+	public void setFbranchShop(Integer fbranchShop) {
+		this.fbranchShop = fbranchShop;
+	}
+	public String getFcashier() {
+		return fcashier;
+	}
+	public void setFcashier(String fcashier) {
+		this.fcashier = fcashier;
+	}
+	public Integer getFpos() {
+		return fpos;
+	}
+	public void setFpos(Integer fpos) {
+		this.fpos = fpos;
+	}
+	public String getFshift() {
+		return fshift;
+	}
+	public void setFshift(String fshift) {
+		this.fshift = fshift;
+	}
+	public BigDecimal getFtotalAmount() {
+		return ftotalAmount;
+	}
+	public void setFtotalAmount(BigDecimal ftotalAmount) {
+		this.ftotalAmount = ftotalAmount;
+	}
+	public BigDecimal getFdiscountAmount() {
+		return fdiscountAmount;
+	}
+	public void setFdiscountAmount(BigDecimal fdiscountAmount) {
+		this.fdiscountAmount = fdiscountAmount;
+	}
+	public BigDecimal getFreceAmount() {
+		return freceAmount;
+	}
+	public void setFreceAmount(BigDecimal freceAmount) {
+		this.freceAmount = freceAmount;
+	}
+	public Date getFbeginTime() {
+		return fbeginTime;
+	}
+	public void setFbeginTime(Date fbeginTime) {
+		this.fbeginTime = fbeginTime;
+	}
+	public Date getFendTime() {
+		return fendTime;
+	}
+	public void setFendTime(Date fendTime) {
+		this.fendTime = fendTime;
+	}
+	public Integer getFcollectMode() {
+		return fcollectMode;
+	}
+	public void setFcollectMode(Integer fcollectMode) {
+		this.fcollectMode = fcollectMode;
+	}
+	public String getCustomName() {
+		return customName;
+	}
+	public void setCustomName(String customName) {
+		this.customName = customName;
+	}
+	public BigDecimal getFprice() {
+		return fprice;
+	}
+	public void setFprice(BigDecimal fprice) {
+		this.fprice = fprice;
+	}
+	public BigDecimal getFdiscountPrice() {
+		return fdiscountPrice;
+	}
+	public void setFdiscountPrice(BigDecimal fdiscountPrice) {
+		this.fdiscountPrice = fdiscountPrice;
+	}
+	public BigDecimal getFbalAmount() {
+		return fbalAmount;
+	}
+	public void setFbalAmount(BigDecimal fbalAmount) {
+		this.fbalAmount = fbalAmount;
+	}
+	public Integer getFdiscountReason() {
+		return fdiscountReason;
+	}
+	public void setFdiscountReason(Integer fdiscountReason) {
+		this.fdiscountReason = fdiscountReason;
+	}
+	public String getFsettleName() {
+		return fsettleName;
+	}
+	public void setFsettleName(String fsettleName) {
+		this.fsettleName = fsettleName;
+	}
+	public BigDecimal getFsettleAmount() {
+		return fsettleAmount;
+	}
+	public void setFsettleAmount(BigDecimal fsettleAmount) {
+		this.fsettleAmount = fsettleAmount;
+	}
+	public String getFcurrency() {
+		return fcurrency;
+	}
+	public void setFcurrency(String fcurrency) {
+		this.fcurrency = fcurrency;
+	}
+	public BigDecimal getFrate() {
+		return frate;
+	}
+	public void setFrate(BigDecimal frate) {
+		this.frate = frate;
+	}
+	public String getFcardType() {
+		return fcardType;
+	}
+	public void setFcardType(String fcardType) {
+		this.fcardType = fcardType;
+	}
+	public String getFcardNo() {
+		return fcardNo;
+	}
+	public void setFcardNo(String fcardNo) {
+		this.fcardNo = fcardNo;
+	}
+	public String getFreferenceNo() {
+		return freferenceNo;
+	}
+	public void setFreferenceNo(String freferenceNo) {
+		this.freferenceNo = freferenceNo;
+	}
+	public String getFcardNumber() {
+		return fcardNumber;
+	}
+	public void setFcardNumber(String fcardNumber) {
+		this.fcardNumber = fcardNumber;
+	}
+	public BigDecimal getFamountxf() {
+		return famountxf;
+	}
+	public void setFamountxf(BigDecimal famountxf) {
+		this.famountxf = famountxf;
+	}
+	public String getFcardTypeName() {
+		return fcardTypeName;
+	}
+	public void setFcardTypeName(String fcardTypeName) {
+		this.fcardTypeName = fcardTypeName;
+	}
+	public Short getFaccount() {
+		return faccount;
+	}
+	public void setFaccount(Short faccount) {
+		this.faccount = faccount;
+	}
+	public Integer getFaccountSubId() {
+		return faccountSubId;
+	}
+	public void setFaccountSubId(Integer faccountSubId) {
+		this.faccountSubId = faccountSubId;
+	}
+	public String getFcustomName() {
+		return fcustomName;
+	}
+	public void setFcustomName(String fcustomName) {
+		this.fcustomName = fcustomName;
+	}
+	public String getFaddress() {
+		return faddress;
+	}
+	public void setFaddress(String faddress) {
+		this.faddress = faddress;
+	}
+	public String getFlinkman() {
+		return flinkman;
+	}
+	public void setFlinkman(String flinkman) {
+		this.flinkman = flinkman;
+	}
+	public String getFlinkTel() {
+		return flinkTel;
+	}
+	public void setFlinkTel(String flinkTel) {
+		this.flinkTel = flinkTel;
+	}
+	public String getFlinkPhone() {
+		return flinkPhone;
+	}
+	public void setFlinkPhone(String flinkPhone) {
+		this.flinkPhone = flinkPhone;
+	}
+	public String getFreserve1() {
+		return freserve1;
+	}
+	public void setFreserve1(String freserve1) {
+		this.freserve1 = freserve1;
+	}
+	public String getFreserve2() {
+		return freserve2;
+	}
+	public void setFreserve2(String freserve2) {
+		this.freserve2 = freserve2;
+	}
+	public String getFreserve3() {
+		return freserve3;
+	}
+	public void setFreserve3(String freserve3) {
+		this.freserve3 = freserve3;
 	}
 	
 }

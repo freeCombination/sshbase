@@ -19,4 +19,9 @@ public interface IDataMonitorService {
 	 * 查询实时库存
 	 */
 	public ListVo<SellBillsVo> getInventory(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询零售单
+	 */
+	public ListVo<SellBillsVo> getRetail(Map<String, String> paramMap)  throws Exception;
 }
