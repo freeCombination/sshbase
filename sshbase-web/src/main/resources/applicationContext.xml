@@ -149,13 +149,13 @@
 	</tx:advice>
 	-->
 	
-	<aop:config>
+	<!-- <aop:config>
 	    <aop:aspect ref="logAspect" >
 		<aop:pointcut id="transactionPoint"
 			expression="execution(* com.hed.sshbase.*.service..*.*(..))" />
 	    <aop:after method="doSystemLog" pointcut-ref="transactionPoint"/>
 	    </aop:aspect>
-	</aop:config>
+	</aop:config> -->
 	
 	<!-- 流程任务处理回调实现类 -->
 	<!-- 
