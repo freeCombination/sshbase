@@ -4,22 +4,26 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<package name="hg" extends="st" namespace="/hg">
-		<action name="toRetailBills" >
+		<action name="toRetailBills">
 			<result>/WEB-INF/pages/hg/retailBills.jsp</result>
 		</action>
 		<action name="toRetailBillsDetail" class="com.hed.sshbase.hg.action.DataMonitorAction">
             <result>/WEB-INF/pages/hg/retailBillsDetail.jsp</result>
         </action>
         
-        <action name="toSellBills" >
+        <action name="toSellBills">
             <result>/WEB-INF/pages/hg/sellBills.jsp</result>
         </action>
         <action name="toSellBillsDetail" class="com.hed.sshbase.hg.action.DataMonitorAction">
             <result>/WEB-INF/pages/hg/sellBillsDetail.jsp</result>
         </action>
 		
-		<action name="toInventory" >
+		<action name="toInventory">
             <result>/WEB-INF/pages/hg/inventory.jsp</result>
+        </action>
+        
+        <action name="toTransSummary">
+            <result>/WEB-INF/pages/hg/transSummary.jsp</result>
         </action>
         
 		<action name="*" class="com.hed.sshbase.hg.action.DataMonitorAction" method="{1}"></action>

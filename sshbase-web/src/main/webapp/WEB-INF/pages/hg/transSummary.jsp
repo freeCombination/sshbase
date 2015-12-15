@@ -7,7 +7,7 @@
 <%@include file="../common/taglibs.jsp"%>
 <%@include file="../common/css.jsp"%>
 <%@include file="../common/ext.jsp"%>
-<title>零售单</title>
+<title>收发汇总</title>
 <link href="" rel="SHORTCUT ICON" />
 <style type="text/css">
   .x-form-layout-table{
@@ -34,49 +34,17 @@
         Ext.define("SellBills",{
             extend:"Ext.data.Model",
             fields:[
-                {name: "finterId"},
-                {name: "fdate"},
-                {name: "fsupplyId"},
-                {name: "fdCStockId"},
-                {name: "fitemName"},
-                {name: "fmodel"},
-                {name: "funitId"},
-                {name: "fbatchNo"},
-                {name: "fauxqty"}, 
-                {name: "fauxprice"},
-                {name: "famount"},
-                {name: "fdeptId"},
-                {name: "fempId"},
-                {name: "fconsignPrice"},
-                {name: "fconsignAmount"},
-                {name: "fname"},
-                {name: "fnumber"},
-                {name: "deptName"}, 
-                {name: "userName"}, 
+                {name: "spdm"},
+                {name: "txm"},
                 {name: "unit"},
-                {name: "ghcustom"},
-                {name: "stockName"},
-                {name: "fbillNo"},
-                {name: "fcheckFlag"},
-                {name: "fbarCode"},
-                
-                {name: "ffmanagerId"},
-                {name: "fsupplyName"},
-                {name: "fsManagerName"},
-                {name: "ftranType"},
-                
-                {name: "fbillType"},
-                {name: "fbranchShop"},
-                {name: "fcashier"},
-                {name: "fpos"},
-                {name: "fshift"},
-                {name: "ftotalAmount"},
-                {name: "fdiscountAmount"},
-                {name: "freceAmount"},
-                {name: "fbeginTime"},
-                {name: "fendTime"},
-                {name: "fcollectMode"},
-                {name: "customName"}
+                {name: "cqsl"},
+                {name: "bqrksl"},
+                {name: "bqcksl"},
+                {name: "bqjcsl"},
+                {name: "spmc"},
+                {name: "sfrq"},
+                {name: "sfck"},
+                {name: "ggxh"}
             ]
         });
         
@@ -89,7 +57,7 @@
                 actionMethods: {
                     read: 'POST'
                 },
-                url: "${ctx}/hg/getRetail.action",
+                url: "${ctx}/hg/getTransSummary.action",
                 reader: {
                      totalProperty: "totalSize",
                      root: "list"
@@ -100,25 +68,22 @@
         
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
-                {header: "单据编号",width:160,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
-                {header: "单据日期",width: 100,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                //{header: "单据类型",width: 90,dataIndex: "fbillType",menuDisabled: true,sortable :false},
-                //{header: "分店",width:100,dataIndex: "fbranchShop",menuDisabled: true,sortable :false},
-                {header: "收银员",width: 100,dataIndex: "fcashier",menuDisabled: true,sortable :false},
-                //{header: "POS机",width: 100,dataIndex: "fpos",menuDisabled: true,sortable :false},
-                //{header: "班次",width: 120,dataIndex: "fshift",menuDisabled: true,sortable :false},
-                {header: "总金额",width: 120,dataIndex: "ftotalAmount",menuDisabled: true,sortable :false},
-                {header: "折扣金额",width: 100,dataIndex: "fdiscountAmount",menuDisabled: true,sortable :false},
-                {header: "实收金额",width: 100,dataIndex: "freceAmount",menuDisabled: true,sortable :false},
-                {header: "销售开始时间",width: 160,dataIndex: "fbeginTime",menuDisabled: true,sortable :false},
-                {header: "销售结束时间",width: 160,dataIndex: "fendTime",menuDisabled: true,sortable :false},
-                {header: "收款性质",width: 100,dataIndex: "fcollectMode",menuDisabled: true,sortable :false},
-                {header: "客户名称",width: 100,dataIndex: "customName",menuDisabled: true,sortable :false}
+                {header: "日期",width:120,dataIndex: "sfrq",menuDisabled: true,sortable :false},
+                {header: "商品编码",width:160,dataIndex: "spdm",menuDisabled: true,sortable :false},
+                {header: "商品名称",width: 160,dataIndex: "spmc",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "ggxh",menuDisabled: true,sortable :false},
+                {header: "单位",width: 100,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 140,dataIndex: "txm",menuDisabled: true,sortable :false},
+                {header: "初期数量",width: 120,dataIndex: "cqsl",menuDisabled: true,sortable :false},
+                {header: "本期入库数量",width: 120,dataIndex: "bqrksl",menuDisabled: true,sortable :false},
+                {header: "本期出库数量",width: 120,dataIndex: "bqcksl",menuDisabled: true,sortable :false},
+                {header: "本期结存数量",width: 120,dataIndex: "bqjcsl",menuDisabled: true,sortable :false},
+                {header: "仓库",width: 120,dataIndex: "sfck",menuDisabled: true,sortable :false}
              ];
         
         //grid组件
         var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
-            title:'零售单',
+            title:'收发汇总',
             border:false,
             columnLines: true,
             layout:"fit",
@@ -188,12 +153,7 @@
                 handler:function(){
                     query();
                 }
-            }],
-            listeners:{
-                itemdblclick:function(grid, record, item, index, e, eOpts ){
-                    openwin(record.get('fbillNo'));
-                }
-            }
+            }]
         });
         //sellBillsStore.load({params:{start:0,limit:SystemConstant.commonSize}});
         
@@ -311,48 +271,6 @@
                     }
                 }
             }).show();
-        }
-        
-        function openwin(billsId) {
-            var height = 600;
-            var width = 1366;
-            var h = window.screen.availHeight;
-            var w = window.screen.availWidth;
-            
-            var dh = document.body.clientHeight;
-            var dw = document.body.clientWidth;
-            
-            if (w <= 1366) {
-                width = dw - 20;
-                height = dh;
-            }
-            
-            var y = (h - height) / 2;
-            var x = (w - width) / 2;
-            if (w <= 1366) {
-                x = 0;
-            }
-            
-            /* var billsName = '销售出库单';
-            if (-1 == btype || 21 == btype) {
-                billsName = '销售出库单';
-            }
-            else if (29 == btype) {
-                billsName = '其他出库单';
-            }
-            else if (1 == btype) {
-                billsName = '外购入库单';
-            }
-            else if (10 == btype) {
-                billsName = '其他入库单';
-            } */
-            
-            //var url = "${ctx}/hg/toSellBillsDetail.action?billsId=" + billsId + "&billsName=" + billsName;
-            //url = encodeURI(url);
-            //url = encodeURI(url);
-            
-            window.open("${ctx}/hg/toRetailBillsDetail.action?billsId=" + billsId, "", 
-                "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
         }
         
         function getFirstDay(){

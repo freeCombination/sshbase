@@ -190,9 +190,9 @@ public class SellBillsVo implements Serializable{
 	// 实收金额
 	private BigDecimal freceAmount;
 	// 销售开始时间
-	private Date fbeginTime;
+	private String fbeginTime;
 	// 销售结束时间
-	private Date fendTime;
+	private String fendTime;
 	// 收款性质
 	private Integer fcollectMode;
 	// 客户名称
@@ -712,16 +712,16 @@ public class SellBillsVo implements Serializable{
 	public void setFreceAmount(BigDecimal freceAmount) {
 		this.freceAmount = freceAmount;
 	}
-	public Date getFbeginTime() {
+	public String getFbeginTime() {
 		return fbeginTime;
 	}
-	public void setFbeginTime(Date fbeginTime) {
+	public void setFbeginTime(String fbeginTime) {
 		this.fbeginTime = fbeginTime;
 	}
-	public Date getFendTime() {
+	public String getFendTime() {
 		return fendTime;
 	}
-	public void setFendTime(Date fendTime) {
+	public void setFendTime(String fendTime) {
 		this.fendTime = fendTime;
 	}
 	public Integer getFcollectMode() {

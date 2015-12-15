@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.hed.sshbase.common.vo.ListVo;
 import com.hed.sshbase.hg.vo.SellBillsVo;
+import com.hed.sshbase.hg.vo.TransSummaryVo;
 
 /**
  * 数据监控Service接口
@@ -24,4 +25,9 @@ public interface IDataMonitorService {
 	 * 查询零售单
 	 */
 	public ListVo<SellBillsVo> getRetail(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询收发汇总
+	 */
+	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap)  throws Exception;
 }

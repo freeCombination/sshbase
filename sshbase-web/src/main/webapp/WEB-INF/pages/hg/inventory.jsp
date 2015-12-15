@@ -69,11 +69,11 @@
 	                {header: "规格型号",width:100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
 	                {header: "仓库代码",width: 120,dataIndex: "stockNumber",menuDisabled: true,sortable :false},
 	                {header: "仓库名称",width: 120,dataIndex: "stockName",menuDisabled: true,sortable :false},
-	                {header: "生产/采购日期",width: 100,dataIndex: "fkfDateStr",menuDisabled: true,sortable :false},
-	                {header: "保质期",width: 70,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
+	                //{header: "生产/采购日期",width: 100,dataIndex: "fkfDateStr",menuDisabled: true,sortable :false},
+	                //{header: "保质期",width: 70,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
 	                {header: "基本计量单位",width: 100,dataIndex: "unit",menuDisabled: true,sortable :false},
-	                {header: "基本单位数量",width: 100,dataIndex: "fqty",menuDisabled: true,sortable :false},
-	                {header: "最新进价",width: 100,dataIndex: "fcostPrice",menuDisabled: true,sortable :false}
+	                {header: "基本单位数量",width: 100,dataIndex: "fqty",menuDisabled: true,sortable :false}
+	                //{header: "最新进价",width: 100,dataIndex: "fcostPrice",menuDisabled: true,sortable :false}
 	             ];
 		
 		//grid组件

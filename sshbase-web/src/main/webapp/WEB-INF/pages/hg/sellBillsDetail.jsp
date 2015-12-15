@@ -131,40 +131,40 @@
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-                {header: "产品代码",width: 90,dataIndex: "fshortNumber",menuDisabled: true,sortable :false},
+                {header: "产品代码",width: 90,dataIndex: "fnumber",menuDisabled: true,sortable :false},//短代码 （fshortNumber）
                 {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
                 {header: "产品名称",width:160,dataIndex: "fname",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
-                {header: "辅助属性",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
-                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                //{header: "辅助属性",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                //{header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
-                {header: "应发数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
+                //{header: "应发数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
                 {header: "实发数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
-                {header: "辅助单位",width: 90,dataIndex: "fsecUnitName",menuDisabled: true,sortable :false},
-                {header: "换算率",width: 100,dataIndex: "fsecCoefficient",menuDisabled: true,sortable :false},
-                {header: "辅助数量",width: 100,dataIndex: "fsecQty",menuDisabled: true,sortable :false},
-                {header: "计划单价",width: 100,dataIndex: "fauxPlanPrice",menuDisabled: true,sortable :false},
-                {header: "计划价金额",width: 100,dataIndex: "fplanAmount",menuDisabled: true,sortable :false},
-                {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
-                {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                //{header: "辅助单位",width: 90,dataIndex: "fsecUnitName",menuDisabled: true,sortable :false},
+                //{header: "换算率",width: 100,dataIndex: "fsecCoefficient",menuDisabled: true,sortable :false},
+                //{header: "辅助数量",width: 100,dataIndex: "fsecQty",menuDisabled: true,sortable :false},
+                //{header: "计划单价",width: 100,dataIndex: "fauxPlanPrice",menuDisabled: true,sortable :false},
+                //{header: "计划价金额",width: 100,dataIndex: "fplanAmount",menuDisabled: true,sortable :false},
+                //{header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                //{header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
                 {header: "备注",width: 100,dataIndex: "fnote",menuDisabled: true,sortable :false},
-                {header: "生产/采购日期",width: 120,dataIndex: "fkfDate",menuDisabled: true,sortable :false},
-                {header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
-                {header: "有效期至",width: 100,dataIndex: "fperiodDate",menuDisabled: true,sortable :false},
-                {header: "仓位",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
+                //{header: "生产/采购日期",width: 120,dataIndex: "fkfDate",menuDisabled: true,sortable :false},
+                //{header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
+                //{header: "有效期至",width: 100,dataIndex: "fperiodDate",menuDisabled: true,sortable :false},
+                //{header: "仓位",width: 100,dataIndex: "",menuDisabled: true,sortable :false},
                 {header: "销售单价",width: 100,dataIndex: "fconsignPrice",menuDisabled: true,sortable :false},
                 {header: "折扣率(%)",width: 100,dataIndex: "fdiscountRate",menuDisabled: true,sortable :false},
-                {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false},
-                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
-                {header: "合同单号",width: 100,dataIndex: "fcontractBillNo",menuDisabled: true,sortable :false},
-                {header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
-                {header: "订单分录",width: 100,dataIndex: "forderEntryId",menuDisabled: true,sortable :false},
-                {header: "辅助单位开票数量",width: 120,dataIndex: "fsecInvoiceQty",menuDisabled: true,sortable :false},
-                {header: "开票数量",width: 90,dataIndex: "fauxQtyInvoice",menuDisabled: true,sortable :false},
-                {header: "客户订单号",width: 90,dataIndex: "fclientOrderNo",menuDisabled: true,sortable :false},
-                {header: "对账确认意见(表体)",width: 120,dataIndex: "fconfirmMemEntry",menuDisabled: true,sortable :false},
-                {header: "订单行号",width: 90,dataIndex: "fclientEntryId",menuDisabled: true,sortable :false},
-                {header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
+                {header: "销售金额",width: 100,dataIndex: "fconsignAmount",menuDisabled: true,sortable :false}
+                //{header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
+                //{header: "合同单号",width: 100,dataIndex: "fcontractBillNo",menuDisabled: true,sortable :false},
+                //{header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
+                //{header: "订单分录",width: 100,dataIndex: "forderEntryId",menuDisabled: true,sortable :false},
+                //{header: "辅助单位开票数量",width: 120,dataIndex: "fsecInvoiceQty",menuDisabled: true,sortable :false},
+                //{header: "开票数量",width: 90,dataIndex: "fauxQtyInvoice",menuDisabled: true,sortable :false},
+                //{header: "客户订单号",width: 90,dataIndex: "fclientOrderNo",menuDisabled: true,sortable :false},
+                //{header: "对账确认意见(表体)",width: 120,dataIndex: "fconfirmMemEntry",menuDisabled: true,sortable :false},
+                //{header: "订单行号",width: 90,dataIndex: "fclientEntryId",menuDisabled: true,sortable :false},
+                //{header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
              ];
         
         // 其他出库
@@ -199,21 +199,21 @@
                 {header: "商品类别",width: 100,dataIndex: "fitemTypeName",menuDisabled: true,sortable :false},
                 {header: "商品品牌",width: 100,dataIndex: "fcomBrandName",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
-                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
-                {header: "应收数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
+                //{header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                //{header: "应收数量",width: 100,dataIndex: "fauxQtyMust",menuDisabled: true,sortable :false},
                 {header: "实收数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
-                {header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
-                {header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
-                {header: "金额",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                //{header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false},
+                //{header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                //{header: "金额",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
                 {header: "收货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
-                {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
-                {header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
+                //{header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
+                //{header: "订单单号",width: 100,dataIndex: "forderBillNo",menuDisabled: true,sortable :false},
                 {header: "销售价格",width:100,dataIndex: "fentrySelfA0164",menuDisabled: true,sortable :false},
-                {header: "销售价金额",width: 100,dataIndex: "fentrySelfA0162",menuDisabled: true,sortable :false},
-                {header: "进销价差额",width: 100,dataIndex: "fentrySelfA0163",menuDisabled: true,sortable :false},
-                {header: "关联数量",width: 120,dataIndex: "fentrySelfA0165",menuDisabled: true,sortable :false},
-                {header: "是否关联完毕",width: 120,dataIndex: "fentrySelfA0166",menuDisabled: true,sortable :false},
-                {header: "门店销售价",width: 100,dataIndex: "",menuDisabled: true,sortable :false}
+                {header: "销售价金额",width: 100,dataIndex: "fentrySelfA0162",menuDisabled: true,sortable :false}
+                //{header: "进销价差额",width: 100,dataIndex: "fentrySelfA0163",menuDisabled: true,sortable :false},
+                //{header: "关联数量",width: 120,dataIndex: "fentrySelfA0165",menuDisabled: true,sortable :false},
+                //{header: "是否关联完毕",width: 120,dataIndex: "fentrySelfA0166",menuDisabled: true,sortable :false},
+                //{header: "门店销售价",width: 100,dataIndex: "",menuDisabled: true,sortable :false}
              ];
         
         // 其他入库
@@ -346,6 +346,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'fsaleStyle',
                     fieldLabel: '销售方式'
                 }]
@@ -373,6 +374,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'fselTranType',
                     fieldLabel: '源单类型'
                 }]
@@ -391,6 +393,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'stockName',
                     fieldLabel: '发货仓库'
                 }]

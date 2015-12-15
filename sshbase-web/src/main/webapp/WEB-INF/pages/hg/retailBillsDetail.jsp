@@ -180,10 +180,10 @@
                 {header: "实付金额",width: 100,dataIndex: "fbalAmount",menuDisabled: true,sortable :false},
                 {header: "商品打折率",width: 100,dataIndex: "fdiscountRate",menuDisabled: true,sortable :false},
                 //{header: "打折原因",width: 100,dataIndex: "fdiscountReason",menuDisabled: true,sortable :false},
-                {header: "营业员",width: 100,dataIndex: "userName",menuDisabled: true,sortable :false},
-                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
-                {header: "生产/采购日期",width: 120,dataIndex: "fkfDateStr",menuDisabled: true,sortable :false},
-                {header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false}
+                {header: "营业员",width: 100,dataIndex: "userName",menuDisabled: true,sortable :false}
+                //{header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                //{header: "生产/采购日期",width: 120,dataIndex: "fkfDateStr",menuDisabled: true,sortable :false},
+                //{header: "保质期(天)",width: 90,dataIndex: "fkfPeriod",menuDisabled: true,sortable :false}
              ];
         
         var cm2=[
@@ -216,9 +216,9 @@
                  {header: "联系人",width:100,dataIndex: "flinkman",menuDisabled: true,sortable :false},
                  {header: "电话",width: 100,dataIndex: "flinkTel",menuDisabled: true,sortable :false},
                  {header: "移动电话",width: 100,dataIndex: "flinkPhone",menuDisabled: true,sortable :false},
-                 {header: "顾客备注1",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false},
-                 {header: "退货原因",width: 120,dataIndex: "freserve2",menuDisabled: true,sortable :false},
-                 {header: "纸质单号",width: 100,dataIndex: "freserve3",menuDisabled: true,sortable :false}
+                 {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false}
+                 //{header: "退货原因",width: 120,dataIndex: "freserve2",menuDisabled: true,sortable :false},
+                 //{header: "纸质单号",width: 100,dataIndex: "freserve3",menuDisabled: true,sortable :false}
               ];
         
         //grid组件
@@ -359,6 +359,7 @@
                 items: [{
                     xtype: 'textfield',
                     id:'fcashier',
+                    hidden:true,
                     fieldLabel: '收银员'
                 }]
             },
@@ -376,6 +377,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'fshift',
                     fieldLabel: '班次'
                 }]
@@ -430,6 +432,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'fcollectMode',
                     fieldLabel: '收款性质'
                 }]
@@ -439,6 +442,7 @@
                 border: false,
                 items: [{
                     xtype: 'textfield',
+                    hidden:true,
                     id:'customName',
                     fieldLabel: '客户名称'
                 }]

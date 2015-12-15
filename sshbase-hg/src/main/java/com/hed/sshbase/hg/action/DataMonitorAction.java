@@ -10,6 +10,7 @@ import com.hed.sshbase.common.util.RequestUtil;
 import com.hed.sshbase.common.vo.ListVo;
 import com.hed.sshbase.hg.service.IDataMonitorService;
 import com.hed.sshbase.hg.vo.SellBillsVo;
+import com.hed.sshbase.hg.vo.TransSummaryVo;
 
 /**
  * 数据监控Action
@@ -97,6 +98,24 @@ public class DataMonitorAction extends BaseAction {
         } catch (Exception e) {
             JsonUtil.outJson("{success:false,msg:'查询零售单失败！'}");
             this.excepAndLogHandle(DataMonitorAction.class, "查询零售单", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
+	
+	/**
+	 * 查询收发汇总
+	 */
+	public String getTransSummary() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<TransSummaryVo> volst = monitorService.getTransSummary(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            JsonUtil.outJson("{success:false,msg:'查询收发汇总失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "查询收发汇总", e, false);
             return LOGIN;
         }
         return null;

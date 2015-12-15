@@ -1,9 +1,15 @@
 package com.hed.sshbase.hg.service.impl;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.hibernate.classic.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,7 @@ import com.hed.sshbase.common.util.StringUtil;
 import com.hed.sshbase.common.vo.ListVo;
 import com.hed.sshbase.hg.service.IDataMonitorService;
 import com.hed.sshbase.hg.vo.SellBillsVo;
+import com.hed.sshbase.hg.vo.TransSummaryVo;
 
 /**
  * 数据监控Service
@@ -162,7 +169,8 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		String sql = " SELECT "
 				+ " t1.FBillNO fbillNo, t1.FDate fdate, t1.FBillType fbillType, t1.FBranchShop fbranchShop, t8.FName fcashier, "
 				+ " t1.FPOS fpos, t9.FName fshift, t1.FTotalAmount ftotalAmount, t1.FDiscountAmount fdiscountAmount, "
-				+ " t1.FReceAmount freceAmount, t1.FBeginTime fbeginTime, t1.FEndTime fendTime, t1.FCollectMode fcollectMode, "
+				+ " t1.FReceAmount freceAmount, convert(varchar(19), t1.FBeginTime, 20) fbeginTime, "
+				+ " convert(varchar(19), t1.FEndTime, 20) fendTime, t1.FCollectMode fcollectMode, "
 				+ " t2.FName customName, t4.FName stockName, t5.FName fname, t5.FNumber fnumber, t3.FBarcode fbarCode, "
 				+ " t6.FName unit, t3.FQty fqty, t3.FPrice fprice, t3.FDiscountPrice fdiscountPrice, t3.FAmount famount,"
 				+ " t3.FBalAmount fbalAmount, t3.FDiscountRate fdiscountRate, t3.FDiscountReason fdiscountReason, t7.FName userName, "
@@ -212,5 +220,47 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		volst.setTotalSize(count);
 		volst.setList(lst);
 		return volst;
+	}
+
+	@Override
+	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap) throws Exception {
+		
+		int start = NumberUtils.toInt(paramMap.get("start"));
+        int limit = NumberUtils.toInt(paramMap.get("limit"));
+		
+		ListVo<TransSummaryVo> voLst = new ListVo<TransSummaryVo>();
+		int count = 0;
+		List<TransSummaryVo> list = new ArrayList<TransSummaryVo>();
+		
+		Session session = baseDao2.getHibernateTemp().getSessionFactory().openSession();
+		Connection conn = null;
+		ResultSet rs = null;
+		CallableStatement cs = null;
+		if (session != null) {
+			conn = session.connection();
+			cs = conn.prepareCall("{Call cd_wlsfhzb(?, ?)}");
+			cs.setString(1, "2015-12-30"); //CallableStatement的参数设置下标从1 开始 
+			cs.setString(2, "2015-12-30");
+			//cs.registerOutParameter(3, Types.INTEGER);
+			rs = cs.executeQuery();
+			//cs.getInt(3);
+			
+			TransSummaryVo vo = null;
+			while(rs.next()){
+		        vo = new TransSummaryVo();
+				
+		        
+		        System.out.println(rs.getString("商品名称"));
+		    }
+			
+			rs.close();
+			cs.close();
+			session.close();
+		}
+		
+		voLst.setTotalSize(count);
+		voLst.setList(list);
+		
+		return voLst;
 	}
 }
