@@ -163,6 +163,12 @@ public class SellBillsVo implements Serializable{
 	// 保管
 	private String fsManagerName;
 	
+	/*调拨单*****************************/
+	// 调出仓库
+	private String fscStockName;
+	// 调入仓库
+	private String fdcStockName;
+	
 	/*实时库存*****************************/
 	// 仓库代码
 	private String stockNumber;
@@ -879,6 +885,18 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFreserve3(String freserve3) {
 		this.freserve3 = freserve3;
+	}
+	public String getFscStockName() {
+		return fscStockName;
+	}
+	public void setFscStockName(String fscStockName) {
+		this.fscStockName = fscStockName;
+	}
+	public String getFdcStockName() {
+		return fdcStockName;
+	}
+	public void setFdcStockName(String fdcStockName) {
+		this.fdcStockName = fdcStockName;
 	}
 	
 }

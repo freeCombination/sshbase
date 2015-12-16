@@ -30,4 +30,9 @@ public interface IDataMonitorService {
 	 * 查询收发汇总
 	 */
 	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询物料
+	 */
+	public ListVo<SellBillsVo> getGoodsInfo(Map<String, String> paramMap)  throws Exception;
 }

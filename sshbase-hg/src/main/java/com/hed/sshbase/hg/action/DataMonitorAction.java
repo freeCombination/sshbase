@@ -120,4 +120,22 @@ public class DataMonitorAction extends BaseAction {
         }
         return null;
     }
+	
+	/**
+	 * 查询物料
+	 */
+	public String getGoodsInfo() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getGoodsInfo(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            JsonUtil.outJson("{success:false,msg:'查询物料失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "查询物料", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
 }
