@@ -76,7 +76,9 @@
                 {name: "fbeginTime"},
                 {name: "fendTime"},
                 {name: "fcollectMode"},
-                {name: "customName"}
+                {name: "customName"},
+                {name: "freserve1"},
+                {name: "fcustomName"}
             ]
         });
         
@@ -107,13 +109,14 @@
                 {header: "收银员",width: 100,dataIndex: "fcashier",menuDisabled: true,sortable :false},
                 //{header: "POS机",width: 100,dataIndex: "fpos",menuDisabled: true,sortable :false},
                 //{header: "班次",width: 120,dataIndex: "fshift",menuDisabled: true,sortable :false},
-                {header: "总金额",width: 120,dataIndex: "ftotalAmount",menuDisabled: true,sortable :false},
-                {header: "折扣金额",width: 100,dataIndex: "fdiscountAmount",menuDisabled: true,sortable :false},
-                {header: "实收金额",width: 100,dataIndex: "freceAmount",menuDisabled: true,sortable :false},
-                {header: "销售开始时间",width: 160,dataIndex: "fbeginTime",menuDisabled: true,sortable :false},
-                {header: "销售结束时间",width: 160,dataIndex: "fendTime",menuDisabled: true,sortable :false},
+                {header: "总金额",width: 80,dataIndex: "ftotalAmount",menuDisabled: true,sortable :false},
+                {header: "折扣金额",width: 80,dataIndex: "fdiscountAmount",menuDisabled: true,sortable :false},
+                {header: "实收金额",width: 80,dataIndex: "freceAmount",menuDisabled: true,sortable :false},
+                {header: "销售开始时间",width: 150,dataIndex: "fbeginTime",menuDisabled: true,sortable :false},
+                {header: "销售结束时间",width: 150,dataIndex: "fendTime",menuDisabled: true,sortable :false},
                 {header: "收款性质",width: 100,dataIndex: "fcollectMode",menuDisabled: true,sortable :false},
-                {header: "客户名称",width: 100,dataIndex: "customName",menuDisabled: true,sortable :false}
+                {header: "顾客姓名",width: 120,dataIndex: "fcustomName",menuDisabled: true,sortable :false},
+                {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false}
              ];
         
         //grid组件
@@ -140,32 +143,12 @@
             tbar: [
             {
                 xtype:'label',
-                id:'createDate',
-                html:'POS机'
+                html:'单据编号'
             },
             {
-                width: 90,
+                width: 200,
                 xtype: 'textfield',
-                readOnly:true,
-                id:'posMachine'
-            },
-            {
-                xtype:'label',
-                html:'&nbsp;&nbsp;班次'
-            },
-            {
-                id:'bcNo',
-                width: 120,
-                xtype: 'textfield'
-            },
-            {
-                xtype:'label',
-                html:'&nbsp;&nbsp;保质期(天)'
-            },
-            {
-                id:'fkfPeriod',
-                width: 120,
-                xtype: 'textfield'
+                id:'fbillNoText'
             },'&nbsp;',
             {
                 id:'searchDicBtn',
@@ -175,7 +158,7 @@
                 iconCls:'search-button',
                 handler:function(){
                     var proxy = sellBillsStore.getProxy();
-                    proxy.setExtraParam("queryDate",Ext.getCmp("queryDate").getValue());
+                    proxy.setExtraParam("fbillNo",Ext.getCmp("fbillNoText").getValue());
                     sellBillsStore.loadPage(1);
                 }
             },'->',
@@ -281,12 +264,15 @@
                     text: '确定',
                     id: 'sureBtn',
                     handler: function() {
+                    	Ext.getCmp("fbillNoText").setValue('');
+                    	
                         sdate = Ext.getCmp('startDate').getValue();
                         edate = Ext.getCmp('endDate').getValue();
                         
                         var proxy = sellBillsStore.getProxy();
                         proxy.setExtraParam('startDate',sdate);
                         proxy.setExtraParam('endDate',edate);
+                        proxy.setExtraParam("fbillNo",'');
                         sellBillsStore.loadPage(1);
                         queryWin.close();
                     }

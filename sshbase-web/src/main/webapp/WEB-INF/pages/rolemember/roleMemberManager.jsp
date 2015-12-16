@@ -763,6 +763,7 @@ var roleMemberIds;
 	        	id:'group',
 	            title: '群组',
 	            layout:'fit',
+	            hidden:true,
 	            items:[
 					groupPanel	
 		        ]
@@ -943,7 +944,7 @@ var roleMemberIds;
 		layout: "border",
 		renderTo: Ext.getBody(),
 		items: [ 
-			roleGrid,scopeTab,panelTab
+			roleGrid ,panelTab//scopeTab
 		]
 	});
 }); 

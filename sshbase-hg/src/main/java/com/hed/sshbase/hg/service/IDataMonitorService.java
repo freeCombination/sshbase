@@ -27,6 +27,11 @@ public interface IDataMonitorService {
 	public ListVo<SellBillsVo> getRetail(Map<String, String> paramMap)  throws Exception;
 	
 	/**
+	 * 查询零售单商品
+	 */
+	public ListVo<SellBillsVo> getRetailGoods(Map<String, String> paramMap)  throws Exception;
+	
+	/**
 	 * 查询收发汇总
 	 */
 	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap)  throws Exception;

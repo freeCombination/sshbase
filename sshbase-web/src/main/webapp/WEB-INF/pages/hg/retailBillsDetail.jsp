@@ -166,6 +166,23 @@
             }
         });
         
+        var goodsStore=Ext.create("Ext.data.Store", {
+            pageSize: SystemConstant.commonSize,
+            model:"SellBills",
+            proxy: {
+                type:"ajax",
+                actionMethods: {
+                    read: 'POST'
+                },
+                url: "${ctx}/hg/getRetailGoods.action",
+                reader: {
+                     totalProperty: "totalSize",
+                     root: "list"
+                },
+                simpleSortMode :true
+            }
+        });
+        
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 {header: "仓库",width: 90,dataIndex: "stockName",menuDisabled: true,sortable :false},
@@ -229,14 +246,14 @@
             layout:"fit",
             id: "goodsDetail",
             bbar:  Ext.create("Ext.PagingToolbar", {
-                store: sellBillsStore,
+                store: goodsStore,
                 displayInfo: true,
                 displayMsg: SystemConstant.displayMsg,
                 emptyMsg: SystemConstant.emptyMsg
             }),
             columns:cm,
             forceFit : false,
-            store: sellBillsStore,
+            store: goodsStore,
             autoScroll: true,
             stripeRows: true
         });
@@ -449,10 +466,9 @@
             }]
         });
         
-        var proxy = sellBillsStore.getProxy();
-        proxy.setExtraParam("forDetail","forDetail");
-        proxy.setExtraParam("billsId",billsId);
-        sellBillsStore.load(function(records){
+        var gproxy = goodsStore.getProxy();
+        gproxy.setExtraParam("billsId",billsId);
+        goodsStore.load(function(records){
             if (records.length > 0 && !hasSet) {
                 var r = records[0];
                 Ext.getCmp('fbillNo').setValue(r.get('fbillNo'));
@@ -472,6 +488,11 @@
                 hasSet = true;
             }
         });
+        
+        var proxy = sellBillsStore.getProxy();
+        proxy.setExtraParam("forDetail","forDetail");
+        proxy.setExtraParam("billsId",billsId);
+        sellBillsStore.loadPage(1);
         
         Ext.create("Ext.container.Viewport", {
             layout: "border",

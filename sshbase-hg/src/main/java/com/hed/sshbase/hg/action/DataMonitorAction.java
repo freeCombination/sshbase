@@ -104,6 +104,24 @@ public class DataMonitorAction extends BaseAction {
     }
 	
 	/**
+	 * 查询零售单商品
+	 */
+	public String getRetailGoods() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getRetailGoods(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            JsonUtil.outJson("{success:false,msg:'查询零售单商品失败！'}");
+            this.excepAndLogHandle(DataMonitorAction.class, "查询零售单商品", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
+	
+	/**
 	 * 查询收发汇总
 	 */
 	public String getTransSummary() {
