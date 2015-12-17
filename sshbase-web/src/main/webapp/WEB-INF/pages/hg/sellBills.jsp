@@ -30,7 +30,8 @@
 		var sdate = '';
 		var edate = '';
 		var btype = '';
-		var cflag = '';
+		var fnumberStart = '';
+		var fnumberEnd = '';
 		
 		//建立Model模型对象
 		Ext.define("SellBills",{
@@ -65,7 +66,9 @@
                 {name: "ffmanagerId"},
                 {name: "fsupplyName"},
                 {name: "fsManagerName"},
-                {name: "ftranType"}
+                {name: "ftranType"},
+                {name: "fscStockName"},
+                {name: "fdcStockName"}
 			]
 		});
 		
@@ -94,10 +97,10 @@
                 {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
                 //{header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
                 {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
-                {header: "购货单位",width: 100,dataIndex: "ghcustom",menuDisabled: true,sortable :false},
                 //{header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
                 {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
                 {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "购货单位",width: 100,dataIndex: "ghcustom",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
                 //{header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
@@ -116,12 +119,12 @@
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
                 {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
-                {header: "领料部门",width:100,dataIndex: "deptName",menuDisabled: true,sortable :false},
+                //{header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
                 {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
-                {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
                 {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
                 {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "领料部门",width:100,dataIndex: "deptName",menuDisabled: true,sortable :false},
+                {header: "发货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
                 {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
@@ -137,12 +140,12 @@
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
                 {header: "制单日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
+                //{header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
                 {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
-                {header: "供应商",width: 100,dataIndex: "fsupplyName",menuDisabled: true,sortable :false},
                 //{header: "收料仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
                 {header: "物料长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
                 {header: "物料名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "供应商",width: 100,dataIndex: "fsupplyName",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
                 //{header: "单价",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
@@ -159,7 +162,7 @@
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
                 {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
+                //{header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
                 {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
                 {header: "收货仓库",width: 100,dataIndex: "stockName",menuDisabled: true,sortable :false},
                 {header: "物料长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
@@ -177,18 +180,33 @@
 		var cm5=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
-                {header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
+                //{header: "审核标志",width: 90,dataIndex: "fcheckFlag",menuDisabled: true,sortable :false},
                 {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
                 {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
                 {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
                 {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
-                {header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
-                {header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
-                {header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
+                //{header: "批号",width: 100,dataIndex: "fbatchNo",menuDisabled: true,sortable :false},
+                //{header: "单位成本",width: 100,dataIndex: "fauxprice",menuDisabled: true,sortable :false},
+                //{header: "成本",width: 100,dataIndex: "famount",menuDisabled: true,sortable :false},
                 {header: "部门",width: 100,dataIndex: "deptName",menuDisabled: true,sortable :false},
                 {header: "业务员",width: 90,dataIndex: "userName",menuDisabled: true,sortable :false},
                 {header: "条形码",width: 100,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
+             ];
+		
+		// 调拨单
+		var cm6=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
+                {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
+                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
+                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "调出仓库",width: 100,dataIndex: "fscStockName",menuDisabled: true,sortable :false},
+                {header: "调入仓库",width: 100,dataIndex: "fdcStockName",menuDisabled: true,sortable :false},
+                {header: "数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
              ];
 		
 		//grid组件
@@ -292,6 +310,18 @@
                 hidden:true,
                 width: 120,
                 xtype: 'textfield'
+            },
+            {
+                xtype:'label',
+                id:'dcckNameLabel',
+                hidden:true,
+                html:'&nbsp;&nbsp;调出仓库'
+            },
+            {
+                id:'dcckNameText',
+                hidden:true,
+                width: 120,
+                xtype: 'textfield'
             },'&nbsp;',
 			{
 				id:'searchDicBtn',
@@ -340,7 +370,39 @@
 	                labelAlign: 'right',
 	                anchor: '100%'
 	            },
-	            items: [{
+	            items: [
+				{
+				    xtype:'fieldset',
+				    padding: '5 0 0 0',
+				    collapsible: false,
+				    layout: 'column',
+				    width: '100%',
+				    items :[
+				        {
+				            columnWidth: .5,
+				            border: false,
+				            items: [{
+				                fieldLabel: '单据类型',
+				                xtype: 'combo',
+				                id:'billsType',
+				                displayField: 'display',
+				                valueField: 'value',
+				                store:Ext.create('Ext.data.Store', {
+				                    fields:['display', 'value'],
+				                    data:[
+				                        {'display':'全部', 'value':-1},
+				                        {'display':'外购入库', 'value':1},
+				                        //{'display':'其他入库', 'value':10},
+				                        {'display':'销售出库', 'value':21},
+				                        //{'display':'其他出库', 'value':29}
+				                        {'display':'调拨单', 'value':41}
+				                    ]
+				                })
+				            }]
+				        }
+				    ]
+				},
+	            {
 	                xtype:'fieldset',
 	                padding: '5 0 0 0',
 	                collapsible: false,
@@ -400,42 +462,32 @@
 	                        columnWidth: .5,
 	                        border: false,
 	                        items: [{
-	                        	fieldLabel: '单据类型',
-                                xtype: 'combo',
-                                id:'billsType',
-                                displayField: 'display',
-                                valueField: 'value',
-                                store:Ext.create('Ext.data.Store', {
-                                	fields:['display', 'value'],
-                                    data:[
-                                        {'display':'全部', 'value':-1},
-                                        {'display':'外购入库', 'value':1},
-                                        {'display':'其他入库', 'value':10},
-                                        {'display':'销售出库', 'value':21},
-                                        {'display':'其他出库', 'value':29}
-                                    ]
-                                })
+	                        	fieldLabel: '物料代码',
+	                        	readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberStart',
+                                listeners: {
+                                	focus: function(){
+                                		getFnumber('fnumberStart');
+                                    }
+                                }
 	                        }]
 	                    },
 	                    {
-	                        columnWidth: .5,
-	                        border: false,
-	                        items: [{
-	                        	fieldLabel: '审核标志',
-                                xtype: 'combo',
-                                id:'checkFlag',
-                                displayField: 'display',
-                                valueField: 'value',
-                                store:Ext.create('Ext.data.Store', {
-                                    fields:['display', 'value'],
-                                    data:[
-                                        {'display':'全部', 'value':'A'},
-                                        {'display':'Y', 'value':'Y'},
-                                        {'display':'N', 'value':'N'},
-                                    ]
-                                })
-	                        }]
-	                    }
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: ' 至 ',
+                                readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberEnd',
+                                listeners: {
+                                    focus: function(){
+                                    	getFnumber('fnumberEnd');
+                                    }
+                                }
+                            }]
+                        }
 	                ]
 	            }]
 	        });
@@ -460,7 +512,8 @@
 	                	sdate = Ext.getCmp('startDate').getValue();
                         edate = Ext.getCmp('endDate').getValue();
                         btype = Ext.getCmp('billsType').getValue();
-                        cflag = Ext.getCmp('checkFlag').getValue();
+                        fnumberStart = Ext.getCmp('fnumberStart').getValue();
+                        fnumberEnd = Ext.getCmp('fnumberEnd').getValue();
                         
                         var billsName = '出入库';
                         if (21 == btype) {
@@ -473,6 +526,8 @@
                             Ext.getCmp('gysNameText').setVisible(false);
                             Ext.getCmp('shckNameLabel').setVisible(false);
                             Ext.getCmp('shckNameText').setVisible(false);
+                            Ext.getCmp('dcckNameLabel').setVisible(false);
+                            Ext.getCmp('dcckNameText').setVisible(false);
                             sellBillsGrid.reconfigure(sellBillsStore, cm);
                         }
                         else if (29 == btype) {
@@ -485,6 +540,8 @@
                             Ext.getCmp('gysNameText').setVisible(false);
                             Ext.getCmp('shckNameLabel').setVisible(false);
                             Ext.getCmp('shckNameText').setVisible(false);
+                            Ext.getCmp('dcckNameLabel').setVisible(false);
+                            Ext.getCmp('dcckNameText').setVisible(false);
                             sellBillsGrid.reconfigure(sellBillsStore, cm2);
                         }
                         else if (1 == btype) {
@@ -496,6 +553,8 @@
                             Ext.getCmp('gysNameText').setVisible(true);
                             Ext.getCmp('shckNameLabel').setVisible(false);
                             Ext.getCmp('shckNameText').setVisible(false);
+                            Ext.getCmp('dcckNameLabel').setVisible(false);
+                            Ext.getCmp('dcckNameText').setVisible(false);
                             billsName = '外购入库';
                             sellBillsGrid.reconfigure(sellBillsStore, cm3);
                         }
@@ -508,8 +567,24 @@
                             Ext.getCmp('gysNameText').setVisible(false);
                             Ext.getCmp('shckNameLabel').setVisible(true);
                             Ext.getCmp('shckNameText').setVisible(true);
+                            Ext.getCmp('dcckNameLabel').setVisible(false);
+                            Ext.getCmp('dcckNameText').setVisible(false);
                             billsName = '其他入库';
                             sellBillsGrid.reconfigure(sellBillsStore, cm4);
+                        }
+                        else if (41 == btype) {
+                        	Ext.getCmp('purchaseUnit').setVisible(false);
+                            Ext.getCmp('purchaseUnitLabel').setVisible(false);
+                            Ext.getCmp('deliverStock').setVisible(false);
+                            Ext.getCmp('deliverStockLabel').setVisible(false);
+                            Ext.getCmp('gysNameLabel').setVisible(false);
+                            Ext.getCmp('gysNameText').setVisible(false);
+                            Ext.getCmp('shckNameLabel').setVisible(false);
+                            Ext.getCmp('shckNameText').setVisible(false);
+                            Ext.getCmp('dcckNameLabel').setVisible(true);
+                            Ext.getCmp('dcckNameText').setVisible(true);
+                            billsName = '调拨单';
+                            sellBillsGrid.reconfigure(sellBillsStore, cm6);
                         }
                         else if (-1 == btype) {
                             billsName = '出入库';
@@ -521,6 +596,8 @@
                             Ext.getCmp('gysNameText').setVisible(false);
                             Ext.getCmp('shckNameLabel').setVisible(false);
                             Ext.getCmp('shckNameText').setVisible(false);
+                            Ext.getCmp('dcckNameLabel').setVisible(false);
+                            Ext.getCmp('dcckNameText').setVisible(false);
                             
                             sellBillsGrid.reconfigure(sellBillsStore, cm5);
                         }
@@ -531,7 +608,8 @@
 	                    proxy.setExtraParam('startDate',sdate);
 	                    proxy.setExtraParam('endDate',edate);
 	                    proxy.setExtraParam('billsType',btype);
-	                    proxy.setExtraParam('checkFlag',cflag);
+	                    proxy.setExtraParam('fnumberStart',fnumberStart);
+	                    proxy.setExtraParam('fnumberEnd',fnumberEnd);
 	                    proxy.setExtraParam("queryDate",'');
 	                    sellBillsStore.loadPage(1);
 	                    queryWin.close();
@@ -551,13 +629,13 @@
 	                		Ext.getCmp('startDate').setValue(sdate);
 	                        Ext.getCmp('endDate').setValue(edate);
 	                        Ext.getCmp('billsType').setValue(btype);
-	                        Ext.getCmp('checkFlag').setValue(cflag);
+	                        Ext.getCmp('fnumberStart').setValue(fnumberStart);
+	                        Ext.getCmp('fnumberEnd').setValue(fnumberEnd);
 	                	}
 	                	else {
 	                		Ext.getCmp('startDate').setValue(getFirstDay());
                             Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
                             Ext.getCmp('billsType').setValue(-1);
-                            Ext.getCmp('checkFlag').setValue('A');
 	                	}
 	                }
 	            }
@@ -604,6 +682,130 @@
             
 		    window.open("${ctx}/hg/toSellBillsDetail.action?billsId=" + billsId + "&ftranType=" + ftranType, "", 
 		        "height=" + height + ", width=" + width + ", top=" + y + ", left=" + x + ", toolbar=no, menubar=no, scrollbars=no, resizable=yes, location=no, status=no");
+		}
+		
+		function getFnumber(domId) {
+			
+		    Ext.define("Goods",{
+		        extend:"Ext.data.Model",
+		        fields:[
+		            {name:"fnumber"},
+		            {name:"fname"},
+		            {name:"fmodel"},
+		            {name:"unit"},
+		            {name:"fbarCode"}
+		         ]
+		    });
+		    
+		    //行选择模型
+		    var smSingle=Ext.create("Ext.selection.CheckboxModel",{
+		        injectCheckbox:1,
+		        mode : 'SINGLE',
+		        listeners: {
+		            selectionchange: function(){
+		                var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+		                if(rows.length > 0){
+		                    Ext.getCmp('goodsOk').setDisabled(false);
+		                }else{
+		                    Ext.getCmp('goodsOk').setDisabled(true);
+		                }
+		            }
+		        }
+		    });
+		          
+		    var goodsCm=[
+		        {xtype: "rownumberer",text:"序号",width:60,align:"center"},
+		        {header: "物料代码",width: 150,align:'center',dataIndex: "fnumber",menuDisabled: true,sortable:false},
+		        {header: "物料名称",width: 150,align:'center',dataIndex: "fname",menuDisabled: true,sortable:false},
+		        {header: "规格型号",width: 80,align:'center',dataIndex: "fmodel",menuDisabled: true,sortable:false},
+		        {header: "单位",width: 60,align:'center',dataIndex: "unit",menuDisabled: true,sortable:false},
+		        {header: "条形码",width: 120,align:'center',dataIndex: "fbarCode",menuDisabled: true,sortable:false}
+		    ];
+
+		    var goodsStore = Ext.create('Ext.data.Store', {
+		        pageSize: SystemConstant.commonSize,
+		        model: 'Goods',
+		        proxy: {
+		            type: 'ajax',
+		            actionMethods: {
+		                read: 'POST'
+		            },
+		            url: '${ctx}/hg/getGoodsInfo.action',
+		            reader:{
+		                type: 'json',
+		                root: 'list',
+		                totalProperty:"totalSize"
+		            },
+		            autoLoad: true
+		        }
+		    });
+
+		    goodsPanel = Ext.create('Ext.grid.Panel',{
+		        //title:'物料信息',
+		        id: "goodsPanel",
+		        layout:"fit",
+		        stripeRows: true,
+		        border:false,
+		        forceFit:false,
+		        columnLines: true,
+		        autoScroll: true,
+		        store : goodsStore,
+		        selModel:smSingle,
+		        columns:goodsCm,
+		        tbar:[
+                '物料名称',
+		        {
+		        	xtype: 'textfield',
+		        	width:'160',
+                    id:'goodsName'
+		        },
+		        '&nbsp;&nbsp;',
+		        {
+                    text :   "查询", 
+                    iconCls: "search-button", 
+                    handler:function(){
+                        var proxy = goodsStore.getProxy();
+                        proxy.setExtraParam("goodsName",Ext.getCmp('goodsName').getValue());
+                        goodsStore.loadPage(1);
+                    } 
+                }],
+		        bbar:new Ext.PagingToolbar({
+		            pageSize: SystemConstant.commonSize,
+		            store: goodsStore,
+		            displayInfo: true,
+		            displayMsg: SystemConstant.displayMsg,
+		            emptyMsg: SystemConstant.emptyMsg
+		        })
+		    });
+		                    
+		    //用户分配角色窗口
+		    goodsWin = Ext.create(Ext.window.Window,{
+		        title:"选择物料",
+		        width:680,
+		        height:400,
+		        modal:true,
+		        resizable:false,
+		        layout:"fit",
+		        closeAction:'destroy',
+		        items:[goodsPanel],
+		        buttonAlign : 'center',
+		        buttons:[{
+		            id:'goodsOk',
+		            text:'确定',
+		            disabled:true,
+		            handler:function(){
+		                var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+		                Ext.getCmp(domId + '').setValue(rows[0].get("fnumber"));
+		                goodsWin.close();
+		            }
+		        },{
+		            text:'取消',handler:function(){
+		            	goodsWin.close();
+		        }}
+		        ]
+		    }).show();
+		    
+		    goodsStore.loadPage(1);
 		}
 		
 		function getFirstDay(){

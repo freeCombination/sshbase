@@ -10,119 +10,30 @@
 <body>
 	<table width="100%" border="0">
 		<tr>
-			<td valign="top">
-				<div class="container_2 container_3">
-					<div class="top">
-						<span class="keep_left FontStyle">XXX模块</span><span
-							class="keep_right"><a href="#">更多</a></span>
-					</div>
-					<ul class="ul_1">
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知大家好啊！
-						</a></li>
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知！</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-					</ul>
-				</div>
-
-				<div class="container_2 container_3">
-					<div class="top">
-						<span class="keep_left FontStyle">XXX模块</span><span
-							class="keep_right"><a href="#">更多</a></span>
-					</div>
-					<ul class="ul_1">
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-					</ul>
-				</div>
-
-				<div class="container_2 container_3">
-					<div class="top">
-						<span class="keep_left FontStyle">XXX模块</span><span
-							class="keep_right"><a href="#">更多</a></span>
-					</div>
-					<ul class="ul_1">
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-					</ul>
-				</div>
-
-				<div class="container_2 container_3">
-					<div class="top">
-						<span class="keep_left FontStyle">XXX模块</span><span
-							class="keep_right"><a href="#">更多</a></span>
-					</div>
-					<ul class="ul_1">
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#" class="hot">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-						<li>【2013-04-25】<a href="#">关于XXXXX公司的通知</a></li>
-					</ul>
-				</div>
-			</td>
-			<td width="190" valign="top">
+			<td width="100%" height="100%" valign="top">
 				<div class="container_right">
 					<div class="container_right_title">
 						<span class="FontStyle">快捷入口</span>
 					</div>
 					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮1</div>
+						<a href="${ctx}/hg/toSellBills.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+						<div>出入库查询</div>
 					</div>
 					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮2</div>
+						<a href="${ctx}/hg/toInventory.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+						<div>实时库存查询</div>
 					</div>
 					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮3</div>
+						<a href="${ctx}/hg/toRetailBills.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+						<div>零售单查询</div>
 					</div>
 					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮4</div>
-					</div>
-					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮1</div>
-					</div>
-					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮2</div>
-					</div>
-					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮3</div>
-					</div>
-					<div class="container_right_icon">
-						<a href="#"><img src="${ctx}/images/index/right_icon.png" /></a>
-						<div>快捷按钮4</div>
+						<a href="${ctx}/hg/toTransSummary.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+						<div>收发汇总查询</div>
 					</div>
 				</div>
 			</td>
 		</tr>
 	</table>
-
-	<input id="bom_off" class="information_btn" value="" name=""
-		type="button" onclick="btnCont(0)" />
 </body>
 </html>

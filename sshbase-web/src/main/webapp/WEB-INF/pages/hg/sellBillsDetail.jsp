@@ -105,7 +105,9 @@
                 {name: "fentrySelfA0163"},
                 {name: "fentrySelfA0165"},
                 {name: "fentrySelfA0166"},
-                {name: "fsManagerName"}
+                {name: "fsManagerName"},
+                {name: "fscStockName"},
+                {name: "fdcStockName"}
             ]
         });
         
@@ -131,7 +133,7 @@
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 //{header: "ID",dataIndex: "pkDictionaryId",hidden: true,menuDisabled: true,sortable :false},
-                {header: "产品代码",width: 90,dataIndex: "fnumber",menuDisabled: true,sortable :false},//短代码 （fshortNumber）
+                {header: "产品代码",width: 160,dataIndex: "fnumber",menuDisabled: true,sortable :false},//短代码 （fshortNumber）
                 {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false},
                 {header: "产品名称",width:160,dataIndex: "fname",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
@@ -239,6 +241,21 @@
                 {header: "源单单号",width: 100,dataIndex: "fsourceBillNo",menuDisabled: true,sortable :false},
                 {header: "备注",width: 100,dataIndex: "fnote",menuDisabled: true,sortable :false},
                 {header: "检验是否良品",width: 120,dataIndex: "fchkPassItem",menuDisabled: true,sortable :false}
+             ];
+        
+        // 调拨单
+        var cm5=[
+                {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
+                {header: "日期",width: 120,dataIndex: "fdate",menuDisabled: true,sortable :false},
+                {header: "单据编号",width:100,dataIndex: "fbillNo",menuDisabled: true,sortable :false},
+                {header: "产品长代码",width: 120,dataIndex: "fnumber",menuDisabled: true,sortable :false},
+                {header: "产品名称",width: 120,dataIndex: "fname",menuDisabled: true,sortable :false},
+                {header: "规格型号",width: 100,dataIndex: "fmodel",menuDisabled: true,sortable :false},
+                {header: "单位",width: 70,dataIndex: "unit",menuDisabled: true,sortable :false},
+                {header: "调出仓库",width: 100,dataIndex: "fscStockName",menuDisabled: true,sortable :false},
+                {header: "调入仓库",width: 100,dataIndex: "fdcStockName",menuDisabled: true,sortable :false},
+                {header: "数量",width: 100,dataIndex: "fauxqty",menuDisabled: true,sortable :false},
+                {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
              ];
         
         //grid组件
@@ -417,6 +434,26 @@
                     id:'stockNameGet',
                     fieldLabel: '收货仓库'
                 }]
+            },
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    hidden:true,
+                    id:'fscStockName',
+                    fieldLabel: '调出仓库'
+                }]
+            },
+            {
+                columnWidth: .25,
+                border: false,
+                items: [{
+                    xtype: 'textfield',
+                    hidden:true,
+                    id:'fdcStockName',
+                    fieldLabel: '调入仓库'
+                }]
             }]
         });
 		
@@ -468,6 +505,22 @@
             sellBillsGrid.reconfigure(sellBillsStore, cm4);
             billsName = '其他入库单';
         }
+        else if (41 == btype) {
+            Ext.getCmp('gysName').setVisible(false);
+            Ext.getCmp('fsettleDate').setVisible(false);
+            Ext.getCmp('fsaleStyle').setVisible(false);
+            Ext.getCmp('fholisticDiscountRate').setVisible(false);
+            Ext.getCmp('ghcustom').setVisible(false);
+            Ext.getCmp('ffetchAdd').setVisible(false);
+            Ext.getCmp('stockName').setVisible(false);
+            Ext.getCmp('fexplanation').setVisible(false);
+            
+            Ext.getCmp('fscStockName').setVisible(true);
+            Ext.getCmp('fdcStockName').setVisible(true);
+            
+            sellBillsGrid.reconfigure(sellBillsStore, cm5);
+            billsName = '调拨单';
+        }
         
         Ext.getCmp('ftranType').setText(billsName);
 		
@@ -491,6 +544,8 @@
         		Ext.getCmp('stockNameGet').setValue(r.get('stockName'));
         		Ext.getCmp('gysName').setValue(r.get('fsupplyName'));
         		Ext.getCmp('fsManagerName').setValue(r.get('fsManagerName'));
+        		Ext.getCmp('fscStockName').setValue(r.get('fscStockName'));
+                Ext.getCmp('fdcStockName').setValue(r.get('fdcStockName'));
         		
         		hasSet = true;
         	}
