@@ -29,6 +29,7 @@
         
         var sdate = '';
         var edate = '';
+        var stockInfo = '';
         
         //建立Model模型对象
         Ext.define("SellBills",{
@@ -68,7 +69,7 @@
         
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
-                {header: "日期",width:120,dataIndex: "sfrq",menuDisabled: true,sortable :false},
+                //{header: "日期",width:120,dataIndex: "sfrq",menuDisabled: true,sortable :false},
                 {header: "商品编码",width:160,dataIndex: "spdm",menuDisabled: true,sortable :false},
                 {header: "商品名称",width: 160,dataIndex: "spmc",menuDisabled: true,sortable :false},
                 {header: "规格型号",width: 100,dataIndex: "ggxh",menuDisabled: true,sortable :false},
@@ -77,13 +78,13 @@
                 {header: "初期数量",width: 120,dataIndex: "cqsl",menuDisabled: true,sortable :false},
                 {header: "本期入库数量",width: 120,dataIndex: "bqrksl",menuDisabled: true,sortable :false},
                 {header: "本期出库数量",width: 120,dataIndex: "bqcksl",menuDisabled: true,sortable :false},
-                {header: "本期结存数量",width: 120,dataIndex: "bqjcsl",menuDisabled: true,sortable :false},
-                {header: "仓库",width: 120,dataIndex: "sfck",menuDisabled: true,sortable :false}
+                {header: "本期结存数量",width: 120,dataIndex: "bqjcsl",menuDisabled: true,sortable :false}
+                //{header: "仓库",width: 120,dataIndex: "sfck",menuDisabled: true,sortable :false}
              ];
         
         //grid组件
         var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
-            title:'收发汇总',
+            //title:'收发汇总',
             border:false,
             columnLines: true,
             layout:"fit",
@@ -103,53 +104,17 @@
             autoScroll: true,
             stripeRows: true,
             tbar: [
-            {
-                xtype:'label',
-                id:'createDate',
-                html:'POS机'
-            },
-            {
-                width: 90,
-                xtype: 'textfield',
-                readOnly:true,
-                id:'posMachine'
-            },
-            {
-                xtype:'label',
-                html:'&nbsp;&nbsp;班次'
-            },
-            {
-                id:'bcNo',
-                width: 120,
-                xtype: 'textfield'
-            },
-            {
-                xtype:'label',
-                html:'&nbsp;&nbsp;保质期(天)'
-            },
-            {
-                id:'fkfPeriod',
-                width: 120,
-                xtype: 'textfield'
-            },'&nbsp;',
-            {
-                id:'searchDicBtn',
-                xtype:'button',
-                disabled:false,
-                text:'查询',
-                iconCls:'search-button',
-                handler:function(){
-                    var proxy = sellBillsStore.getProxy();
-                    proxy.setExtraParam("queryDate",Ext.getCmp("queryDate").getValue());
-                    sellBillsStore.loadPage(1);
-                }
-            },'->',
+			{
+			    xtype:'label',
+			    html:'&nbsp;&nbsp;收发汇总'
+			},
+            '->',
             {
                 id:'addDicBtn',
                 xtype:'button',
                 disabled:false,
                 text:'过滤',
-                iconCls:'add-button',
+                iconCls:'privilege-button',
                 handler:function(){
                     query();
                 }
@@ -174,7 +139,38 @@
                     labelAlign: 'right',
                     anchor: '100%'
                 },
-                items: [{
+                items: [
+				{
+				    xtype:'fieldset',
+				    padding: '5 0 0 0',
+				    collapsible: false,
+				    layout: 'column',
+				    width: '100%',
+				    items :[
+				        {
+				            columnWidth: 1,
+				            border: false,
+				            items: [{
+				                fieldLabel: '仓库信息',
+				                xtype: 'combo',
+				                width: 280,
+				                id:'stockInfo',
+				                displayField: 'display',
+				                valueField: 'value',
+				                store:Ext.create('Ext.data.Store', {
+				                    fields:['display', 'value'],
+				                    data:[
+				                          {'display':'全部', 'value':'-1'},
+				                          {'display':'001(免税仓库)', 'value':'001'},
+				                          {'display':'100(机场免税店)', 'value':'100'},
+				                          {'display':'111(免税品待检仓)', 'value':'111'}
+				                      ]
+				                })
+				            }]
+				        }
+				    ]
+				},
+                {
                     xtype:'fieldset',
                     padding: '5 0 0 0',
                     collapsible: false,
@@ -243,10 +239,12 @@
                     handler: function() {
                         sdate = Ext.getCmp('startDate').getValue();
                         edate = Ext.getCmp('endDate').getValue();
+                        stockInfo = Ext.getCmp('stockInfo').getValue();
                         
                         var proxy = sellBillsStore.getProxy();
                         proxy.setExtraParam('startDate',sdate);
                         proxy.setExtraParam('endDate',edate);
+                        proxy.setExtraParam('stockInfo',stockInfo);
                         sellBillsStore.loadPage(1);
                         queryWin.close();
                     }
@@ -267,6 +265,13 @@
                         else {
                             Ext.getCmp('startDate').setValue(getFirstDay());
                             Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
+                        }
+                        
+                        if (stockInfo && stockInfo != '') {
+                        	Ext.getCmp('stockInfo').setValue(stockInfo);
+                        }
+                        else {
+                        	Ext.getCmp('stockInfo').setValue('-1');
                         }
                     }
                 }

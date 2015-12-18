@@ -4,6 +4,11 @@
 .save-button {
 	background: url(../images/icons/save.gif) left top no-repeat !important;
 }
+
+.privilege-button {
+    background: url(../images/icons/privilege.gif) left top no-repeat !important;
+}
+
 .start-button { 
    background: url(../images/icons/start.gif) left no-repeat!important;  
 }

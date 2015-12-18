@@ -1,8 +1,10 @@
 package com.hed.sshbase.hg.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.hed.sshbase.common.vo.ListVo;
+import com.hed.sshbase.hg.vo.GysVo;
 import com.hed.sshbase.hg.vo.SellBillsVo;
 import com.hed.sshbase.hg.vo.TransSummaryVo;
 
@@ -40,4 +42,14 @@ public interface IDataMonitorService {
 	 * 查询物料
 	 */
 	public ListVo<SellBillsVo> getGoodsInfo(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询供应商
+	 */
+	public ListVo<GysVo> getGysInfo(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询购货单位
+	 */
+	public List<GysVo> getGhdwInfo()  throws Exception;
 }

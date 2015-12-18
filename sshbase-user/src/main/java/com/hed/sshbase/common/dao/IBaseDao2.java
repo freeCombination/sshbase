@@ -732,8 +732,9 @@ public interface IBaseDao2 {
      * @param className 返回值的类型
      * @return List
      */
-    public List executeNativeSQLForBean(int start, int pageSize, String sql,
-        Class className);
+    public List executeNativeSQLForBean(int start, int pageSize, String sql, Class className);
+    
+    public List executeNativeSQLForBean(String sql, Class className);
     
     /**
      * 取总条数

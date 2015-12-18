@@ -3,7 +3,6 @@ package com.hed.sshbase.hg.service.impl;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,7 @@ import com.hed.sshbase.common.dao.IBaseDao2;
 import com.hed.sshbase.common.util.StringUtil;
 import com.hed.sshbase.common.vo.ListVo;
 import com.hed.sshbase.hg.service.IDataMonitorService;
+import com.hed.sshbase.hg.vo.GysVo;
 import com.hed.sshbase.hg.vo.SellBillsVo;
 import com.hed.sshbase.hg.vo.TransSummaryVo;
 
@@ -37,11 +37,15 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
         int limit = NumberUtils.toInt(paramMap.get("limit"));
         String startDate = paramMap.get("startDate");
         String endDate = paramMap.get("endDate");
-        String queryDate = paramMap.get("queryDate");
-        String fbillNo = paramMap.get("fbillNo");
         String billsType = paramMap.get("billsType");
         String fnumberStart = paramMap.get("fnumberStart");
         String fnumberEnd = paramMap.get("fnumberEnd");
+        
+        String queryDate = paramMap.get("queryDate");
+        String fbillNo = paramMap.get("fbillNo");
+        String gysId = paramMap.get("gysId");
+        String purchaseUnitId = paramMap.get("purchaseUnitId");
+        String dcckNo = paramMap.get("dcckNo");
         
         String billsId = paramMap.get("billsId");
         String forDetail = paramMap.get("forDetail");
@@ -89,10 +93,6 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 			commonSql += " and t1.FBillNo='" + billsId + "'";
 		}
 		else {
-			if (StringUtil.isNotBlank(fbillNo)) {
-				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
-			}
-			
 			if (StringUtil.isNotBlank(billsType) && !"-1".equals(billsType)) {
 				commonSql += " and t1.FTranType=" + billsType;
 			}
@@ -105,8 +105,32 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
 			}
 			
+			if (StringUtil.isNotBlank(fnumberStart)) {
+				commonSql += " and t9.FNumber >= '" + fnumberStart + "'";
+			}
+			
+			if (StringUtil.isNotBlank(fnumberEnd)) {
+				commonSql += " and t9.FNumber <= '" + fnumberEnd + "'";
+			}
+			
 			if (StringUtil.isNotBlank(queryDate)) {
 				commonSql += " and t1.Fdate=convert(datetime,'" + queryDate + "')";
+			}
+			
+			if (StringUtil.isNotBlank(fbillNo)) {
+				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+			}
+			
+			if (StringUtil.isNotBlank(purchaseUnitId) && !"-1".equals(purchaseUnitId)) {
+				commonSql += " and t7.FItemID = " + purchaseUnitId;
+			}
+			
+			if (StringUtil.isNotBlank(gysId) && !"-1".equals(gysId)) {
+				commonSql += " and t11.FItemID = " + gysId;
+			}
+			
+			if (StringUtil.isNotBlank(dcckNo) && !"-1".equals(dcckNo)) {
+				commonSql += " and t15.FNumber ='" + dcckNo + "'";
 			}
 		}
 		
@@ -127,6 +151,9 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
         int limit = NumberUtils.toInt(paramMap.get("limit"));
         
         String stockNumber = paramMap.get("stockNumber");
+        String showZero = paramMap.get("showZero");
+        String fnumberStart = paramMap.get("fnumberStart");
+        String fnumberEnd = paramMap.get("fnumberEnd");
 		
 		String sql = " SELECT "
 				+ " t2.FNumber fnumber, t2.FName fname, t3.FModel fmodel, t4.FName stockName, "
@@ -146,6 +173,18 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		}
 		else {
 			commonSql += " and t4.FNumber in ('001', '110', '111')";
+		}
+		
+		if (StringUtil.isBlank(showZero) || !"true".equals(showZero)) {
+			commonSql += " and t1.FQty > 0 ";
+		}
+		
+		if (StringUtil.isNotBlank(fnumberStart)) {
+			commonSql += " and t2.FNumber >= '" + fnumberStart + "'";
+		}
+		
+		if (StringUtil.isNotBlank(fnumberEnd)) {
+			commonSql += " and t2.FNumber <= '" + fnumberEnd + "'";
 		}
 		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
@@ -264,9 +303,12 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		
 		int start = NumberUtils.toInt(paramMap.get("start"));
         int limit = NumberUtils.toInt(paramMap.get("limit"));
+        String startDate = paramMap.get("startDate");
+        String endDate = paramMap.get("limit");
+        String stockInfo = paramMap.get("stockInfo");
 		
 		ListVo<TransSummaryVo> voLst = new ListVo<TransSummaryVo>();
-		int count = 0;
+		int count = 100;
 		List<TransSummaryVo> list = new ArrayList<TransSummaryVo>();
 		
 		Session session = baseDao2.getHibernateTemp().getSessionFactory().openSession();
@@ -285,9 +327,20 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 			TransSummaryVo vo = null;
 			while(rs.next()){
 		        vo = new TransSummaryVo();
-				
-		        
-		        System.out.println(rs.getString("商品名称"));
+				// 收发日期
+		        //vo.setSfrq("");
+		        vo.setSpdm(rs.getString("FNumber"));
+		        vo.setSpmc(rs.getString("FName"));
+		        vo.setGgxh(rs.getString("FModel"));
+		        vo.setUnit(rs.getString("FUnitName"));
+		        vo.setTxm(rs.getString("FGoodsBarCode"));
+		        vo.setCqsl(rs.getBigDecimal("FBegQty"));
+		        vo.setBqrksl(rs.getBigDecimal("FInQty"));
+		        vo.setBqcksl(rs.getBigDecimal("FOutQty"));
+		        vo.setBqjcsl(rs.getBigDecimal("FEndQty"));
+		        // 收发仓库
+		        //vo.setSfck(rs.getString(""));
+		        list.add(vo);
 		    }
 			
 			rs.close();
@@ -337,5 +390,47 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		volst.setTotalSize(count);
 		volst.setList(lst);
 		return volst;
+	}
+	
+	@Override
+	public ListVo<GysVo> getGysInfo(Map<String, String> paramMap)  throws Exception {
+		
+		int start = NumberUtils.toInt(paramMap.get("start"));
+        int limit = NumberUtils.toInt(paramMap.get("limit"));
+        
+        String gysName = paramMap.get("gysName");
+        
+        String sql = " select "
+        		+ " FItemID fitemId, "
+        		+ " FName fname, "
+        		+ " FNumber fnumber, "
+        		+ " FAddress faddress "
+        		+ " FROM t_Supplier ";
+        
+        String countSql = " select count(*) FROM t_Supplier ";
+        
+        if (StringUtil.isNotBlank(gysName)) {
+        	sql += " where FName like '%" + gysName + "%'";
+        	countSql += " where FName like '%" + gysName + "%'";
+        }
+        
+        int count = baseDao2.getTotalCountNativeQuery(countSql, new Object[]{});
+		
+        sql += " ORDER BY FItemID ";
+		List<GysVo> lst = (List<GysVo>)baseDao2.executeNativeSQLForBean(start, limit, sql, GysVo.class);
+		
+		ListVo<GysVo> volst = new ListVo<GysVo>();
+		volst.setTotalSize(count);
+		volst.setList(lst);
+		return volst;
+	}
+	
+	@Override
+	public List<GysVo> getGhdwInfo()  throws Exception {
+		
+        String sql = " select FItemID fitemId, FName fname from t_Organization ORDER BY FItemID";
+		List<GysVo> lst = (List<GysVo>)baseDao2.executeNativeSQLForBean(sql, GysVo.class);
+		
+		return lst;
 	}
 }

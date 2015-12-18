@@ -272,8 +272,30 @@
             {
                 id:'purchaseUnit',
                 hidden:true,
-                width: 120,
-                xtype: 'textfield'
+                width: 160,
+                xtype: 'combo',
+                displayField: 'fname',
+                valueField: 'fitemId',
+                store:Ext.create('Ext.data.Store', {
+                    fields:['fname', 'fitemId'],
+                    proxy: {
+                        type: 'ajax',
+                        actionMethods: {
+                            read: 'POST'
+                        },
+                        url: '${ctx}/hg/getGhdwInfo.action',
+                        reader: {
+                            type: 'json'
+                        }
+                    },
+                    autoLoad: true,
+                    listeners:{
+                        load:function(store, records){
+                            var obj = {fitemId:-1, fname:'全部'};
+                            store.insert(0, obj);
+                        }
+                    }
+                })
             },
             {
             	xtype:'label',
@@ -296,7 +318,18 @@
             {
                 id:'gysNameText',
                 hidden:true,
-                width: 120,
+                width: 260,
+                readOnly:true,
+                xtype: 'textfield',
+                listeners: {
+                    focus: function(){
+                        getGys('gysNameText', 'gysNameHidden');
+                    }
+                }
+            },
+            {
+                id:'gysNameHidden',
+                hidden:true,
                 xtype: 'textfield'
             },
             {
@@ -321,7 +354,18 @@
                 id:'dcckNameText',
                 hidden:true,
                 width: 120,
-                xtype: 'textfield'
+                xtype: 'combo',
+                displayField: 'display',
+                valueField: 'value',
+                store:Ext.create('Ext.data.Store', {
+                    fields:['display', 'value'],
+                    data:[
+                        {'display':'全部', 'value':'-1'},
+                        {'display':'001(免税仓库)', 'value':'001'},
+                        {'display':'100(机场免税店)', 'value':'100'},
+                        {'display':'111(免税品待检仓)', 'value':'111'}
+                    ]
+                })
             },'&nbsp;',
 			{
 				id:'searchDicBtn',
@@ -332,15 +376,17 @@
 				handler:function(){
 					var proxy = sellBillsStore.getProxy();
 					proxy.setExtraParam("queryDate",Ext.getCmp("queryDate").getValue());
+					proxy.setExtraParam("fbillNo",Ext.getCmp("billsNo").getValue());
+					proxy.setExtraParam("gysId",Ext.getCmp("gysNameHidden").getValue());
+					proxy.setExtraParam("purchaseUnitId",Ext.getCmp("purchaseUnit").getValue());
+					proxy.setExtraParam("dcckNo",Ext.getCmp("dcckNameText").getValue());
 					sellBillsStore.loadPage(1);
 				}
 			},'->',
 			{
-				id:'addDicBtn',
                 xtype:'button',
-                disabled:false,
                 text:'过滤',
-                iconCls:'add-button',
+                iconCls:'privilege-button',
                 handler:function(){
                 	query();
                 }
@@ -509,6 +555,12 @@
 	                id: 'sureBtn',
 	                handler: function() {
 	                	Ext.getCmp("queryDate").setValue('');
+	                	Ext.getCmp("billsNo").setValue('');
+	                	Ext.getCmp("gysNameText").setValue('');
+	                	Ext.getCmp("gysNameHidden").setValue('');
+	                    Ext.getCmp("purchaseUnit").setValue('');
+	                    Ext.getCmp("dcckNameText").setValue('');
+	                	
 	                	sdate = Ext.getCmp('startDate').getValue();
                         edate = Ext.getCmp('endDate').getValue();
                         btype = Ext.getCmp('billsType').getValue();
@@ -519,6 +571,7 @@
                         if (21 == btype) {
                             billsName = '销售出库';
                             Ext.getCmp('purchaseUnit').setVisible(true);
+                            Ext.getCmp('purchaseUnit').setValue(-1);
                             Ext.getCmp('purchaseUnitLabel').setVisible(true);
                             Ext.getCmp('deliverStock').setVisible(false);
                             Ext.getCmp('deliverStockLabel').setVisible(false);
@@ -583,6 +636,7 @@
                             Ext.getCmp('shckNameText').setVisible(false);
                             Ext.getCmp('dcckNameLabel').setVisible(true);
                             Ext.getCmp('dcckNameText').setVisible(true);
+                            Ext.getCmp('dcckNameText').setValue('-1');
                             billsName = '调拨单';
                             sellBillsGrid.reconfigure(sellBillsStore, cm6);
                         }
@@ -610,7 +664,12 @@
 	                    proxy.setExtraParam('billsType',btype);
 	                    proxy.setExtraParam('fnumberStart',fnumberStart);
 	                    proxy.setExtraParam('fnumberEnd',fnumberEnd);
+	                    
 	                    proxy.setExtraParam("queryDate",'');
+	                    proxy.setExtraParam("fbillNo",'');
+	                    proxy.setExtraParam("gysId",'');
+	                    proxy.setExtraParam("purchaseUnitId",'');
+	                    proxy.setExtraParam("dcckNo",'');
 	                    sellBillsStore.loadPage(1);
 	                    queryWin.close();
 	                }
@@ -799,6 +858,12 @@
 		                goodsWin.close();
 		            }
 		        },{
+                    text:'清空',
+                    handler:function(){
+                        Ext.getCmp(domId + '').setValue('');
+                        goodsWin.close();
+                    }
+                },{
 		            text:'取消',handler:function(){
 		            	goodsWin.close();
 		        }}
@@ -807,6 +872,138 @@
 		    
 		    goodsStore.loadPage(1);
 		}
+		
+	    function getGys(domId, hiddenId) {
+            
+            Ext.define("Gys",{
+                extend:"Ext.data.Model",
+                fields:[
+                    {name:"fitemId"},
+                    {name:"fname"},
+                    {name:"fnumber"},
+                    {name:"faddress"}
+                 ]
+            });
+            
+            //行选择模型
+            var smSingle=Ext.create("Ext.selection.CheckboxModel",{
+                injectCheckbox:1,
+                mode : 'SINGLE',
+                listeners: {
+                    selectionchange: function(){
+                        var rows = Ext.getCmp('gysPanel').getSelectionModel().getSelection();
+                        if(rows.length > 0){
+                            Ext.getCmp('gysOk').setDisabled(false);
+                        }else{
+                            Ext.getCmp('gysOk').setDisabled(true);
+                        }
+                    }
+                }
+            });
+                  
+            var gysCm=[
+                {xtype: "rownumberer",text:"序号",width:60,align:"center"},
+                {header: "ID",hidden:true,dataIndex: "fitemId",menuDisabled: true,sortable:false},
+                {header: "供应商名称",width: 260,align:'center',dataIndex: "fname",menuDisabled: true,sortable:false},
+                {header: "供应商编号",width: 100,align:'center',dataIndex: "fnumber",menuDisabled: true,sortable:false},
+                {header: "地址",width: 200,align:'center',dataIndex: "faddress",menuDisabled: true,sortable:false}
+            ];
+
+            var gysStore = Ext.create('Ext.data.Store', {
+                pageSize: SystemConstant.commonSize,
+                model: 'Gys',
+                proxy: {
+                    type: 'ajax',
+                    actionMethods: {
+                        read: 'POST'
+                    },
+                    url: '${ctx}/hg/getGysInfo.action',
+                    reader:{
+                        type: 'json',
+                        root: 'list',
+                        totalProperty:"totalSize"
+                    },
+                    autoLoad: true
+                }
+            });
+
+            gysPanel = Ext.create('Ext.grid.Panel',{
+                //title:'物料信息',
+                id: "gysPanel",
+                layout:"fit",
+                stripeRows: true,
+                border:false,
+                forceFit:false,
+                columnLines: true,
+                autoScroll: true,
+                store : gysStore,
+                selModel:smSingle,
+                columns:gysCm,
+                tbar:[
+                '供应商名称',
+                {
+                    xtype: 'textfield',
+                    width:'200',
+                    id:'gysName'
+                },
+                '&nbsp;&nbsp;',
+                {
+                    text :   "查询", 
+                    iconCls: "search-button", 
+                    handler:function(){
+                        var proxy = gysStore.getProxy();
+                        proxy.setExtraParam("gysName",Ext.getCmp('gysName').getValue());
+                        gysStore.loadPage(1);
+                    } 
+                }],
+                bbar:new Ext.PagingToolbar({
+                    pageSize: SystemConstant.commonSize,
+                    store: gysStore,
+                    displayInfo: true,
+                    displayMsg: SystemConstant.displayMsg,
+                    emptyMsg: SystemConstant.emptyMsg
+                })
+            });
+                            
+            //用户分配角色窗口
+            gysWin = Ext.create(Ext.window.Window,{
+                title:"选择物料",
+                width:630,
+                height:400,
+                modal:true,
+                resizable:false,
+                layout:"fit",
+                closeAction:'destroy',
+                items:[gysPanel],
+                buttonAlign : 'center',
+                buttons:[{
+                    id:'gysOk',
+                    text:'确定',
+                    disabled:true,
+                    handler:function(){
+                        var rows = Ext.getCmp('gysPanel').getSelectionModel().getSelection();
+                        Ext.getCmp(domId + '').setValue(rows[0].get("fname"));
+                        Ext.getCmp(hiddenId + '').setValue(rows[0].get("fitemId"));
+                        gysWin.close();
+                    }
+                },{
+                    text:'清空',
+                    handler:function(){
+                    	Ext.getCmp(domId + '').setValue('');
+                        Ext.getCmp(hiddenId + '').setValue('');
+                        gysWin.close();
+                    }
+                },{
+                    text:'取消',
+                    handler:function(){
+                    	gysWin.close();
+                    }
+                }
+                ]
+            }).show();
+            
+            gysStore.loadPage(1);
+        }
 		
 		function getFirstDay(){
 		    var year = new Date().getFullYear();

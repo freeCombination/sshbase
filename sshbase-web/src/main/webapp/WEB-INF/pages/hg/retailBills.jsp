@@ -167,7 +167,7 @@
                 xtype:'button',
                 disabled:false,
                 text:'过滤',
-                iconCls:'add-button',
+                iconCls:'privilege-button',
                 handler:function(){
                     query();
                 }

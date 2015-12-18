@@ -877,11 +877,17 @@ public class BaseDaoHibernateImpl2 extends HibernateDaoSupport implements
      * @return
      */
     @Override
-    public List executeNativeSQLForBean(int start, int pageSize, String sql,
-        Class className) {
+    public List executeNativeSQLForBean(int start, int pageSize, String sql, Class className) {
         Query q = this.getSession().createSQLQuery(sql);
         q.setFirstResult(start);
         q.setMaxResults(pageSize);
+        q.setResultTransformer(Transformers.aliasToBean(className));
+        return q.list();
+    }
+    
+    @Override
+    public List executeNativeSQLForBean(String sql, Class className) {
+        Query q = this.getSession().createSQLQuery(sql);
         q.setResultTransformer(Transformers.aliasToBean(className));
         return q.list();
     }

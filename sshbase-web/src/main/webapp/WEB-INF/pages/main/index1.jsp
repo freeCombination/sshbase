@@ -246,7 +246,7 @@ function getIE() {
 	
 	<div class="frame2_bottom">
 		<div class="frame2_bottom_txt">
-			Copyright&nbsp;&nbsp;2015&nbsp;&nbsp;&nbsp;版权所有：**有限公司&nbsp;&nbsp;&nbsp;
+			Copyright&nbsp;&nbsp;2015&nbsp;&nbsp;&nbsp;版权所有：四川机场旅客服务有限公司免税商店&nbsp;&nbsp;&nbsp;
 		</div>
 	</div>
 </body>

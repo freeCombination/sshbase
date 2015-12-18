@@ -26,6 +26,11 @@
 		             "Ext.toolbar.Paging", 
 		             "Ext.form.*",
 					 "Ext.data.*" ]);
+		
+		var showZero = 'false';
+        var fnumberStart = '';
+        var fnumberEnd = '';
+		
 		//建立Model模型对象
 		Ext.define("Inventory",{
 			extend:"Ext.data.Model",
@@ -78,7 +83,7 @@
 		
 		//grid组件
 		var inventoryGrid =  Ext.create("Ext.grid.Panel",{
-			title:'实时库存',
+			//title:'实时库存',
 			border:false,
 			columnLines: true,
 			layout:"fit",
@@ -96,7 +101,22 @@
 	     	forceFit : true,
 			store: inventoryStore,
 			autoScroll: true,
-			stripeRows: true
+			stripeRows: true,
+			tbar: [
+				{
+				    xtype:'label',
+				    html:'&nbsp;&nbsp;实时库存'
+				},
+				'->',
+				{
+				    xtype:'button',
+				    text:'过滤',
+				    iconCls:'privilege-button',
+				    handler:function(){
+				        query();
+				    }
+				}
+			]
 		});
 		inventoryStore.load({params:{start:0,limit:SystemConstant.commonSize}});
 		
@@ -108,7 +128,7 @@
 		        leaf: false,
 		        children: [
 		            {nodeId: "001", text: "001(免税仓库)", leaf: true },
-		            {nodeId: "110", text: "100(机场免税店)", leaf: true},
+		            {nodeId: "100", text: "100(机场免税店)", leaf: true},
 		            {nodeId: "111", text: "111(免税品待检仓)", leaf: true }
 		        ]
 		    }
@@ -124,10 +144,273 @@
 		});
 		
 		treePanel.on("itemclick",function(view,record,item,index,e,opts){
+			showZero = 'false';
+            fnumberStart = '';
+            fnumberEnd = '';
+			
 			var proxy = inventoryStore.getProxy();
             proxy.setExtraParam("stockNumber", record.raw.nodeId);
+            proxy.setExtraParam('showZero','');
+            proxy.setExtraParam('fnumberStart','');
+            proxy.setExtraParam('fnumberEnd','');
             inventoryStore.loadPage(1);
 		});
+		
+		function query(){
+            var queryPanel = Ext.create('Ext.form.Panel', {
+                border: false,
+                layout: 'column',
+                fieldDefaults: {
+                    labelWidth: 75,
+                    width: 170,
+                    labelAlign: 'right',
+                    anchor: '100%'
+                },
+                items: [
+                {
+                    xtype:'fieldset',
+                    padding: '5 0 0 0',
+                    collapsible: false,
+                    layout: 'column',
+                    width: '100%',
+                    items :[
+                        {
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: '物料代码',
+                                readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberStart',
+                                listeners: {
+                                    focus: function(){
+                                        getFnumber('fnumberStart');
+                                    }
+                                }
+                            }]
+                        },
+                        {
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: ' 至 ',
+                                readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberEnd',
+                                listeners: {
+                                    focus: function(){
+                                        getFnumber('fnumberEnd');
+                                    }
+                                }
+                            }]
+                        }
+                    ]
+                },
+                {
+                    xtype:'fieldset',
+                    padding: '5 0 0 0',
+                    collapsible: false,
+                    layout: 'column',
+                    width: '100%',
+                    items :[
+                        {
+                            columnWidth: 1,
+                            border: false,
+                            items: [{
+                                fieldLabel: '显示数量为零的数据',
+                                labelWidth: 320,
+                                width: 340,
+                                xtype: 'checkboxfield',
+                                id:'showZero',
+                                inputValue:'true',
+                                checked : false
+                            }]
+                        }
+                    ]
+                }]
+            });
+            
+            var queryWin = Ext.create('Ext.window.Window', {
+                bodyStyle: 'padding:5px 5px 5px 5px; background-color:white;',
+                title: '条件',
+                closable: true,
+                resizable: false,
+                buttonAlign: "right",
+                width: 380,
+                modal: true,
+                layout: 'fit',
+                constrain: true, //设置只能在窗口范围内拖动
+                closeAction: 'destroy',
+                items: [queryPanel],
+                buttons: [{
+                    text: '确定',
+                    id: 'sureBtn',
+                    handler: function() {
+                    	showZero = Ext.getCmp('showZero').getValue();
+                        fnumberStart = Ext.getCmp('fnumberStart').getValue();
+                        fnumberEnd = Ext.getCmp('fnumberEnd').getValue();
+                        
+                        var proxy = inventoryStore.getProxy();
+                        proxy.setExtraParam('showZero',showZero);
+                        proxy.setExtraParam('fnumberStart',fnumberStart);
+                        proxy.setExtraParam('fnumberEnd',fnumberEnd);
+                        inventoryStore.loadPage(1);
+                        queryWin.close();
+                    }
+                }, {
+                    text: '取消',
+                    id: 'cancelBtn',
+                    handler: function() {
+                        queryWin.close();
+                    }
+                }],
+                listeners: {
+                    afterrender: function(){
+                        if (showZero && showZero != 'false') {
+                            Ext.getCmp('showZero').setValue(showZero);
+                        }
+                        
+                        if (fnumberStart && fnumberStart != '') {
+                            Ext.getCmp('fnumberStart').setValue(fnumberStart);
+                        }
+                        
+                        if (fnumberEnd && fnumberEnd != '') {
+                            Ext.getCmp('fnumberEnd').setValue(fnumberEnd);
+                        }
+                    }
+                }
+            }).show();
+        }
+		
+	    function getFnumber(domId) {
+            
+            Ext.define("Goods",{
+                extend:"Ext.data.Model",
+                fields:[
+                    {name:"fnumber"},
+                    {name:"fname"},
+                    {name:"fmodel"},
+                    {name:"unit"},
+                    {name:"fbarCode"}
+                 ]
+            });
+            
+            //行选择模型
+            var smSingle=Ext.create("Ext.selection.CheckboxModel",{
+                injectCheckbox:1,
+                mode : 'SINGLE',
+                listeners: {
+                    selectionchange: function(){
+                        var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+                        if(rows.length > 0){
+                            Ext.getCmp('goodsOk').setDisabled(false);
+                        }else{
+                            Ext.getCmp('goodsOk').setDisabled(true);
+                        }
+                    }
+                }
+            });
+                  
+            var goodsCm=[
+                {xtype: "rownumberer",text:"序号",width:60,align:"center"},
+                {header: "物料代码",width: 150,align:'center',dataIndex: "fnumber",menuDisabled: true,sortable:false},
+                {header: "物料名称",width: 150,align:'center',dataIndex: "fname",menuDisabled: true,sortable:false},
+                {header: "规格型号",width: 80,align:'center',dataIndex: "fmodel",menuDisabled: true,sortable:false},
+                {header: "单位",width: 60,align:'center',dataIndex: "unit",menuDisabled: true,sortable:false},
+                {header: "条形码",width: 120,align:'center',dataIndex: "fbarCode",menuDisabled: true,sortable:false}
+            ];
+
+            var goodsStore = Ext.create('Ext.data.Store', {
+                pageSize: SystemConstant.commonSize,
+                model: 'Goods',
+                proxy: {
+                    type: 'ajax',
+                    actionMethods: {
+                        read: 'POST'
+                    },
+                    url: '${ctx}/hg/getGoodsInfo.action',
+                    reader:{
+                        type: 'json',
+                        root: 'list',
+                        totalProperty:"totalSize"
+                    },
+                    autoLoad: true
+                }
+            });
+
+            goodsPanel = Ext.create('Ext.grid.Panel',{
+                //title:'物料信息',
+                id: "goodsPanel",
+                layout:"fit",
+                stripeRows: true,
+                border:false,
+                forceFit:false,
+                columnLines: true,
+                autoScroll: true,
+                store : goodsStore,
+                selModel:smSingle,
+                columns:goodsCm,
+                tbar:[
+                '物料名称',
+                {
+                    xtype: 'textfield',
+                    width:'160',
+                    id:'goodsName'
+                },
+                '&nbsp;&nbsp;',
+                {
+                    text :   "查询", 
+                    iconCls: "search-button", 
+                    handler:function(){
+                        var proxy = goodsStore.getProxy();
+                        proxy.setExtraParam("goodsName",Ext.getCmp('goodsName').getValue());
+                        goodsStore.loadPage(1);
+                    } 
+                }],
+                bbar:new Ext.PagingToolbar({
+                    pageSize: SystemConstant.commonSize,
+                    store: goodsStore,
+                    displayInfo: true,
+                    displayMsg: SystemConstant.displayMsg,
+                    emptyMsg: SystemConstant.emptyMsg
+                })
+            });
+                            
+            //用户分配角色窗口
+            goodsWin = Ext.create(Ext.window.Window,{
+                title:"选择物料",
+                width:680,
+                height:400,
+                modal:true,
+                resizable:false,
+                layout:"fit",
+                closeAction:'destroy',
+                items:[goodsPanel],
+                buttonAlign : 'center',
+                buttons:[{
+                    id:'goodsOk',
+                    text:'确定',
+                    disabled:true,
+                    handler:function(){
+                        var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+                        Ext.getCmp(domId + '').setValue(rows[0].get("fnumber"));
+                        goodsWin.close();
+                    }
+                },{
+                    text:'清空',
+                    handler:function(){
+                        Ext.getCmp(domId + '').setValue('');
+                        goodsWin.close();
+                    }
+                },{
+                    text:'取消',handler:function(){
+                        goodsWin.close();
+                }}
+                ]
+            }).show();
+            
+            goodsStore.loadPage(1);
+        }
 		
 		Ext.create("Ext.container.Viewport", {
 		    layout: "border",
