@@ -439,7 +439,7 @@
 				                        {'display':'全部', 'value':-1},
 				                        {'display':'外购入库', 'value':1},
 				                        //{'display':'其他入库', 'value':10},
-				                        {'display':'销售出库', 'value':21},
+				                        {'display':'零售单', 'value':21},
 				                        //{'display':'其他出库', 'value':29}
 				                        {'display':'调拨单', 'value':41}
 				                    ]
@@ -569,7 +569,7 @@
                         
                         var billsName = '出入库';
                         if (21 == btype) {
-                            billsName = '销售出库';
+                            billsName = '零售单';
                             Ext.getCmp('purchaseUnit').setVisible(true);
                             Ext.getCmp('purchaseUnit').setValue(-1);
                             Ext.getCmp('purchaseUnitLabel').setVisible(true);

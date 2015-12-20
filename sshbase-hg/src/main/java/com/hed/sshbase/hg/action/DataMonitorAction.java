@@ -125,8 +125,19 @@ public class DataMonitorAction extends BaseAction {
 	public String getTransSummary() {
         try {
             Map<String, String> params = RequestUtil.getParameterMap(getRequest());
-            ListVo<TransSummaryVo> volst = monitorService.getTransSummary(params);
+            ListVo<TransSummaryVo> voLstInSession = (ListVo<TransSummaryVo>)getSession().getAttribute("transSummary");
+            Map<String, String> paramMapInsession = (Map<String, String>)getSession().getAttribute("transSummaryPrams");
             
+            ListVo<TransSummaryVo> volst = monitorService.getTransSummary(params, voLstInSession, paramMapInsession);
+            
+            if (voLstInSession == null || (voLstInSession != null && voLstInSession.getList() == null)
+   				 || (voLstInSession != null && voLstInSession.getList() != null && voLstInSession.getList().size() <= 0)
+   				 || !params.get("startDate").equals(paramMapInsession.get("startDate")) || !params.get("endDate").equals(paramMapInsession.get("endDate"))
+				 || !params.get("stockInfo").equals(paramMapInsession.get("stockInfo")) || !params.get("stockInfo2").equals(paramMapInsession.get("stockInfo2"))
+				 || !params.get("fnumberStart").equals(paramMapInsession.get("fnumberStart")) || !params.get("fnumberEnd").equals(paramMapInsession.get("fnumberEnd"))) {
+            	getSession().setAttribute("transSummary", volst);
+            	getSession().setAttribute("transSummaryPrams", params);
+            }
             JsonUtil.outJson(volst);
             
         } catch (Exception e) {

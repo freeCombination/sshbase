@@ -2,6 +2,7 @@ package com.hed.sshbase.hg.service.impl;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.hed.sshbase.common.dao.IBaseDao2;
+import com.hed.sshbase.common.util.DateUtil;
 import com.hed.sshbase.common.util.StringUtil;
 import com.hed.sshbase.common.vo.ListVo;
 import com.hed.sshbase.hg.service.IDataMonitorService;
@@ -85,8 +87,8 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN t_ComCategory t12 ON t12.FItemID = t2.FComCategoryID"
 				+ " LEFT JOIN t_ComBrand t13 ON t13.FItemID =  t2.FComBrandID"
 				+ " LEFT JOIN t_Emp t14 ON t14.FItemID = t1.FSManagerID"
-				+ " LEFT JOIN t_Stock t15 ON t15.FItemID = t1.FSCStockID"
-				+ " LEFT JOIN t_Stock t16 ON t16.FItemID = t1.FDCStockID"
+				+ " LEFT JOIN t_Stock t15 ON t15.FItemID = t2.FSCStockID"
+				+ " LEFT JOIN t_Stock t16 ON t16.FItemID = t2.FDCStockID"
 				+ " WHERE t9.FNumber like '1.%' and t1.FTranType in (1, 21, 41)";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
@@ -103,6 +105,14 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 			
 			if (StringUtil.isNotBlank(endDate)) {
 				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+			}
+			
+			if (StringUtil.isNotBlank(fnumberStart) && StringUtil.isNotBlank(fnumberEnd)) {
+				if (fnumberStart.compareTo(fnumberEnd) < 0) {
+					String temp = fnumberStart;
+					fnumberStart = fnumberEnd;
+					fnumberEnd = temp;
+				}
 			}
 			
 			if (StringUtil.isNotBlank(fnumberStart)) {
@@ -177,6 +187,14 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		
 		if (StringUtil.isBlank(showZero) || !"true".equals(showZero)) {
 			commonSql += " and t1.FQty > 0 ";
+		}
+		
+		if (StringUtil.isNotBlank(fnumberStart) && StringUtil.isNotBlank(fnumberEnd)) {
+			if (fnumberStart.compareTo(fnumberEnd) < 0) {
+				String temp = fnumberStart;
+				fnumberStart = fnumberEnd;
+				fnumberEnd = temp;
+			}
 		}
 		
 		if (StringUtil.isNotBlank(fnumberStart)) {
@@ -299,57 +317,106 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 	}
 
 	@Override
-	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap) throws Exception {
+	public ListVo<TransSummaryVo> getTransSummary(Map<String, String> paramMap, ListVo<TransSummaryVo> voLstInSession,
+			Map<String, String> paramMapInsession) throws Exception {
 		
 		int start = NumberUtils.toInt(paramMap.get("start"));
         int limit = NumberUtils.toInt(paramMap.get("limit"));
         String startDate = paramMap.get("startDate");
-        String endDate = paramMap.get("limit");
+        String endDate = paramMap.get("endDate");
         String stockInfo = paramMap.get("stockInfo");
+        String stockInfo2 = paramMap.get("stockInfo2");
+        String fnumberStart = paramMap.get("fnumberStart");
+        String fnumberEnd = paramMap.get("fnumberEnd");
 		
 		ListVo<TransSummaryVo> voLst = new ListVo<TransSummaryVo>();
-		int count = 100;
 		List<TransSummaryVo> list = new ArrayList<TransSummaryVo>();
 		
-		Session session = baseDao2.getHibernateTemp().getSessionFactory().openSession();
-		Connection conn = null;
-		ResultSet rs = null;
-		CallableStatement cs = null;
-		if (session != null) {
-			conn = session.connection();
-			cs = conn.prepareCall("{Call cd_wlsfhzb(?, ?)}");
-			cs.setString(1, "2015-12-30"); //CallableStatement的参数设置下标从1 开始 
-			cs.setString(2, "2015-12-30");
-			//cs.registerOutParameter(3, Types.INTEGER);
-			rs = cs.executeQuery();
-			//cs.getInt(3);
+		if (voLstInSession == null || (voLstInSession != null && voLstInSession.getList() == null)
+				 || (voLstInSession != null && voLstInSession.getList() != null && voLstInSession.getList().size() <= 0)
+				 || !startDate.equals(paramMapInsession.get("startDate")) || !endDate.equals(paramMapInsession.get("endDate"))
+				 || !stockInfo.equals(paramMapInsession.get("stockInfo")) || !stockInfo2.equals(paramMapInsession.get("stockInfo2"))
+				 || !fnumberStart.equals(paramMapInsession.get("fnumberStart")) || !fnumberEnd.equals(paramMapInsession.get("fnumberEnd"))) {
 			
-			TransSummaryVo vo = null;
-			while(rs.next()){
-		        vo = new TransSummaryVo();
-				// 收发日期
-		        //vo.setSfrq("");
-		        vo.setSpdm(rs.getString("FNumber"));
-		        vo.setSpmc(rs.getString("FName"));
-		        vo.setGgxh(rs.getString("FModel"));
-		        vo.setUnit(rs.getString("FUnitName"));
-		        vo.setTxm(rs.getString("FGoodsBarCode"));
-		        vo.setCqsl(rs.getBigDecimal("FBegQty"));
-		        vo.setBqrksl(rs.getBigDecimal("FInQty"));
-		        vo.setBqcksl(rs.getBigDecimal("FOutQty"));
-		        vo.setBqjcsl(rs.getBigDecimal("FEndQty"));
-		        // 收发仓库
-		        //vo.setSfck(rs.getString(""));
-		        list.add(vo);
-		    }
+			Session session = baseDao2.getHibernateTemp().getSessionFactory().openSession();
+			Connection conn = null;
+			ResultSet rs = null;
+			CallableStatement cs = null;
+			if (session != null) {
+				conn = session.connection();
+				cs = conn.prepareCall("{Call cd_wlsfhzb(?, ?, ?, ?, ?, ?)}");
+				cs.setDate(1, new Date(DateUtil.stringToDate(startDate, "yyyy-MM-dd").getTime())); //CallableStatement的参数设置下标从1 开始 
+				cs.setDate(2, new Date(DateUtil.stringToDate(endDate, "yyyy-MM-dd").getTime()));
+				if (StringUtil.isBlank(stockInfo) || "-1".equals(stockInfo)) {
+					cs.setString(3, "");
+				}
+				else {
+					cs.setString(3, stockInfo);
+				}
+				
+				if (StringUtil.isBlank(stockInfo2) || "-1".equals(stockInfo2)) {
+					cs.setString(4, "");
+				}
+				else {
+					cs.setString(4, stockInfo2);
+				}
+				
+				if (StringUtil.isBlank(fnumberStart)) {
+					cs.setString(5, "");
+				}
+				else {
+					cs.setString(5, fnumberStart);
+				}
+				
+				if (StringUtil.isBlank(fnumberEnd)) {
+					cs.setString(6, "");
+				}
+				else {
+					cs.setString(6, fnumberEnd);
+				}
+				
+				//cs.registerOutParameter(3, Types.INTEGER);
+				rs = cs.executeQuery();
+				//cs.getInt(3);
+				
+				TransSummaryVo vo = null;
+				while(rs.next()){
+			        vo = new TransSummaryVo();
+					// 收发日期
+			        //vo.setSfrq("");
+			        vo.setSpdm(rs.getString("FNumber"));
+			        vo.setSpmc(rs.getString("FName"));
+			        vo.setGgxh(rs.getString("FModel"));
+			        vo.setUnit(rs.getString("FUnitName"));
+			        vo.setTxm(rs.getString("FGoodsBarCode"));
+			        vo.setCqsl(rs.getBigDecimal("FBegQty"));
+			        vo.setBqrksl(rs.getBigDecimal("FInQty"));
+			        vo.setBqcksl(rs.getBigDecimal("FOutQty"));
+			        vo.setBqjcsl(rs.getBigDecimal("FEndQty"));
+			        // 收发仓库
+			        //vo.setSfck(rs.getString(""));
+			        list.add(vo);
+			    }
+				
+				rs.close();
+				cs.close();
+				session.close();
+			}
 			
-			rs.close();
-			cs.close();
-			session.close();
+			voLst.setTotalSize(list.size());
+			voLst.setList(list);
 		}
-		
-		voLst.setTotalSize(count);
-		voLst.setList(list);
+		else {
+			int total = voLstInSession.getTotalSize();
+			voLst.setTotalSize(total);
+			
+			List<TransSummaryVo> listInSession = voLstInSession.getList();
+			int end = start + limit;
+			for (int i = start; i < end && i < total ; i++) {
+				list.add(listInSession.get(i));
+			}
+			voLst.setList(list);
+		}
 		
 		return voLst;
 	}

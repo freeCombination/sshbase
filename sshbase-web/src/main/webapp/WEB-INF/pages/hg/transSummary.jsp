@@ -30,6 +30,9 @@
         var sdate = '';
         var edate = '';
         var stockInfo = '';
+        var stockInfo2 = '';
+        var fnumberStart = '';
+        var fnumberEnd = '';
         
         //建立Model模型对象
         Ext.define("SellBills",{
@@ -135,7 +138,7 @@
                 layout: 'column',
                 fieldDefaults: {
                     labelWidth: 75,
-                    width: 170,
+                    width: 200,
                     labelAlign: 'right',
                     anchor: '100%'
                 },
@@ -148,12 +151,11 @@
 				    width: '100%',
 				    items :[
 				        {
-				            columnWidth: 1,
+				            columnWidth: .5,
 				            border: false,
 				            items: [{
-				                fieldLabel: '仓库信息',
+				                fieldLabel: '仓库编码',
 				                xtype: 'combo',
-				                width: 280,
 				                id:'stockInfo',
 				                displayField: 'display',
 				                valueField: 'value',
@@ -167,7 +169,27 @@
 				                      ]
 				                })
 				            }]
-				        }
+				        },
+				        {
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: ' 至 ',
+                                xtype: 'combo',
+                                id:'stockInfo2',
+                                displayField: 'display',
+                                valueField: 'value',
+                                store:Ext.create('Ext.data.Store', {
+                                    fields:['display', 'value'],
+                                    data:[
+                                          {'display':'全部', 'value':'-1'},
+                                          {'display':'001(免税仓库)', 'value':'001'},
+                                          {'display':'100(机场免税店)', 'value':'100'},
+                                          {'display':'111(免税品待检仓)', 'value':'111'}
+                                      ]
+                                })
+                            }]
+                        }
 				    ]
 				},
                 {
@@ -218,6 +240,45 @@
                             }]
                         }
                     ]
+                },
+                {
+                    xtype:'fieldset',
+                    padding: '5 0 0 0',
+                    collapsible: false,
+                    layout: 'column',
+                    width: '100%',
+                    items :[
+                        {
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: '物料代码',
+                                readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberStart',
+                                listeners: {
+                                    focus: function(){
+                                        getFnumber('fnumberStart');
+                                    }
+                                }
+                            }]
+                        },
+                        {
+                            columnWidth: .5,
+                            border: false,
+                            items: [{
+                                fieldLabel: ' 至 ',
+                                readOnly:true,
+                                xtype: 'textfield',
+                                id:'fnumberEnd',
+                                listeners: {
+                                    focus: function(){
+                                        getFnumber('fnumberEnd');
+                                    }
+                                }
+                            }]
+                        }
+                    ]
                 }]
             });
             
@@ -227,7 +288,7 @@
                 closable: true,
                 resizable: false,
                 buttonAlign: "right",
-                width: 380,
+                width: 480,
                 modal: true,
                 layout: 'fit',
                 constrain: true, //设置只能在窗口范围内拖动
@@ -240,11 +301,17 @@
                         sdate = Ext.getCmp('startDate').getValue();
                         edate = Ext.getCmp('endDate').getValue();
                         stockInfo = Ext.getCmp('stockInfo').getValue();
+                        stockInfo2 = Ext.getCmp('stockInfo2').getValue();
+                        fnumberStart = Ext.getCmp('fnumberStart').getValue();
+                        fnumberEnd = Ext.getCmp('fnumberEnd').getValue();
                         
                         var proxy = sellBillsStore.getProxy();
                         proxy.setExtraParam('startDate',sdate);
                         proxy.setExtraParam('endDate',edate);
                         proxy.setExtraParam('stockInfo',stockInfo);
+                        proxy.setExtraParam('stockInfo2',stockInfo2);
+                        proxy.setExtraParam('fnumberStart',fnumberStart);
+                        proxy.setExtraParam('fnumberEnd',fnumberEnd);
                         sellBillsStore.loadPage(1);
                         queryWin.close();
                     }
@@ -261,10 +328,14 @@
                         if (sdate && sdate != '') {
                             Ext.getCmp('startDate').setValue(sdate);
                             Ext.getCmp('endDate').setValue(edate);
+                            Ext.getCmp('fnumberStart').setValue(fnumberStart);
+                            Ext.getCmp('fnumberEnd').setValue(fnumberEnd);
                         }
                         else {
                             Ext.getCmp('startDate').setValue(getFirstDay());
                             Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
+                            Ext.getCmp('fnumberStart').setValue(fnumberStart);
+                            Ext.getCmp('fnumberEnd').setValue(fnumberEnd);
                         }
                         
                         if (stockInfo && stockInfo != '') {
@@ -273,9 +344,146 @@
                         else {
                         	Ext.getCmp('stockInfo').setValue('-1');
                         }
+                        
+                        if (stockInfo2 && stockInfo2 != '') {
+                            Ext.getCmp('stockInfo2').setValue(stockInfo2);
+                        }
+                        else {
+                            Ext.getCmp('stockInfo2').setValue('-1');
+                        }
                     }
                 }
             }).show();
+        }
+        
+        function getFnumber(domId) {
+            
+            Ext.define("Goods",{
+                extend:"Ext.data.Model",
+                fields:[
+                    {name:"fnumber"},
+                    {name:"fname"},
+                    {name:"fmodel"},
+                    {name:"unit"},
+                    {name:"fbarCode"}
+                 ]
+            });
+            
+            //行选择模型
+            var smSingle=Ext.create("Ext.selection.CheckboxModel",{
+                injectCheckbox:1,
+                mode : 'SINGLE',
+                listeners: {
+                    selectionchange: function(){
+                        var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+                        if(rows.length > 0){
+                            Ext.getCmp('goodsOk').setDisabled(false);
+                        }else{
+                            Ext.getCmp('goodsOk').setDisabled(true);
+                        }
+                    }
+                }
+            });
+                  
+            var goodsCm=[
+                {xtype: "rownumberer",text:"序号",width:60,align:"center"},
+                {header: "物料代码",width: 150,align:'center',dataIndex: "fnumber",menuDisabled: true,sortable:false},
+                {header: "物料名称",width: 150,align:'center',dataIndex: "fname",menuDisabled: true,sortable:false},
+                {header: "规格型号",width: 80,align:'center',dataIndex: "fmodel",menuDisabled: true,sortable:false},
+                {header: "单位",width: 60,align:'center',dataIndex: "unit",menuDisabled: true,sortable:false},
+                {header: "条形码",width: 120,align:'center',dataIndex: "fbarCode",menuDisabled: true,sortable:false}
+            ];
+
+            var goodsStore = Ext.create('Ext.data.Store', {
+                pageSize: SystemConstant.commonSize,
+                model: 'Goods',
+                proxy: {
+                    type: 'ajax',
+                    actionMethods: {
+                        read: 'POST'
+                    },
+                    url: '${ctx}/hg/getGoodsInfo.action',
+                    reader:{
+                        type: 'json',
+                        root: 'list',
+                        totalProperty:"totalSize"
+                    },
+                    autoLoad: true
+                }
+            });
+
+            goodsPanel = Ext.create('Ext.grid.Panel',{
+                //title:'物料信息',
+                id: "goodsPanel",
+                layout:"fit",
+                stripeRows: true,
+                border:false,
+                forceFit:false,
+                columnLines: true,
+                autoScroll: true,
+                store : goodsStore,
+                selModel:smSingle,
+                columns:goodsCm,
+                tbar:[
+                '物料名称',
+                {
+                    xtype: 'textfield',
+                    width:'160',
+                    id:'goodsName'
+                },
+                '&nbsp;&nbsp;',
+                {
+                    text :   "查询", 
+                    iconCls: "search-button", 
+                    handler:function(){
+                        var proxy = goodsStore.getProxy();
+                        proxy.setExtraParam("goodsName",Ext.getCmp('goodsName').getValue());
+                        goodsStore.loadPage(1);
+                    } 
+                }],
+                bbar:new Ext.PagingToolbar({
+                    pageSize: SystemConstant.commonSize,
+                    store: goodsStore,
+                    displayInfo: true,
+                    displayMsg: SystemConstant.displayMsg,
+                    emptyMsg: SystemConstant.emptyMsg
+                })
+            });
+                            
+            //用户分配角色窗口
+            goodsWin = Ext.create(Ext.window.Window,{
+                title:"选择物料",
+                width:680,
+                height:400,
+                modal:true,
+                resizable:false,
+                layout:"fit",
+                closeAction:'destroy',
+                items:[goodsPanel],
+                buttonAlign : 'center',
+                buttons:[{
+                    id:'goodsOk',
+                    text:'确定',
+                    disabled:true,
+                    handler:function(){
+                        var rows = Ext.getCmp('goodsPanel').getSelectionModel().getSelection();
+                        Ext.getCmp(domId + '').setValue(rows[0].get("fnumber"));
+                        goodsWin.close();
+                    }
+                },{
+                    text:'清空',
+                    handler:function(){
+                        Ext.getCmp(domId + '').setValue('');
+                        goodsWin.close();
+                    }
+                },{
+                    text:'取消',handler:function(){
+                        goodsWin.close();
+                }}
+                ]
+            }).show();
+            
+            goodsStore.loadPage(1);
         }
         
         function getFirstDay(){

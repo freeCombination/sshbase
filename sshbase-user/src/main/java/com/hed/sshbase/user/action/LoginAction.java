@@ -320,6 +320,8 @@ public class LoginAction extends BaseAction {
             super.getSession().removeAttribute("userPermission");
             super.getSession().removeAttribute("orgPermission");
             super.getSession().removeAttribute("menuList");
+            super.getSession().removeAttribute("transSummary");
+            super.getSession().removeAttribute("transSummaryPrams");
             logService.addLog(log);
             JsonUtil.outJson("{success:true,msg:''}");
         }
