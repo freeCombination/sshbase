@@ -8,7 +8,7 @@
 <script type="text/javascript" src="${ctx}/scripts/login/jcookie.js"></script>
 <script type="text/javascript" src="${ctx}/scripts/login/login.js"></script>
 <script type="text/javascript" src="${ctx}/scripts/login/isLogin.js"></script>
-<title>免税商店实时数据监控系统</title>
+<title>金蝶K/3 商业管理系统</title>
 <script language="javascript" type="text/javascript">
 	$(document).ready(function(){
 		// document.onkeydown = showKeyDown;
@@ -105,7 +105,7 @@
 <body class="login2" onload="setFocus()">
 	<div class="login2_bg">
 		<div class="login2_title">
-			免税商店实时数据监控系统&nbsp;<span class="span_SUB">V 1.0</span>
+			金蝶K/3 商业管理系统
 		</div>
 		<table border="0" cellpadding="0" cellspacing="2" class="login_2">
 			<tr>

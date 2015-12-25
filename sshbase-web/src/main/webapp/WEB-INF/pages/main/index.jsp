@@ -5,7 +5,7 @@
 <%@include file="../common/index_css.jsp"%>
 <html>
 <head>
-<title>开发架构系统</title>
+<title>金蝶K/3 商业管理系统</title>
 </head>
 <body>
 	<table width="100%" border="0">

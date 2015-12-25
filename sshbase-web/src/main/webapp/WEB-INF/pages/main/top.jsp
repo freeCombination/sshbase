@@ -7,7 +7,7 @@
 <script type="text/javascript" src="${ctx}/scripts/extjs/bootstrap.js"></script>
 <script type="text/javascript" src="${ctx}/scripts/extjs/locale/ext-lang-zh_CN.js"></script>
 <head>
-<title>架构系统</title>
+<title>金蝶K/3 商业管理系统</title>
 </head>
 <script language="javascript">
 	function getBg(num) {
