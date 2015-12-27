@@ -256,6 +256,10 @@ public class SellBillsVo implements Serializable{
 	// 纸质单号
 	private String freserve3;
 	
+	
+	private BigDecimal totalCount;
+	private BigDecimal totalAmount;
+	
 	public Integer getFinterId() {
 		return finterId;
 	}
@@ -897,6 +901,18 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFdcStockName(String fdcStockName) {
 		this.fdcStockName = fdcStockName;
+	}
+	public BigDecimal getTotalCount() {
+		return totalCount;
+	}
+	public void setTotalCount(BigDecimal totalCount) {
+		this.totalCount = totalCount;
+	}
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 	
 }

@@ -68,7 +68,9 @@
                 {name: "fsManagerName"},
                 {name: "ftranType"},
                 {name: "fscStockName"},
-                {name: "fdcStockName"}
+                {name: "fdcStockName"},
+                {name: "totalCount"},
+                {name: "totalAmount"}
 			]
 		});
 		
@@ -87,7 +89,20 @@
 				     root: "list"
 			    },
 	            simpleSortMode :true
-	        }
+	        },
+            listeners:{
+                load:function(store, records){
+                    var count = store.getCount();
+                    if(count > 0){
+                        Ext.getCmp('totalCount').setText('数量：'+records[0].data.totalCount);
+                        Ext.getCmp('totalAmount').setText('金额：'+records[0].data.totalAmount);
+                    }
+                    else{
+                    	Ext.getCmp('totalCount').setText('数量：0');
+                        Ext.getCmp('totalAmount').setText('金额：0');
+                    }
+                }
+            }
 		});
 		
 		// 销售出库
@@ -209,6 +224,41 @@
                 {header: "条形码",width: 120,dataIndex: "fbarCode",menuDisabled: true,sortable :false}
              ];
 		
+		//定义底部工具条
+        var sumTbar = Ext.create('Ext.toolbar.Toolbar', {
+            id : 'sumTbar',
+            region : 'north',
+            id : 'nextTopBar',
+            width : '100%',
+            border :true,
+            items:["&nbsp;&nbsp;",
+            {
+                xtype:'label',
+                text:'总计：'
+            },
+            "->",
+            {
+                xtype:'label',
+                text:'数量：',
+                width:160,
+                id:'totalCount'
+            },
+            {
+                xtype:'label',
+                text:'金额：',
+                width:200,
+                id:'totalAmount'
+            }]
+        });
+
+        var bar = Ext.create("Ext.PagingToolbar", {
+            store: sellBillsStore,
+            displayInfo: true,
+            width : '100%',
+            displayMsg: SystemConstant.displayMsg,
+            emptyMsg: SystemConstant.emptyMsg
+        });
+		
 		//grid组件
 		var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
 			title:'出入库',
@@ -219,12 +269,14 @@
 			width: "100%",
 			height: document.body.clientHeight,
 			id: "sellBillsGrid",
-			bbar:  Ext.create("Ext.PagingToolbar", {
-				store: sellBillsStore,
-				displayInfo: true,
-				displayMsg: SystemConstant.displayMsg,
-				emptyMsg: SystemConstant.emptyMsg
-			}),
+			dockedItems : {
+                xtype : 'toolbar',
+                dock : 'bottom',
+                layout : 'vbox',
+                width : '100%',
+                border : false,
+                items : [sumTbar, bar]
+            },
 			columns:cm5,
 	     	forceFit : true,
 			store: sellBillsStore,

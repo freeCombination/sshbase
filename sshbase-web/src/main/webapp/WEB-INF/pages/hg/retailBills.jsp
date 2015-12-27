@@ -78,7 +78,9 @@
                 {name: "fcollectMode"},
                 {name: "customName"},
                 {name: "freserve1"},
-                {name: "fcustomName"}
+                {name: "fcustomName"},
+                {name: "totalCount"},
+                {name: "totalAmount"}
             ]
         });
         
@@ -97,6 +99,19 @@
                      root: "list"
                 },
                 simpleSortMode :true
+            },
+            listeners:{
+                load:function(store, records){
+                    var count = store.getCount();
+                    if(count > 0){
+                        Ext.getCmp('totalCount').setText('数量：'+records[0].data.totalCount);
+                        Ext.getCmp('totalAmount').setText('金额：'+records[0].data.totalAmount);
+                    }
+                    else{
+                        Ext.getCmp('totalCount').setText('数量：0');
+                        Ext.getCmp('totalAmount').setText('金额：0');
+                    }
+                }
             }
         });
         
@@ -119,6 +134,41 @@
                 {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false}
              ];
         
+        //定义底部工具条
+        var sumTbar = Ext.create('Ext.toolbar.Toolbar', {
+            id : 'sumTbar',
+            region : 'north',
+            id : 'nextTopBar',
+            width : '100%',
+            border :true,
+            items:["&nbsp;&nbsp;",
+            {
+            	xtype:'label',
+                text:'总计：'
+            },
+            "->",
+            {
+            	xtype:'label',
+                text:'数量：',
+                width:160,
+                id:'totalCount'
+            },
+            {
+            	xtype:'label',
+                text:'金额：',
+                width:200,
+                id:'totalAmount'
+            }]
+        });
+
+        var bar = Ext.create("Ext.PagingToolbar", {
+            store: sellBillsStore,
+            displayInfo: true,
+            width : '100%',
+            displayMsg: SystemConstant.displayMsg,
+            emptyMsg: SystemConstant.emptyMsg
+        });
+        
         //grid组件
         var sellBillsGrid =  Ext.create("Ext.grid.Panel",{
             title:'零售单',
@@ -129,12 +179,14 @@
             width: "100%",
             height: document.body.clientHeight,
             id: "sellBillsGrid",
-            bbar:  Ext.create("Ext.PagingToolbar", {
-                store: sellBillsStore,
-                displayInfo: true,
-                displayMsg: SystemConstant.displayMsg,
-                emptyMsg: SystemConstant.emptyMsg
-            }),
+            dockedItems : {
+                xtype : 'toolbar',
+                dock : 'bottom',
+                layout : 'vbox',
+                width : '100%',
+                border : false,
+                items : [sumTbar, bar]
+            },
             columns:cm,
             forceFit : false,
             store: sellBillsStore,
@@ -192,8 +244,8 @@
                 border: false,
                 layout: 'column',
                 fieldDefaults: {
-                    labelWidth: 75,
-                    width: 170,
+                    labelWidth: 90,
+                    width: 250,
                     labelAlign: 'right',
                     anchor: '100%'
                 },
@@ -209,16 +261,16 @@
                             border: false,
                             items: [{
                                 xtype: 'textfield',
-                                fieldLabel: '起始日期',
+                                fieldLabel: '销售开始时间',
                                 id:'startDate',
                                 readOnly:true,
                                 listeners:{
                                     "afterrender":function(com,eOpts){
                                         var startTime=Ext.getDom("startDate-inputEl");
-                                        startTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
+                                        startTime.initcfg={dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates:[]};
                                         startTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
                                         startTime.onclick=function(){
-                                            WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'#F{$dp.$D(\'endDate-inputEl\')}'});
+                                            WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'endDate-inputEl\')}'});
                                         };
                                     }
                                 }
@@ -229,16 +281,16 @@
                             border: false,
                             items: [{
                                 xtype: 'textfield',
-                                fieldLabel: '截止日期 ',
+                                fieldLabel: '销售结束时间',
                                 id:'endDate',
                                 readOnly:true,
                                 listeners:{
                                     "afterrender":function(com,eOpts){
                                         var endTime=Ext.getDom("endDate-inputEl");
-                                        endTime.initcfg={dateFmt:'yyyy-MM-dd',disabledDates:[]};
+                                        endTime.initcfg={dateFmt:'yyyy-MM-dd HH:mm:ss',disabledDates:[]};
                                         endTime.style.cssText='background: url(\'${ctx }/scripts/my97DatePicker/skin/datePicker.gif\') no-repeat right #FFF;';
                                         endTime.onclick=function(){
-                                            WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'startDate-inputEl\')}'});
+                                            WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startDate-inputEl\')}'});
                                         };
                                     }
                                 }
@@ -254,7 +306,7 @@
                 closable: true,
                 resizable: false,
                 buttonAlign: "right",
-                width: 380,
+                width: 300,
                 modal: true,
                 layout: 'fit',
                 constrain: true, //设置只能在窗口范围内拖动
@@ -292,7 +344,7 @@
                         }
                         else {
                             Ext.getCmp('startDate').setValue(getFirstDay());
-                            Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d"));
+                            Ext.getCmp('endDate').setValue(Ext.Date.format(new Date(),"Y-m-d H:m:s"));
                         }
                     }
                 }
@@ -348,7 +400,7 @@
             if(month < 10){
                 month = "0" + month;
             }
-            return year + "-" + month + "-01";
+            return year + "-" + month + "-01" + " 00:00:00";
         }
     });
     </script>

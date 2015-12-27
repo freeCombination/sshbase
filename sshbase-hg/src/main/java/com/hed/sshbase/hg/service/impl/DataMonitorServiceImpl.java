@@ -1,5 +1,6 @@
 package com.hed.sshbase.hg.service.impl;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,6 +14,7 @@ import org.hibernate.classic.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.hed.sshbase.common.dao.IBaseDao2;
 import com.hed.sshbase.common.util.DateUtil;
@@ -75,6 +77,9 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t14.FName fsManagerName, t15.FName fscStockName, t16.FName fdcStockName ";
 		
 		String countSql = " SELECT count(*)";
+		String totalSql = " SELECT SUM(ISNULL(t2.Fauxqty, 0)) tc, SUM("
+				+ "CASE WHEN ISNULL(t2.Famount, 0) = 0 THEN ISNULL(t2.FConsignAmount, 0) ELSE ISNULL(t2.Famount, 0) END"
+				+ ") ta";
 		String commonSql = " FROM ICStockBill t1 LEFT JOIN ICStockBillEntry t2 "
 				+ " ON t1.FInterID=t2.FInterID "
 				+ " LEFT JOIN t_Department t4 ON t4.FItemID = t1.FDeptID"
@@ -144,10 +149,24 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 			}
 		}
 		
+		List<Object[]> totalCountLst = (List<Object[]>)baseDao2.executeNativeQuery(totalSql + commonSql);
+		BigDecimal totalCount = new BigDecimal(0);
+		BigDecimal totalAmount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalCountLst)) {
+			totalCount = (BigDecimal)totalCountLst.get(0)[0];
+			totalAmount = (BigDecimal)totalCountLst.get(0)[1];
+		}
+		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
 		
 		commonSql += "order by t1.Fdate desc";
 		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		if (!CollectionUtils.isEmpty(lst)) {
+			SellBillsVo vo = lst.get(0);
+			vo.setTotalCount(totalCount);
+			vo.setTotalAmount(totalAmount);
+		}
 		
 		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
 		volst.setTotalSize(count);
@@ -239,6 +258,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t15.FReserve1 freserve1, t15.FReserve2 freserve2, t15.FReserve3 freserve3 ";
 		
 		String countSql = " SELECT count(*)";
+		String totalAmountSql = " SELECT SUM(ISNULL(t1.FTotalAmount, 0))";
 		String commonSql = " FROM T_LS_Retail t1 "
 				+ " LEFT JOIN t_Emp t8 ON t8.FItemID = t1.FCashier"
 				+ " LEFT JOIN t_LS_RetailEntry2 t10 ON t10.FID = t1.FID"
@@ -247,27 +267,55 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN t_LS_Custom t15 ON t15.FID = t1.FID"
 				+ " WHERE 1 = 1 ";
 		
+		String totalCountSql = " SELECT SUM(ISNULL(t3.FQty, 0))"
+				+ " FROM T_LS_Retail t1 "
+				+ " LEFT JOIN T_LS_RetailEntry t3 ON t3.FID = t1.FID"
+				+ " LEFT JOIN t_Item t5 ON t5.FItemID = t3.FItemID"
+				+ " WHERE t5.FNumber like '1.%' ";
+		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
 			commonSql += " and t1.FBillNo='" + billsId + "'";
+			totalCountSql += " and t1.FBillNo='" + billsId + "'";
 		}
 		else {
 			if (StringUtil.isNotBlank(fbillNo)) {
 				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+				totalCountSql += " and t1.FBillNo like '%" + fbillNo + "%'";
 			}
 			
 			if (StringUtil.isNotBlank(startDate)) {
 				commonSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+				totalCountSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
 			}
 			
 			if (StringUtil.isNotBlank(endDate)) {
 				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+				totalCountSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
 			}
+		}
+		
+		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql);
+		BigDecimal totalCount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalCountLst)) {
+			totalCount = (BigDecimal)totalCountLst.get(0);
+		}
+		
+		List<Object> totalAmoutLst = (List<Object>)baseDao2.executeNativeQuery(totalAmountSql + commonSql);
+		BigDecimal totalAmount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalAmoutLst)) {
+			totalAmount = (BigDecimal)totalAmoutLst.get(0);
 		}
 		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
 		
 		commonSql += "order by t1.Fdate desc";
 		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		if (!CollectionUtils.isEmpty(lst)) {
+			SellBillsVo vo = lst.get(0);
+			vo.setTotalCount(totalCount);
+			vo.setTotalAmount(totalAmount);
+		}
 		
 		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
 		volst.setTotalSize(count);
