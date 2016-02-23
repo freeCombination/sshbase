@@ -232,8 +232,8 @@
                  {header: "地址",width: 180,dataIndex: "faddress",menuDisabled: true,sortable :false},
                  {header: "联系人",width:100,dataIndex: "flinkman",menuDisabled: true,sortable :false},
                  {header: "电话",width: 100,dataIndex: "flinkTel",menuDisabled: true,sortable :false},
-                 {header: "移动电话",width: 100,dataIndex: "flinkPhone",menuDisabled: true,sortable :false},
-                 {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false}
+                 {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false},
+                 {header: "备注",width: 120,dataIndex: "flinkPhone",menuDisabled: true,sortable :false}
                  //{header: "退货原因",width: 120,dataIndex: "freserve2",menuDisabled: true,sortable :false},
                  //{header: "纸质单号",width: 100,dataIndex: "freserve3",menuDisabled: true,sortable :false}
               ];

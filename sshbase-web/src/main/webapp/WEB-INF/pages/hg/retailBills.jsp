@@ -80,7 +80,8 @@
                 {name: "freserve1"},
                 {name: "fcustomName"},
                 {name: "totalCount"},
-                {name: "totalAmount"}
+                {name: "totalAmount"},
+                {name: "flinkPhone"}
             ]
         });
         
@@ -131,7 +132,8 @@
                 {header: "销售结束时间",width: 150,dataIndex: "fendTime",menuDisabled: true,sortable :false},
                 {header: "收款性质",width: 100,dataIndex: "fcollectMode",menuDisabled: true,sortable :false},
                 {header: "顾客姓名",width: 120,dataIndex: "fcustomName",menuDisabled: true,sortable :false},
-                {header: "航班信息",width: 100,dataIndex: "freserve1",menuDisabled: true,sortable :false}
+                {header: "航班信息",width: 120,dataIndex: "freserve1",menuDisabled: true,sortable :false},
+                {header: "备注",width: 120,dataIndex: "flinkPhone",menuDisabled: true,sortable :false}
              ];
         
         //定义底部工具条
