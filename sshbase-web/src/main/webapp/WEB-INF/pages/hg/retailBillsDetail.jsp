@@ -183,6 +183,23 @@
             }
         });
         
+        var settleTypeStore=Ext.create("Ext.data.Store", {
+            pageSize: SystemConstant.commonSize,
+            model:"SellBills",
+            proxy: {
+                type:"ajax",
+                actionMethods: {
+                    read: 'POST'
+                },
+                url: "${ctx}/hg/getRetailSettleType.action",
+                reader: {
+                     totalProperty: "totalSize",
+                     root: "list"
+                },
+                simpleSortMode :true
+            }
+        });
+        
         var cm=[
                 {header:"序号",xtype: "rownumberer",width:60,align:"center",menuDisabled: true,sortable :false},
                 {header: "仓库",width: 90,dataIndex: "stockName",menuDisabled: true,sortable :false},
@@ -265,14 +282,14 @@
             layout:"fit",
             id: "settlementDetail",
             bbar:  Ext.create("Ext.PagingToolbar", {
-                store: sellBillsStore,
+                store: settleTypeStore,
                 displayInfo: true,
                 displayMsg: SystemConstant.displayMsg,
                 emptyMsg: SystemConstant.emptyMsg
             }),
             columns:cm2,
             forceFit : false,
-            store: sellBillsStore,
+            store: settleTypeStore,
             autoScroll: true,
             stripeRows: true
         });
@@ -493,6 +510,11 @@
         proxy.setExtraParam("forDetail","forDetail");
         proxy.setExtraParam("billsId",billsId);
         sellBillsStore.loadPage(1);
+        
+        var proxy1 = settleTypeStore.getProxy();
+        proxy1.setExtraParam("forDetail","forDetail");
+        proxy1.setExtraParam("billsId",billsId);
+        settleTypeStore.loadPage(1);
         
         Ext.create("Ext.container.Viewport", {
             layout: "border",

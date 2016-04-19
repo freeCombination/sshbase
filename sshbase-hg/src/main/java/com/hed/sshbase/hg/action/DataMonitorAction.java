@@ -120,6 +120,23 @@ public class DataMonitorAction extends BaseAction {
     }
 	
 	/**
+	 * 查询零售单结算方式
+	 */
+	public String getRetailSettleType() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getRetailSettleType(params);
+            
+            JsonUtil.outJson(volst);
+            
+        } catch (Exception e) {
+            this.excepAndLogHandle(DataMonitorAction.class, "查询零售单结算方式", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
+	
+	/**
 	 * 查询收发汇总
 	 */
 	public String getTransSummary() {
