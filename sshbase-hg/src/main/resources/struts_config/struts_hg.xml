@@ -4,6 +4,20 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<package name="hg" extends="st" namespace="/hg">
+		<action name="toInSupervise">
+            <result>/WEB-INF/pages/hg/inSupervise.jsp</result>
+        </action>
+        <action name="toInSuperviseDetail" class="com.hed.sshbase.hg.action.DataMonitorAction">
+            <result>/WEB-INF/pages/hg/inSuperviseDetail.jsp</result>
+        </action>
+		
+		<action name="toOutSupervise">
+            <result>/WEB-INF/pages/hg/outSupervise.jsp</result>
+        </action>
+        <action name="toOutSuperviseDetail" class="com.hed.sshbase.hg.action.DataMonitorAction">
+            <result>/WEB-INF/pages/hg/outSuperviseDetail.jsp</result>
+        </action>
+		
 		<action name="toRetailBills">
 			<result>/WEB-INF/pages/hg/retailBills.jsp</result>
 		</action>

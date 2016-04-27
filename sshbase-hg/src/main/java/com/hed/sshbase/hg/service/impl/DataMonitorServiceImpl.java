@@ -675,4 +675,162 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		
 		return lst;
 	}
+	
+	/*********************出入监管准单***********************************/
+	
+	@Override
+	public ListVo<SellBillsVo> getOutSupervise(Map<String, String> paramMap)  throws Exception {
+		int start = NumberUtils.toInt(paramMap.get("start"));
+        int limit = NumberUtils.toInt(paramMap.get("limit"));
+        
+        String startDate = paramMap.get("startDate");
+        String endDate = paramMap.get("endDate");
+        String billsId = paramMap.get("billsId");
+        String forDetail = paramMap.get("forDetail");
+        String fbillNo = paramMap.get("fbillNo");
+		
+        String sql = " SELECT "
+				+ " t1.FBillNo fbillNo, t2.FName fscStockName, t3.FName fdcStockName, t1.FText ftext, "
+				+ " t1.FText1 ftext1, t1.FText2 ftext2, t4.FName userName, t1.FDate fdate, "
+				+ " t5.FName fcardType, t7.FNumber fnumber, t7.FName fname, t7.FModel fmodel, "
+				+ " t8.FName unit, t6.FQty fauxqty ";
+		
+		String countSql = " SELECT count(*)";
+		
+		String commonSql = " from t_BOS200000000 t1 "
+				+ " inner join t_BOS200000000Entry2 t6 on t6.FID = t1.FID"
+				+ " left join t_Item t2 on t2.FItemID = t1.FBase"
+				+ " left join t_Item t3 on t3.FItemID = t1.FBase1"
+				+ " left join t_Item t4 on t4.FItemID = t1.FBiller"
+				+ " left join t_Item t5 on t5.FItemID = t1.FClassID_SRC"
+				+ " left join t_ICItem t7 on t7.FItemID = t6.FBase2"
+				+ " left join t_MeasureUnit t8 on t8.FItemID = t6.FBase3"
+				+ " WHERE 1 = 1 ";
+		
+		String totalCountSql = " SELECT SUM(ISNULL(t6.FQty, 0))"
+				+ " from t_BOS200000000 t1 "
+				+ " inner join t_BOS200000000Entry2 t6 on t6.FID = t1.FID"
+				+ " left join t_ICItem t7 on t7.FItemID = t6.FBase2"
+				+ " WHERE t7.FNumber like '1.%' ";
+		
+		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
+			commonSql += " and t1.FBillNo='" + billsId + "'";
+			totalCountSql += " and t1.FBillNo='" + billsId + "'";
+		}
+		else {
+			if (StringUtil.isNotBlank(fbillNo)) {
+				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+				totalCountSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+			}
+			
+			if (StringUtil.isNotBlank(startDate)) {
+				commonSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+				totalCountSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+			}
+			
+			if (StringUtil.isNotBlank(endDate)) {
+				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+				totalCountSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+			}
+		}
+		
+		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql);
+		BigDecimal totalCount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalCountLst)) {
+			totalCount = (BigDecimal)totalCountLst.get(0);
+		}
+		
+		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
+		
+		commonSql += "order by t1.Fdate desc";
+		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		if (!CollectionUtils.isEmpty(lst)) {
+			SellBillsVo vo = lst.get(0);
+			vo.setTotalCount(totalCount);
+		}
+		
+		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
+		volst.setTotalSize(count);
+		volst.setList(lst);
+		return volst;
+	}
+	
+	@Override
+	public ListVo<SellBillsVo> getInSupervise(Map<String, String> paramMap)  throws Exception {
+		int start = NumberUtils.toInt(paramMap.get("start"));
+        int limit = NumberUtils.toInt(paramMap.get("limit"));
+        
+        String startDate = paramMap.get("startDate");
+        String endDate = paramMap.get("endDate");
+        String billsId = paramMap.get("billsId");
+        String forDetail = paramMap.get("forDetail");
+        String fbillNo = paramMap.get("fbillNo");
+		
+        String sql = " SELECT "
+				+ " t1.FBillNo fbillNo, t2.FName fscStockName, t3.FName fdcStockName, t1.FText ftext, "
+				+ " t1.FText1 ftext1, t1.FText2 ftext2, t4.FName userName, t1.FDate fdate, "
+				+ " t5.FName fcardType, t7.FNumber fnumber, t7.FName fname, t7.FModel fmodel, "
+				+ " t8.FName unit, t6.FQty fauxqty ";
+		
+		String countSql = " SELECT count(*)";
+		
+		String commonSql = " from t_BOS200000001 t1 "
+				+ " inner join t_BOS200000001Entry2 t6 on t6.FID = t1.FID"
+				+ " left join t_Item t2 on t2.FItemID = t1.FBase"
+				+ " left join t_Item t3 on t3.FItemID = t1.FBase1"
+				+ " left join t_Item t4 on t4.FItemID = t1.FBiller"
+				+ " left join t_Item t5 on t5.FItemID = t1.FClassID_SRC"
+				+ " left join t_ICItem t7 on t7.FItemID = t6.FBase2"
+				+ " left join t_MeasureUnit t8 on t8.FItemID = t6.FBase3"
+				+ " WHERE 1 = 1 ";
+		
+		String totalCountSql = " SELECT SUM(ISNULL(t6.FQty, 0))"
+				+ " from t_BOS200000000 t1 "
+				+ " inner join t_BOS200000000Entry2 t6 on t6.FID = t1.FID"
+				+ " left join t_ICItem t7 on t7.FItemID = t6.FBase2"
+				+ " WHERE t7.FNumber like '1.%' ";
+		
+		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
+			commonSql += " and t1.FBillNo='" + billsId + "'";
+			totalCountSql += " and t1.FBillNo='" + billsId + "'";
+		}
+		else {
+			if (StringUtil.isNotBlank(fbillNo)) {
+				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+				totalCountSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+			}
+			
+			if (StringUtil.isNotBlank(startDate)) {
+				commonSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+				totalCountSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+			}
+			
+			if (StringUtil.isNotBlank(endDate)) {
+				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+				totalCountSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+			}
+		}
+		
+		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql);
+		BigDecimal totalCount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalCountLst)) {
+			totalCount = (BigDecimal)totalCountLst.get(0);
+		}
+		
+		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
+		
+		commonSql += "order by t1.Fdate desc";
+		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		if (!CollectionUtils.isEmpty(lst)) {
+			SellBillsVo vo = lst.get(0);
+			vo.setTotalCount(totalCount);
+		}
+		
+		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
+		volst.setTotalSize(count);
+		volst.setList(lst);
+		return volst;
+	}
 }

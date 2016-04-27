@@ -212,4 +212,38 @@ public class DataMonitorAction extends BaseAction {
         }
         return null;
     }
+	
+	/*********************出入监管准单***********************************/
+	
+	/**
+	 * 查询出监管准单
+	 */
+	public String getOutSupervise() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getOutSupervise(params);
+            
+            JsonUtil.outJson(volst);
+        } catch (Exception e) {
+            this.excepAndLogHandle(DataMonitorAction.class, "查询出监管准单", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
+	
+	/**
+	 * 查询入监管准单
+	 */
+	public String getInSupervise() {
+        try {
+            Map<String, String> params = RequestUtil.getParameterMap(getRequest());
+            ListVo<SellBillsVo> volst = monitorService.getInSupervise(params);
+            
+            JsonUtil.outJson(volst);
+        } catch (Exception e) {
+            this.excepAndLogHandle(DataMonitorAction.class, "查询入监管准单", e, false);
+            return LOGIN;
+        }
+        return null;
+    }
 }

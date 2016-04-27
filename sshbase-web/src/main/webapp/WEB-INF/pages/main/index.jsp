@@ -31,6 +31,14 @@
 						<a href="${ctx}/hg/toTransSummary.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
 						<div>收发汇总查询</div>
 					</div>
+					<div class="container_right_icon">
+                        <a href="${ctx}/hg/toOutSupervise.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+                        <div>出监管准单</div>
+                    </div>
+                    <div class="container_right_icon">
+                        <a href="${ctx}/hg/toInSupervise.action" target="frame_Center"><img src="${ctx}/images/index/right_icon.png" /></a>
+                        <div>入监管准单</div>
+                    </div>
 				</div>
 			</td>
 		</tr>

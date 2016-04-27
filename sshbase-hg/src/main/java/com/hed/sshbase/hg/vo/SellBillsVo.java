@@ -260,6 +260,11 @@ public class SellBillsVo implements Serializable{
 	private BigDecimal totalCount;
 	private BigDecimal totalAmount;
 	
+	/*********************出入监管准单***********************************/
+	private String ftext;
+	private String ftext1;
+	private String ftext2;
+	
 	public Integer getFinterId() {
 		return finterId;
 	}
@@ -913,6 +918,24 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+	public String getFtext() {
+		return ftext;
+	}
+	public void setFtext(String ftext) {
+		this.ftext = ftext;
+	}
+	public String getFtext1() {
+		return ftext1;
+	}
+	public void setFtext1(String ftext1) {
+		this.ftext1 = ftext1;
+	}
+	public String getFtext2() {
+		return ftext2;
+	}
+	public void setFtext2(String ftext2) {
+		this.ftext2 = ftext2;
 	}
 	
 }

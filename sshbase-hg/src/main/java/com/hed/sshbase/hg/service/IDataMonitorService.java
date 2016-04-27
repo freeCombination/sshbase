@@ -58,4 +58,16 @@ public interface IDataMonitorService {
 	 * 查询购货单位
 	 */
 	public List<GysVo> getGhdwInfo()  throws Exception;
+	
+	/*********************出入监管准单***********************************/
+	
+	/**
+	 * 查询出监管准单
+	 */
+	public ListVo<SellBillsVo> getOutSupervise(Map<String, String> paramMap)  throws Exception;
+	
+	/**
+	 * 查询入监管准单
+	 */
+	public ListVo<SellBillsVo> getInSupervise(Map<String, String> paramMap)  throws Exception;
 }
