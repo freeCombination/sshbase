@@ -786,8 +786,8 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " WHERE 1 = 1 ";
 		
 		String totalCountSql = " SELECT SUM(ISNULL(t6.FQty, 0))"
-				+ " from t_BOS200000000 t1 "
-				+ " inner join t_BOS200000000Entry2 t6 on t6.FID = t1.FID"
+				+ " from t_BOS200000001 t1 "
+				+ " inner join t_BOS200000001Entry2 t6 on t6.FID = t1.FID"
 				+ " left join t_ICItem t7 on t7.FItemID = t6.FBase2"
 				+ " WHERE t7.FNumber like '1.%' ";
 		
