@@ -81,6 +81,7 @@
                 {name: "fcustomName"},
                 {name: "totalCount"},
                 {name: "totalAmount"},
+                {name: "totalAmountSs"},
                 {name: "flinkPhone"}
             ]
         });
@@ -106,11 +107,13 @@
                     var count = store.getCount();
                     if(count > 0){
                         Ext.getCmp('totalCount').setText('数量：'+records[0].data.totalCount);
-                        Ext.getCmp('totalAmount').setText('金额：'+records[0].data.totalAmount);
+                        Ext.getCmp('totalAmount').setText('应收金额：'+records[0].data.totalAmount);
+                        Ext.getCmp('totalAmountSs').setText('实收金额：'+records[0].data.totalAmountSs);
                     }
                     else{
                         Ext.getCmp('totalCount').setText('数量：0');
-                        Ext.getCmp('totalAmount').setText('金额：0');
+                        Ext.getCmp('totalAmount').setText('应收金额：0');
+                        Ext.getCmp('totalAmountSs').setText('实收金额：0');
                     }
                 }
             }
@@ -160,6 +163,13 @@
                 text:'金额：',
                 width:200,
                 id:'totalAmount'
+            },
+            {
+                xtype:'label',
+                text:'实收金额：',
+                width:200,
+                hidden:true,
+                id:'totalAmountSs'
             }]
         });
 

@@ -77,9 +77,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t14.FName fsManagerName, t15.FName fscStockName, t16.FName fdcStockName ";
 		
 		String countSql = " SELECT count(*)";
-		String totalSql = " SELECT SUM(ISNULL(t2.Fauxqty, 0)) tc, SUM("
-				+ "CASE WHEN ISNULL(t2.Famount, 0) = 0 THEN ISNULL(t2.FConsignAmount, 0) ELSE ISNULL(t2.Famount, 0) END"
-				+ ") ta";
+		String totalSql = " SELECT SUM(ISNULL(t2.Fauxqty, 0)) tc, SUM(ISNULL(t2.FConsignAmount, 0)) ta";
 		String commonSql = " FROM ICStockBill t1 LEFT JOIN ICStockBillEntry t2 "
 				+ " ON t1.FInterID=t2.FInterID "
 				+ " LEFT JOIN t_Department t4 ON t4.FItemID = t1.FDeptID"
@@ -159,7 +157,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
 		
-		commonSql += "order by t1.Fdate desc";
+		commonSql += " order by t1.Fdate desc";
 		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
 		
 		if (!CollectionUtils.isEmpty(lst)) {
@@ -258,44 +256,54 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t15.FReserve1 freserve1, t15.FReserve2 freserve2, t15.FReserve3 freserve3 ";
 		
 		String countSql = " SELECT count(*)";
-		String totalAmountSql = " SELECT SUM(ISNULL(t1.FTotalAmount, 0))";
+		//String totalAmountSql = " SELECT SUM(ISNULL(t1.FTotalAmount, 0)) total, SUM(ISNULL(t1.FReceAmount, 0)) totalSs";
 		String tempSql1 = " SELECT tt1.FID, max(tt2.FSettleAmount) FSettleAmount, MAX(tt2.FSettleID) FSettleID, "
 				+ " max(tt2.FAmount) FAmount, max(tt2.FRate) FRate, MAX(tt2.FCurrency) FCurrency, "
 				+ " max(tt2.FCardType) FCardType, max(tt2.FCardNO) FCardNO, max(tt2.FReferenceNO) FReferenceNO"
-				+ " FROM T_LS_Retail tt1  "
+				+ " FROM T_LS_Retail tt1 "
 				+ " LEFT JOIN t_LS_RetailEntry2 tt2 ON tt2.FID = tt1.FID "
 				+ " where 1 = 1";
 		String tempSql2 = " SELECT tt1.FID, max(tt2.FCustomName) FCustomName, "
 				+ " max(tt2.FAddress) FAddress, max(tt2.FLinkman) FLinkman, "
 				+ " max(tt2.FLinkTel) FLinkTel, max(tt2.FLinkPhone) FLinkPhone, max(tt2.FReserve1) FReserve1,"
 				+ " max(tt2.FReserve2) FReserve2, max(tt2.FReserve3) FReserve3"
-				+ " FROM T_LS_Retail tt1  "
+				+ " FROM T_LS_Retail tt1 "
 				+ " LEFT JOIN t_LS_Custom tt2 ON tt2.FID = tt1.FID "
 				+ " where 1 = 1";
+		String tempSql3 = " SELECT tt1.FID "
+				+ " FROM T_LS_Retail tt1 "
+				+ " LEFT JOIN T_LS_RetailEntry tt3 ON tt3.FID = tt1.FID "
+				+ " LEFT JOIN t_Item tt5 ON tt5.FItemID = tt3.FItemID "
+				+ " WHERE tt5.FNumber like '1.%' ";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
 			tempSql1 += " and tt1.FBillNo='" + billsId + "'";
 			tempSql2 += " and tt1.FBillNo='" + billsId + "'";
+			tempSql3 += " and tt1.FBillNo='" + billsId + "'";
 		}
 		else {
 			if (StringUtil.isNotBlank(fbillNo)) {
 				tempSql1 += " and tt1.FBillNo like '%" + fbillNo + "%'";
 				tempSql2 += " and tt1.FBillNo like '%" + fbillNo + "%'";
+				tempSql3 += " and tt1.FBillNo like '%" + fbillNo + "%'";
 			}
 			
 			if (StringUtil.isNotBlank(startDate)) {
 				tempSql1 += " and tt1.Fdate>=convert(datetime,'" + startDate + "')";
 				tempSql2 += " and tt1.Fdate>=convert(datetime,'" + startDate + "')";
+				tempSql3 += " and tt1.Fdate>=convert(datetime,'" + startDate + "')";
 			}
 			
 			if (StringUtil.isNotBlank(endDate)) {
 				tempSql1 += " and tt1.Fdate<=convert(datetime,'" + endDate + "')";
 				tempSql2 += " and tt1.Fdate<=convert(datetime,'" + endDate + "')";
+				tempSql3 += " and tt1.Fdate<=convert(datetime,'" + endDate + "')";
 			}
 		}
 		
 		tempSql1 += " group by tt1.FID";
 		tempSql2 += " group by tt1.FID";
+		tempSql3 += " group by tt1.FID";
 		
 		String commonSql = " FROM T_LS_Retail t1 "
 				+ " LEFT JOIN t_Emp t8 ON t8.FItemID = t1.FCashier"
@@ -303,46 +311,62 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " LEFT JOIN vw_LS_Currency t11 ON t11.FID = t10.FCurrency"
 				+ " LEFT JOIN t_LS_Settle t12 ON t12.FID = t10.FSettleID"
 				+ " LEFT JOIN (" + tempSql2 + ") t15 ON t15.FID = t1.FID"
+				+ " INNER JOIN (" + tempSql3 + ") t16 ON t16.FID = t1.FID"
 				+ " WHERE 1 = 1 ";
 		
-		String totalCountSql = " SELECT SUM(ISNULL(t3.FQty, 0))"
+		/*String totalCountSql = " SELECT SUM(ISNULL(t3.FQty, 0))"
 				+ " FROM T_LS_Retail t1 "
 				+ " LEFT JOIN T_LS_RetailEntry t3 ON t3.FID = t1.FID"
 				+ " LEFT JOIN t_Item t5 ON t5.FItemID = t3.FItemID"
-				+ " WHERE t5.FNumber like '1.%' ";
+				+ " WHERE t5.FNumber like '1.%' ";*/
+		
+		String totalCountSql1 = " SELECT SUM(ISNULL(t2.Fauxqty, 0)) tc, SUM(ISNULL(t2.FConsignAmount, 0)) ta"
+				+ " FROM ICStockBill t1 "
+				+ " LEFT JOIN ICStockBillEntry t2  ON t1.FInterID=t2.FInterID "
+				+ " LEFT JOIN t_ICItem t9 ON t9.FItemID = t2.FItemID "
+				+ " WHERE t9.FNumber like '1.%' "
+				+ " and t1.FTranType=21 ";
 		
 		if (StringUtil.isNotBlank(forDetail) && "forDetail".equals(forDetail) && StringUtil.isNotBlank(billsId)) {
 			commonSql += " and t1.FBillNo='" + billsId + "'";
-			totalCountSql += " and t1.FBillNo='" + billsId + "'";
+			//totalCountSql += " and t1.FBillNo='" + billsId + "'";
+			totalCountSql1 += " and t1.FBillNo='" + billsId + "'";
 		}
 		else {
 			if (StringUtil.isNotBlank(fbillNo)) {
 				commonSql += " and t1.FBillNo like '%" + fbillNo + "%'";
-				totalCountSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+				//totalCountSql += " and t1.FBillNo like '%" + fbillNo + "%'";
+				totalCountSql1 += " and t1.FBillNo like '%" + fbillNo + "%'";
 			}
 			
 			if (StringUtil.isNotBlank(startDate)) {
 				commonSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
-				totalCountSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+				//totalCountSql += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
+				totalCountSql1 += " and t1.Fdate>=convert(datetime,'" + startDate + "')";
 			}
 			
 			if (StringUtil.isNotBlank(endDate)) {
 				commonSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
-				totalCountSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+				//totalCountSql += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
+				totalCountSql1 += " and t1.Fdate<=convert(datetime,'" + endDate + "')";
 			}
 		}
 		
-		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql);
+		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql1);
 		BigDecimal totalCount = new BigDecimal(0);
+		BigDecimal totalAmount = new BigDecimal(0);
 		if (!CollectionUtils.isEmpty(totalCountLst)) {
-			totalCount = (BigDecimal)totalCountLst.get(0);
+			totalCount = (BigDecimal)((Object[])totalCountLst.get(0))[0];
+			totalAmount = (BigDecimal)((Object[])totalCountLst.get(0))[1];
 		}
 		
-		List<Object> totalAmoutLst = (List<Object>)baseDao2.executeNativeQuery(totalAmountSql + commonSql);
+		/*List<Object> totalAmoutLst = (List<Object>)baseDao2.executeNativeQuery(totalAmountSql + commonSql);
 		BigDecimal totalAmount = new BigDecimal(0);
+		BigDecimal totalAmountSs = new BigDecimal(0);
 		if (!CollectionUtils.isEmpty(totalAmoutLst)) {
-			totalAmount = (BigDecimal)totalAmoutLst.get(0);
-		}
+			totalAmount = (BigDecimal)((Object[])totalAmoutLst.get(0))[0];
+			totalAmountSs = (BigDecimal)((Object[])totalAmoutLst.get(0))[1];
+		}*/
 		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
 		
@@ -353,6 +377,7 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 			SellBillsVo vo = lst.get(0);
 			vo.setTotalCount(totalCount);
 			vo.setTotalAmount(totalAmount);
+			//vo.setTotalAmountSs(totalAmountSs);
 		}
 		
 		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();

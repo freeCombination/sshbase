@@ -259,6 +259,7 @@ public class SellBillsVo implements Serializable{
 	
 	private BigDecimal totalCount;
 	private BigDecimal totalAmount;
+	private BigDecimal totalAmountSs;
 	
 	/*********************出入监管准单***********************************/
 	private String ftext;
@@ -936,6 +937,12 @@ public class SellBillsVo implements Serializable{
 	}
 	public void setFtext2(String ftext2) {
 		this.ftext2 = ftext2;
+	}
+	public BigDecimal getTotalAmountSs() {
+		return totalAmountSs;
+	}
+	public void setTotalAmountSs(BigDecimal totalAmountSs) {
+		this.totalAmountSs = totalAmountSs;
 	}
 	
 }
