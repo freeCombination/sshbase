@@ -110,8 +110,8 @@
                 load:function(store, records){
                     var count = store.getCount();
                     if(count > 0){
-                        Ext.getCmp('totalCount').setText('数量：'+records[0].data.totalCount);
-                        //Ext.getCmp('totalAmount').setText('金额：'+records[0].data.totalAmount);
+                        Ext.getCmp('totalCount').setText('数量：'+ records[0].data.totalCount);
+                        //Ext.getCmp('totalAmount').setText('金额：'+ records[0].data.totalAmount);
                         
                         mergeCells(sellBillsGrid, [1, 2, 3, 4, 5, 6, 7, 8]);
                     }
@@ -157,7 +157,7 @@
             {
                 xtype:'label',
                 text:'数量：',
-                width:160,
+                width:200, // 160
                 id:'totalCount'
             },
             {

@@ -107,12 +107,12 @@
                     var count = store.getCount();
                     if(count > 0){
                         Ext.getCmp('totalCount').setText('数量：'+records[0].data.totalCount);
-                        Ext.getCmp('totalAmount').setText('应收金额：'+records[0].data.totalAmount);
+                        Ext.getCmp('totalAmount').setText('实收金额：'+records[0].data.totalAmount);
                         Ext.getCmp('totalAmountSs').setText('实收金额：'+records[0].data.totalAmountSs);
                     }
                     else{
                         Ext.getCmp('totalCount').setText('数量：0');
-                        Ext.getCmp('totalAmount').setText('应收金额：0');
+                        Ext.getCmp('totalAmount').setText('实收金额：0'); // 应收
                         Ext.getCmp('totalAmountSs').setText('实收金额：0');
                     }
                 }
@@ -160,7 +160,7 @@
             },
             {
             	xtype:'label',
-                text:'金额：',
+                text:'实收金额：', // 应收
                 width:200,
                 id:'totalAmount'
             },

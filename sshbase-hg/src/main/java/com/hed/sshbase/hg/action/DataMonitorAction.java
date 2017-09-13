@@ -59,8 +59,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "获取出入库单", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -80,8 +80,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询实时库存", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -97,8 +97,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询零售单", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -114,8 +114,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询零售单商品", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -131,8 +131,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询零售单结算方式", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -159,8 +159,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询收发汇总", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -176,8 +176,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询物料", e, false);
-            return LOGIN;
         }
+
         return null;
     }
 	
@@ -193,8 +193,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询供应商", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -208,8 +208,8 @@ public class DataMonitorAction extends BaseAction {
             
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询购货单位", e, false);
-            return LOGIN;
         }
+
         return null;
     }
 	
@@ -226,8 +226,8 @@ public class DataMonitorAction extends BaseAction {
             JsonUtil.outJson(volst);
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询出监管准单", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 	
@@ -242,8 +242,8 @@ public class DataMonitorAction extends BaseAction {
             JsonUtil.outJson(volst);
         } catch (Exception e) {
             this.excepAndLogHandle(DataMonitorAction.class, "查询入监管准单", e, false);
-            return LOGIN;
         }
+        
         return null;
     }
 }

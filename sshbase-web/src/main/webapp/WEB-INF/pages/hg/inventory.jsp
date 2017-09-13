@@ -44,7 +44,8 @@
 				{name: "fkfPeriod"},
 				{name: "unit"},
 				{name: "fqty"},
-				{name: "fcostPrice"}
+				{name: "fcostPrice"},
+				{name: "totalCount"}
 			]
 		});
 		
@@ -64,7 +65,18 @@
 				     root: "list"
 			    },
 	        simpleSortMode :true
-	        }
+	        },
+            listeners:{
+                load:function(store, records){
+                    var count = store.getCount();
+                    if(count > 0){
+                        Ext.getCmp('totalCount').setText('数量：'+ records[0].data.totalCount);
+                    }
+                    else{
+                        Ext.getCmp('totalCount').setText('数量：0');
+                    }
+                }
+            }
 		});
 		
 		var cm=[
@@ -81,6 +93,35 @@
 	                //{header: "最新进价",width: 100,dataIndex: "fcostPrice",menuDisabled: true,sortable :false}
 	             ];
 		
+		//定义底部工具条
+        var sumTbar = Ext.create('Ext.toolbar.Toolbar', {
+            id : 'sumTbar',
+            region : 'north',
+            id : 'nextTopBar',
+            width : '100%',
+            border :true,
+            items:["&nbsp;&nbsp;",
+            {
+                xtype:'label',
+                text:'总计：'
+            },
+            "->",
+            {
+                xtype:'label',
+                text:'数量：',
+                width:200,
+                id:'totalCount'
+            }]
+        });
+		
+        var bar = Ext.create("Ext.PagingToolbar", {
+            store: inventoryStore,
+            displayInfo: true,
+            width : '100%',
+            displayMsg: SystemConstant.displayMsg,
+            emptyMsg: SystemConstant.emptyMsg
+        });
+		
 		//grid组件
 		var inventoryGrid =  Ext.create("Ext.grid.Panel",{
 			//title:'实时库存',
@@ -91,12 +132,14 @@
 			width: "100%",
 			height: document.body.clientHeight,
 			id: "inventoryGrid",
-			bbar:  Ext.create("Ext.PagingToolbar", {
-				store: inventoryStore,
-				displayInfo: true,
-				displayMsg: SystemConstant.displayMsg,
-				emptyMsg: SystemConstant.emptyMsg
-			}),
+			dockedItems : {
+                xtype : 'toolbar',
+                dock : 'bottom',
+                layout : 'vbox',
+                width : '100%',
+                border : false,
+                items : [sumTbar, bar]
+            },
 			columns:cm,
 	     	forceFit : true,
 			store: inventoryStore,

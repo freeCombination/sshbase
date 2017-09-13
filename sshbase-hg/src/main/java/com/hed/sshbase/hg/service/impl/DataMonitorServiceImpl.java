@@ -186,8 +186,11 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 				+ " t2.FNumber fnumber, t2.FName fname, t3.FModel fmodel, t4.FName stockName, "
 				+ " t4.FNumber stockNumber, t1.FKFDate fkfDateStr, t1.FKFPeriod fkfPeriod, t5.FName unit,"
 				+ " t1.FQty fqty, t1.FCostPrice fcostPrice";
-		
+		// 分页总条数
 		String countSql = " SELECT count(*)";
+		// 统计基本单位数量
+		String totalCountSql = " SELECT SUM(ISNULL(t1.FQty, 0))";
+		
 		String commonSql = " FROM ICInventory t1 "
 				+ " LEFT JOIN t_Item t2 ON t2.FItemID = t1.FItemID "
 				+ " LEFT JOIN t_ICItem t3 ON t3.FItemID = t1.FItemID"
@@ -224,7 +227,18 @@ public class DataMonitorServiceImpl implements IDataMonitorService {
 		
 		int count = baseDao2.getTotalCountNativeQuery(countSql + commonSql, new Object[]{});
 		
+		List<Object> totalCountLst = (List<Object>)baseDao2.executeNativeQuery(totalCountSql + commonSql);
+		BigDecimal totalCount = new BigDecimal(0);
+		if (!CollectionUtils.isEmpty(totalCountLst)) {
+			totalCount = (BigDecimal)totalCountLst.get(0);
+		}
+		
 		List<SellBillsVo> lst = (List<SellBillsVo>)baseDao2.executeNativeSQLForBean(start, limit, sql + commonSql, SellBillsVo.class);
+		
+		if (!CollectionUtils.isEmpty(lst)) {
+			SellBillsVo vo = lst.get(0);
+			vo.setTotalCount(totalCount);
+		}
 		
 		ListVo<SellBillsVo> volst = new ListVo<SellBillsVo>();
 		volst.setTotalSize(count);

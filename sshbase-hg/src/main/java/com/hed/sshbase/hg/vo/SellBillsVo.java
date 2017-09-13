@@ -148,7 +148,7 @@ public class SellBillsVo implements Serializable{
 	// 实收数量(fauxqty)
 	// 金额(famount)
 	// 销售价格
-	private BigDecimal fentrySelfA0164;
+	private String fentrySelfA0164;
 	// 销售价金额
 	private BigDecimal fentrySelfA0162;
 	// 进销价差额
@@ -620,10 +620,10 @@ public class SellBillsVo implements Serializable{
 	public void setFsupplyName(String fsupplyName) {
 		this.fsupplyName = fsupplyName;
 	}
-	public BigDecimal getFentrySelfA0164() {
+	public String getFentrySelfA0164() {
 		return fentrySelfA0164;
 	}
-	public void setFentrySelfA0164(BigDecimal fentrySelfA0164) {
+	public void setFentrySelfA0164(String fentrySelfA0164) {
 		this.fentrySelfA0164 = fentrySelfA0164;
 	}
 	public BigDecimal getFentrySelfA0162() {
